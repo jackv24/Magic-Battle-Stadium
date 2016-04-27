@@ -6,18 +6,17 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerMove))]
-[RequireComponent(typeof(PlayerLook))]
 public class PlayerInput : MonoBehaviour
 {
     //move Axis input for this player
     private Vector2 inputVector;
+    //attack axis input
+    private Vector2 attackVector;
 
-    private PlayerLook playerLook;
     private PlayerMove playerMove;
 
     void Awake()
     {
-        playerLook = GetComponent<PlayerLook>();
         playerMove = GetComponent<PlayerMove>();
     }
 
@@ -25,9 +24,15 @@ public class PlayerInput : MonoBehaviour
     {
         //Get and normalize input
         inputVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        inputVector.Normalize();
-
         //Call player move
-        playerMove.Move(inputVector);
+        playerMove.Move(inputVector.normalized);
+
+        //Get attack vector (not normalised in this case)
+        attackVector = new Vector2(Input.GetAxisRaw("AttackHorizontal"), Input.GetAxisRaw("AttackVertical"));
+        //Call player move to face direction
+        if (attackVector != Vector2.zero)
+            playerMove.FaceDirection(attackVector);
+        else //if no attack direction is input, just face movement direction
+            playerMove.FaceDirection(inputVector);
     }
 }
