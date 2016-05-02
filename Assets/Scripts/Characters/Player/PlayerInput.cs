@@ -31,7 +31,7 @@ public class PlayerInput : MonoBehaviour
         playerMove.Move(inputVector.normalized);
 
         //Get attack vector (not normalised in this case)
-        attackVector = new Vector2(Input.GetAxisRaw("AttackHorizontal"), Input.GetAxisRaw("AttackVertical"));
+        attackVector = new Vector2(Input.GetAxisRaw("Attack Horizontal"), Input.GetAxisRaw("Attack Vertical"));
         
         //Call player move to face direction
         if (attackVector != Vector2.zero)

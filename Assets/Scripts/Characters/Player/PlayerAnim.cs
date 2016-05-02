@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*
+**  PlayerAnim.cs:  Called from playerinput, sends floats to mecanim for animating
+*/
+
+using UnityEngine;
 using System.Collections;
 
 public class PlayerAnim : MonoBehaviour
