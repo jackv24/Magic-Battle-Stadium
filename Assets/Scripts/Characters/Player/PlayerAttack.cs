@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
+[NetworkSettings(channel = 1, sendInterval = 0)]
 public class PlayerAttack : NetworkBehaviour
 {
     //The delay between each consecutive attack
