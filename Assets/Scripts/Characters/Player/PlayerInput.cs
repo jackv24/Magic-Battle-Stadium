@@ -4,10 +4,11 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerMove))]
 [RequireComponent(typeof(PlayerAnim))]
-public class PlayerInput : MonoBehaviour
+public class PlayerInput : NetworkBehaviour
 {
     //move Axis input for this player
     private Vector2 inputVector;
@@ -25,6 +26,9 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
+        if (!isLocalPlayer)
+            return;
+
         //Get and normalize input
         inputVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         //Call player move

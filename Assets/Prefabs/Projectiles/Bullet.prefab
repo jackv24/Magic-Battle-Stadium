@@ -11,6 +11,8 @@ GameObject:
   - 58: {fileID: 5879870}
   - 50: {fileID: 5003442}
   - 114: {fileID: 11413118}
+  - 114: {fileID: 11455958}
+  - 114: {fileID: 11478404}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -104,6 +106,60 @@ MonoBehaviour:
   moveSpeed: 20
   lifeTime: 5
   damage: 10
+  rotation: {x: 0, y: 0, z: 0}
+  owner: {fileID: 0}
+--- !u!114 &11455958
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 112054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 152
+    i1: 182
+    i2: 136
+    i3: 176
+    i4: 27
+    i5: 161
+    i6: 59
+    i7: 212
+    i8: 123
+    i9: 147
+    i10: 29
+    i11: 62
+    i12: 123
+    i13: 123
+    i14: 136
+    i15: 102
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &11478404
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 112054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0
+  m_SyncRotationAxis: 0
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!212 &21247370
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -156,6 +212,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Constraints
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SendInterval
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TransformSyncMode
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

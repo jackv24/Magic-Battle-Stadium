@@ -5,21 +5,28 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class CharacterStats : MonoBehaviour
+public class CharacterStats : NetworkBehaviour
 {
+    [SyncVar]
     public int currentHealth = 100;
     public int maxHealth = 100;
 
     public Slider healthSlider;
+    public float sliderUpdateInterval = 0.1f;
 
     void Start()
     {
-        UpdateSlider();
+        StartCoroutine("UpdateSlider");
     }
 
     public void ApplyDamage(int amount)
     {
+        //Damage can only be applied on the server
+        if (!isServer)
+            return;
+
         currentHealth -= amount;
 
         if (currentHealth <= 0)
@@ -28,14 +35,22 @@ public class CharacterStats : MonoBehaviour
         UpdateSlider();
     }
 
-    void UpdateSlider()
+    //Slider doesn't need to be updated every frame. Coruotine should save performance.
+    IEnumerator UpdateSlider()
     {
         if (healthSlider)
-            healthSlider.value = (float)currentHealth / maxHealth;
+        {
+            while (true)
+            {
+                healthSlider.value = (float)currentHealth / maxHealth;
+
+                yield return new WaitForSeconds(sliderUpdateInterval);
+            }
+        }
     }
 
     void Die()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 }

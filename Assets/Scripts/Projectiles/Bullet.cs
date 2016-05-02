@@ -4,8 +4,9 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class Bullet : MonoBehaviour
+public class Bullet : NetworkBehaviour
 {
     //How fast the bullet will move
     public float moveSpeed = 10f;
@@ -15,8 +16,18 @@ public class Bullet : MonoBehaviour
     //The amount of damage that will be applied when the bullet collides with a character
     public int damage = 10;
 
+    //Rotation is a SyncVar so that it is synced when the bullet is first spawned, 
+    //thus removing the need to sync bullet position since it will not change direction.
+    [SyncVar]
+    public Vector3 rotation;
+
+    //The player who shot this bullet - they should not be damaged
+    [SyncVar]
+    public GameObject owner;
+
     void Start()
     {
+        transform.eulerAngles = rotation;
         //Set object to be destroyed after its lifetime ends
         Destroy(gameObject, lifeTime);
     }
@@ -29,16 +40,19 @@ public class Bullet : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        CharacterStats stats = col.gameObject.GetComponent<CharacterStats>();
-
-        //if the object that was collided with has stats
-        if(stats)
+        if (col.gameObject != owner)
         {
-            //Apply damage
-            stats.ApplyDamage(damage);
+            CharacterStats stats = col.gameObject.GetComponent<CharacterStats>();
 
-            //destroy bullet
-            Destroy(gameObject);
+            //if the object that was collided with has stats
+            if (stats)
+            {
+                //Apply damage
+                stats.ApplyDamage(damage);
+
+                //destroy bullet
+                Destroy(gameObject);
+            }
         }
     }
 }
