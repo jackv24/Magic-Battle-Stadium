@@ -49,12 +49,12 @@ public class PlayerAttack : NetworkBehaviour
     {
         if (input.y < 0)
             return new Vector3(0, 0, 270);
+        else if (input.y > 0)
+            return new Vector3(0, 0, 90);
         else if (input.x > 0)
             return new Vector3(0, 0, 0);
         else if (input.x < 0)
             return new Vector3(0, 0, 180);
-        else if (input.y > 0)
-            return new Vector3(0, 0, 90);
 
         return Vector3.zero;
     }
