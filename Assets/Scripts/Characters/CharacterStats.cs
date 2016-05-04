@@ -16,8 +16,12 @@ public class CharacterStats : NetworkBehaviour
     public Slider healthSlider;
     public float sliderUpdateInterval = 0.1f;
 
+    private ShowText deadText;
+
     void Start()
     {
+        deadText = GameObject.Find("DeadText").GetComponent<ShowText>();
+
         StartCoroutine("UpdateSlider");
     }
 
@@ -51,6 +55,9 @@ public class CharacterStats : NetworkBehaviour
 
     void Die()
     {
-        //Destroy(gameObject);
+        deadText.Show();
+
+        //Finally, set this gameobject inactive (don't delete, since we want to keep player info)
+        gameObject.SetActive(false);
     }
 }
