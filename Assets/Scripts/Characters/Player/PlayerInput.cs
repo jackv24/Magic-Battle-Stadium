@@ -24,6 +24,13 @@ public class PlayerInput : NetworkBehaviour
         playerAnim = GetComponent<PlayerAnim>();
     }
 
+    void Start()
+    {
+        //If this is the local player, set the main camera's target
+        if (isLocalPlayer)
+            Camera.main.GetComponent<CameraFollow>().target = transform;
+    }
+
     void Update()
     {
         if (!isLocalPlayer)
