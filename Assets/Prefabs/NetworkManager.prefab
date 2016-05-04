@@ -57,7 +57,7 @@ MonoBehaviour:
   m_SpawnPrefabs:
   - {fileID: 112054, guid: 98b688b01ba13bd47b931d3e7b7b8866, type: 2}
   m_CustomConfig: 1
-  m_MaxConnections: 4
+  m_MaxConnections: 6
   m_ConnectionConfig:
     m_PacketSize: 1500
     m_FragmentSize: 500

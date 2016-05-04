@@ -12,6 +12,10 @@ public class RandomColour : NetworkBehaviour
     //The sprite renderers to colour
     public SpriteRenderer[] spriteRenderers;
 
+    //The range in which the generated colour will lie
+    public float minSaturation = 0.25f;
+    public float maxSaturation = 0.75f;
+
     //The colour that is randomly generated
     //hooked to UpdateColour to change the sprite renderers when a player's colour changes
     [SyncVar(hook ="UpdateColor")]
@@ -23,7 +27,7 @@ public class RandomColour : NetworkBehaviour
         if (isLocalPlayer)
         {
             //Generate a random colour
-            randomColor = new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f));
+            randomColor = new Color(Random.Range(minSaturation, maxSaturation), Random.Range(minSaturation, maxSaturation), Random.Range(minSaturation, maxSaturation));
             //Update the colour on the server
             CmdUpdateColor(randomColor);
         }

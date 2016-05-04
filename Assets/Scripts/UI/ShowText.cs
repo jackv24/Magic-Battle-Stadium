@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*
+**  ShowText.cs: Contains public functions for showing and hiding the text component of this gameobject
+*/
+
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -13,6 +17,7 @@ public class ShowText : MonoBehaviour
         text = GetComponent<Text>();
     }
 
+    //Start hidded
     void Start()
     {
         Hide();

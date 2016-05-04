@@ -17,11 +17,24 @@ public class CharacterStats : NetworkBehaviour
     public float sliderUpdateInterval = 0.1f;
 
     private ShowText deadText;
+    private Text healthSliderText;
 
     void Start()
     {
-        deadText = GameObject.Find("DeadText").GetComponent<ShowText>();
+        //if this is the local play, the health bar is in the HUD
+        if (isLocalPlayer)
+        {
+            deadText = GameObject.Find("DeadText").GetComponent<ShowText>();
 
+            //Deactivate health bar below player
+            healthSlider.gameObject.SetActive(false);
+
+            //Find the HUD health slider, and the child text component
+            healthSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
+            healthSliderText = healthSlider.GetComponentInChildren<Text>();
+        }
+
+        //Slider is updated using a coroutine (for performance)
         StartCoroutine("UpdateSlider");
     }
 
@@ -48,6 +61,10 @@ public class CharacterStats : NetworkBehaviour
             {
                 healthSlider.value = (float)currentHealth / maxHealth;
 
+                if (healthSliderText)
+                    healthSliderText.text = currentHealth + "/" + maxHealth;
+
+                //Update at fixed time intervals (not updating every frame saves performance)
                 yield return new WaitForSeconds(sliderUpdateInterval);
             }
         }
@@ -56,7 +73,7 @@ public class CharacterStats : NetworkBehaviour
     [ClientRpc]
     void RpcDie()
     {
-        if(isLocalPlayer)
+        if(deadText)
             deadText.Show();
 
         //Finally, set this gameobject inactive (don't delete, since we want to keep player info)
