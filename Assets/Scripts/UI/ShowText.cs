@@ -15,6 +15,11 @@ public class ShowText : MonoBehaviour
 
     void Start()
     {
+        Hide();
+    }
+
+    public void Hide()
+    {
         text.enabled = false;
     }
 

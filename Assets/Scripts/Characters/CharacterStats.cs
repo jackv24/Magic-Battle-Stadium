@@ -34,7 +34,7 @@ public class CharacterStats : NetworkBehaviour
         currentHealth -= amount;
 
         if (currentHealth <= 0)
-            Die();
+            RpcDie();
 
         UpdateSlider();
     }
@@ -53,9 +53,11 @@ public class CharacterStats : NetworkBehaviour
         }
     }
 
-    void Die()
+    [ClientRpc]
+    void RpcDie()
     {
-        deadText.Show();
+        if(isLocalPlayer)
+            deadText.Show();
 
         //Finally, set this gameobject inactive (don't delete, since we want to keep player info)
         gameObject.SetActive(false);
