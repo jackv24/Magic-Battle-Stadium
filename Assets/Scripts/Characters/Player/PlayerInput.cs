@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerMove))]
 [RequireComponent(typeof(PlayerAnim))]
+[RequireComponent(typeof(CharacterStats))]
 public class PlayerInput : NetworkBehaviour
 {
     //move Axis input for this player
@@ -17,11 +18,13 @@ public class PlayerInput : NetworkBehaviour
 
     private PlayerMove playerMove;
     private PlayerAnim playerAnim;
+    private CharacterStats stats;
 
     void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
         playerAnim = GetComponent<PlayerAnim>();
+        stats = GetComponent<CharacterStats>();
     }
 
     void Start()
@@ -33,7 +36,7 @@ public class PlayerInput : NetworkBehaviour
 
     void Update()
     {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer || !stats.isAlive)
             return;
 
         //Get and normalize input

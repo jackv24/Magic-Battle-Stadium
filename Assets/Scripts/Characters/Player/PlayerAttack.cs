@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
+[RequireComponent(typeof(CharacterStats))]
 [NetworkSettings(channel = 1, sendInterval = 0)]
 public class PlayerAttack : NetworkBehaviour
 {
@@ -22,9 +23,16 @@ public class PlayerAttack : NetworkBehaviour
     //the last direction input - allows next bullet to be fired immediately if the direction changed
     private Vector3 oldDirection;
 
+    private CharacterStats stats;
+
+    void Awake()
+    {
+        stats = GetComponent<CharacterStats>();
+    }
+
     void Update()
     {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer || !stats.isAlive)
             return;
 
         //Get input
