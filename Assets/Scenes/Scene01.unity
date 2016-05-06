@@ -277,7 +277,7 @@ GameObject:
   - 114: {fileID: 286347152}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: MainCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -394,10 +394,6 @@ Prefab:
     - target: {fileID: 495142, guid: 0ab75de4d381f2e47a895b5f4f379c7c, type: 2}
       propertyPath: m_RootOrder
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 11460600, guid: 0ab75de4d381f2e47a895b5f4f379c7c, type: 2}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0ab75de4d381f2e47a895b5f4f379c7c, type: 2}
@@ -634,6 +630,14 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 11413180, guid: bb7603ba86c63dc4193de2c10cf3ad02, type: 2}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 1830313159}
+    - target: {fileID: 11413180, guid: bb7603ba86c63dc4193de2c10cf3ad02, type: 2}
+      propertyPath: enableGameObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 1900210434}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bb7603ba86c63dc4193de2c10cf3ad02, type: 2}
   m_IsPrefabParent: 0
@@ -781,6 +785,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &1830313159 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11444356, guid: 0ab75de4d381f2e47a895b5f4f379c7c,
+    type: 2}
+  m_PrefabInternal: {fileID: 298136100}
+  m_Script: {fileID: -822479833, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
 --- !u!1001 &1883319643
 Prefab:
   m_ObjectHideFlags: 0
@@ -823,6 +833,10 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 139b190df6088a64eba9a9352a0dc1f3, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1900210434 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 102452, guid: 796ebbc555254564a96a7bab64005a87, type: 2}
+  m_PrefabInternal: {fileID: 20834166}
 --- !u!1 &1907432395
 GameObject:
   m_ObjectHideFlags: 0
