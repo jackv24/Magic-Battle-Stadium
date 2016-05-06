@@ -12,6 +12,8 @@ public class NetworkConnectUI : MonoBehaviour
 
     public GameObject[] enableGameObjects;
 
+    public float connectionAttemptTimeout = 1f;
+
     ////Temporary ongui stuff
     //public int offsetX;
     //public int offsetY;
@@ -51,16 +53,17 @@ public class NetworkConnectUI : MonoBehaviour
     public void HostLANGame()
     {
         //Start the game as a host
-        StartGame(true);
+        StartCoroutine("StartGame", true);
     }
     //Connects to an existing LAN game as a client
     public void ConnectLANGame()
     {
         //Start the game as a client
-        StartGame(false);
+        StartCoroutine("StartGame", false);
     }
 
-    void StartGame(bool isHost)
+    //StartGame is a coroutine so code can be paused to wait for connection
+    IEnumerator StartGame(bool isHost)
     {
         //Make sure everything is active (and does not need matchmaking)
         if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null)
@@ -71,18 +74,28 @@ public class NetworkConnectUI : MonoBehaviour
             else
                 manager.StartClient();
 
+            //Enable all of the gameobjects specified in the inspector
+            SetActiveObjects(true);
+
+            //Disable the connection menu, as it is not needed anymore
+            SetUIActive(false);
+
+            //Wait for a certain amount of time to see if the connection was successful
+            yield return new WaitForSeconds(connectionAttemptTimeout);
+
             //If the connection was successful
-            if (manager.IsClientConnected())
+            if (!manager.IsClientConnected())
             {
                 //Enable all of the gameobjects specified in the inspector
-                EnableObjects();
+                SetActiveObjects(false);
 
                 //Disable the connection menu, as it is not needed anymore
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                Debug.Log("The client could not connect to " + manager.networkAddress);
+                SetUIActive(true);
+
+                //Display a notice (using custom notice system)
+                NotificationManager.instance.ShowNotice("!", string.Format(
+                    "<b>Could not connect to <i>{0}</i></b>\nPlease make sure the host has started a game, and you are on the same network.",
+                    manager.networkAddress));
 
                 //If the client did not connect, stop it (allows it to attempt connection later)
                 manager.StopClient();
@@ -105,15 +118,19 @@ public class NetworkConnectUI : MonoBehaviour
     }
 
     //Enable all objects in enableObjects (HUD, etc)
-    void EnableObjects()
+    void SetActiveObjects(bool active)
     {
         foreach (GameObject obj in enableGameObjects)
         {
-            obj.SetActive(true);
+            obj.SetActive(active);
         }
     }
 
-
+    //Sets first child's active state (so code can still run on this gameobject)
+    void SetUIActive(bool active)
+    {
+        gameObject.transform.GetChild(0).gameObject.SetActive(active);
+    }
 
     ////Will be deleted when everything is implemented
     //void OnGUI()
