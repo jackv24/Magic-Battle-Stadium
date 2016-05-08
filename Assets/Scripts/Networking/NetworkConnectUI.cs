@@ -10,6 +10,7 @@ public class NetworkConnectUI : MonoBehaviour
 {
     public NetworkManager manager;
 
+    //Gameobjects to be enabled when the match has connected
     public GameObject[] enableGameObjects;
 
     public float connectionAttemptTimeout = 1f;
@@ -24,6 +25,9 @@ public class NetworkConnectUI : MonoBehaviour
 
     void Start()
     {
+        //Gameobjects to be enabled should start disabled
+        SetActiveObjects(false);
+
         if (!manager)
             Debug.Log("No NetworkManager assigned to Network Connect UI!");
 

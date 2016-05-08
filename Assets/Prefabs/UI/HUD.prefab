@@ -72,6 +72,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22433978}
+  - 114: {fileID: 11466406}
   m_Layer: 0
   m_Name: Slots
   m_TagString: Untagged
@@ -717,6 +718,25 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11466406
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 120040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c9c379f2e5a7324c9b4571efae242a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slots:
+  - {fileID: 11487826}
+  - {fileID: 11405224}
+  - {fileID: 11452604}
+  - {fileID: 11456534}
+  selectedSlot: 0
+  selectedColor: {r: 1, g: 1, b: 1, a: 1}
+  deselectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!114 &11467352
 MonoBehaviour:
   m_ObjectHideFlags: 1
