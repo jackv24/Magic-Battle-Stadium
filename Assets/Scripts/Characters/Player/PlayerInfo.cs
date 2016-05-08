@@ -22,10 +22,12 @@ public class PlayerInfo : NetworkBehaviour
         if (isLocalPlayer)
         {
             //Load name from preferences
-            username = PlayerPrefs.GetString("name", "no name");
+            username = PlayerPrefs.GetString("name", System.Environment.UserName);
 
             //Send name update command to server
             CmdUpdateName(username);
+
+            nameText.enabled = false;
         }
         else //If this is a remote player, call username syncvar hook (make sure name is updated from the start)
             UpdateNameClient(username);
