@@ -166,19 +166,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22471352, guid: 796ebbc555254564a96a7bab64005a87, type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22471352, guid: 796ebbc555254564a96a7bab64005a87, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22477530, guid: 796ebbc555254564a96a7bab64005a87, type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22477530, guid: 796ebbc555254564a96a7bab64005a87, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 796ebbc555254564a96a7bab64005a87, type: 2}
@@ -634,6 +634,10 @@ Prefab:
       propertyPath: enableGameObjects.Array.data[0]
       value: 
       objectReference: {fileID: 1900210434}
+    - target: {fileID: 166330, guid: bb7603ba86c63dc4193de2c10cf3ad02, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bb7603ba86c63dc4193de2c10cf3ad02, type: 2}
   m_IsPrefabParent: 0
