@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerMove))]
 [RequireComponent(typeof(PlayerAnim))]
-[RequireComponent(typeof(CharacterStats))]
+[RequireComponent(typeof(PlayerStats))]
 public class PlayerInput : NetworkBehaviour
 {
     //move Axis input for this player
@@ -18,13 +18,13 @@ public class PlayerInput : NetworkBehaviour
 
     private PlayerMove playerMove;
     private PlayerAnim playerAnim;
-    private CharacterStats stats;
+    private PlayerStats stats;
 
     void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
         playerAnim = GetComponent<PlayerAnim>();
-        stats = GetComponent<CharacterStats>();
+        stats = GetComponent<PlayerStats>();
     }
 
     void Start()

@@ -42,7 +42,7 @@ public class Bullet : NetworkBehaviour
     {
         if (col.gameObject != owner)
         {
-            CharacterStats stats = col.gameObject.GetComponent<CharacterStats>();
+            PlayerStats stats = col.gameObject.GetComponent<PlayerStats>();
 
             //if the object that was collided with has stats
             if (stats)

@@ -544,6 +544,7 @@ MonoBehaviour:
   currentHealth: 100
   maxHealth: 100
   isAlive: 1
+  respawnTime: 5
   healthSlider: {fileID: 11468166}
   sliderUpdateInterval: 0.1
 --- !u!114 &11480818

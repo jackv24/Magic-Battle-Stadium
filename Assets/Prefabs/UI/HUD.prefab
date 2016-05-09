@@ -124,7 +124,6 @@ GameObject:
   - 224: {fileID: 22460802}
   - 222: {fileID: 22270556}
   - 114: {fileID: 11499364}
-  - 114: {fileID: 11411156}
   m_Layer: 5
   m_Name: DeadText
   m_TagString: Untagged
@@ -409,18 +408,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11411156
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 138260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b43a7dc25e695ae4a9360bc5cd738e4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadeSeconds: 5
 --- !u!114 &11415102
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -922,7 +909,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: You have died...
+  m_Text: 'You have died...
+
+    <size=24>Respawning in {0}</size>'
 --- !u!222 &22202280
 CanvasRenderer:
   m_ObjectHideFlags: 1
