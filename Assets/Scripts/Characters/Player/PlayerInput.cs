@@ -7,23 +7,20 @@ using System.Collections;
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerMove))]
-[RequireComponent(typeof(PlayerAnim))]
 [RequireComponent(typeof(PlayerStats))]
 public class PlayerInput : NetworkBehaviour
 {
     //move Axis input for this player
-    private Vector2 inputVector;
+    public Vector2 inputVector;
     //attack axis input
-    private Vector2 attackVector;
+    public Vector2 attackVector;
 
     private PlayerMove playerMove;
-    private PlayerAnim playerAnim;
     private PlayerStats stats;
 
     void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
-        playerAnim = GetComponent<PlayerAnim>();
         stats = GetComponent<PlayerStats>();
     }
 
@@ -46,11 +43,9 @@ public class PlayerInput : NetworkBehaviour
 
         //Get attack vector (not normalised in this case)
         attackVector = new Vector2(Input.GetAxisRaw("Attack Horizontal"), Input.GetAxisRaw("Attack Vertical"));
-        
+
         //Call player move to face direction
-        if (attackVector != Vector2.zero)
-            playerAnim.FaceDirection(attackVector);
-        else //if no attack direction is input, just face movement direction
-            playerAnim.FaceDirection(inputVector);
+        if (attackVector == Vector2.zero)
+            attackVector = inputVector;
     }
 }

@@ -277,7 +277,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 191436}
-  m_LocalRotation: {x: 0, y: 0, z: 0.03047837, w: 0.99953544}
+  m_LocalRotation: {x: 0, y: 0, z: -0.043244876, w: 0.9990645}
   m_LocalPosition: {x: -0.05, y: 0.07, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -358,6 +358,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 447b0654945c7fa40978a00bcccf7e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputVector: {x: 0, y: 0}
+  attackVector: {x: 0, y: 0}
 --- !u!114 &11432358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -433,7 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2feb9e2ef4acfd94181e1e6fe9b16440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
+  moveSpeed: 7
   acceleration: 0.25
 --- !u!114 &11450722
 MonoBehaviour:
@@ -1007,7 +1009,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: moveSpeed
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Color.r

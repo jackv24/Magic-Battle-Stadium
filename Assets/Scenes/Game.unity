@@ -939,10 +939,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 286347155}
     m_Modifications:
-    - target: {fileID: 11412442, guid: e7dc7266734962849a0e2d9889b3df49, type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 22479136, guid: e7dc7266734962849a0e2d9889b3df49, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1019,32 +1015,6 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 286347156}
-    - target: {fileID: 11412442, guid: e7dc7266734962849a0e2d9889b3df49, type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11412442, guid: e7dc7266734962849a0e2d9889b3df49, type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 11412442, guid: e7dc7266734962849a0e2d9889b3df49, type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 2092230626}
-    - target: {fileID: 11412442, guid: e7dc7266734962849a0e2d9889b3df49, type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Disable
-      objectReference: {fileID: 0}
-    - target: {fileID: 11412442, guid: e7dc7266734962849a0e2d9889b3df49, type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e7dc7266734962849a0e2d9889b3df49, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &2092230626 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11401186, guid: e7dc7266734962849a0e2d9889b3df49,
-    type: 2}
-  m_PrefabInternal: {fileID: 2092230625}
-  m_Script: {fileID: 11500000, guid: ea2e959118001484b80dc816a92fe37b, type: 3}
