@@ -13,10 +13,13 @@ public class PlayerStats : NetworkBehaviour
     public int currentHealth = 100;
     public int maxHealth = 100;
 
+    [SyncVar]
     public bool isAlive = true;
 
+    //How long it takes to respawn after dying
     public float respawnTime = 5.0f;
 
+    //UI objects
     public Slider healthSlider;
     public float sliderUpdateInterval = 0.1f;
 
