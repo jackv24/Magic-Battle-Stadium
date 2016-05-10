@@ -47,8 +47,8 @@ public class Bullet : NetworkBehaviour
             //if the object that was collided with has stats
             if (stats)
             {
-                //Apply damage
-                stats.ApplyDamage(damage);
+                //Apply damage (name of bullet owner is also sent to identify who killed who)
+                stats.ApplyDamage(damage, owner.GetComponent<PlayerInfo>().username);
 
                 //destroy bullet
                 Destroy(gameObject);

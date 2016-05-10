@@ -28,6 +28,13 @@ public class PlayerStats : NetworkBehaviour
 
     private Text healthSliderText;
 
+    private PlayerInfo info;
+
+    void Awake()
+    {
+        info = GetComponent<PlayerInfo>();
+    }
+
     void Start()
     {
         //if this is the local play, the health bar is in the HUD
@@ -48,16 +55,19 @@ public class PlayerStats : NetworkBehaviour
         StartCoroutine("UpdateSlider");
     }
 
-    public void ApplyDamage(int amount)
+    public void ApplyDamage(int amount, string attackerName)
     {
         //Damage can only be applied on the server
         if (!isServer)
             return;
 
-        currentHealth -= amount;
+        if (currentHealth > 0)
+        {
+            currentHealth -= amount;
 
-        if (currentHealth <= 0)
-            RpcDie();
+            if (currentHealth <= 0)
+                RpcDie(attackerName);
+        }
     }
 
     //Slider doesn't need to be updated every frame. Coruotine should save performance.
@@ -80,7 +90,7 @@ public class PlayerStats : NetworkBehaviour
 
     //Teh server calls the die command on the client (client shows text)
     [ClientRpc]
-    void RpcDie()
+    void RpcDie(string attackerName)
     {
         if (deadText)
         {
@@ -93,6 +103,14 @@ public class PlayerStats : NetworkBehaviour
         if (isLocalPlayer)
         {
             StartCoroutine("RespawnTimer", respawnTime);
+        }
+
+        if (Scoreboard.instance)
+        {
+            //Add death to scoreboard
+            Scoreboard.instance.AddDeath(info.username);
+            //Add kill to scoreboard
+            Scoreboard.instance.AddKill(attackerName);
         }
     }
 

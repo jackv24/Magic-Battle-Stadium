@@ -24,6 +24,20 @@ public class PlayerInfo : NetworkBehaviour
             //Load name from preferences
             username = PlayerPrefs.GetString("name", System.Environment.UserName);
 
+            //Always check if there is a scoreboard present
+            if (Scoreboard.instance)
+            {
+                //If there is another player with the same name, number each successive player
+                int playerNum = 1;
+                string newName = username;
+                while (Scoreboard.instance.PlayerExists(newName))
+                {
+                    playerNum++;
+                    newName = username + "#" + playerNum;
+                }
+                username = newName;
+            }
+
             //Send name update command to server
             CmdUpdateName(username);
 
@@ -31,6 +45,10 @@ public class PlayerInfo : NetworkBehaviour
         }
         else //If this is a remote player, call username syncvar hook (make sure name is updated from the start)
             UpdateNameClient(username);
+
+        //Add player to scoreboard
+        if(Scoreboard.instance)
+            Scoreboard.instance.AddPlayer(username);
     }
 
     //Updates this player's name on the server
@@ -44,6 +62,14 @@ public class PlayerInfo : NetworkBehaviour
     //Update player info on client
     void UpdateNameClient(string nameString)
     {
+        if (Scoreboard.instance)
+        {
+            //If the player's name has changed, update it on the scoreboard
+            //(this happens when names are synced after the player joins)
+            if (Scoreboard.instance.PlayerExists(username))
+                Scoreboard.instance.ChangeName(username, nameString);
+        }
+
         //set username value passed from syncvar
         username = nameString;
 
