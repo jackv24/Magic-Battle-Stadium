@@ -18,6 +18,7 @@ public class PlayerStats : NetworkBehaviour
 
     //How long it takes to respawn after dying
     public float respawnTime = 5.0f;
+    private Vector3 respawnPos;
 
     //UI objects
     public Slider healthSlider;
@@ -120,7 +121,8 @@ public class PlayerStats : NetworkBehaviour
     {
         //Reset values
         currentHealth = maxHealth;
-        transform.position = NetworkManager.singleton.GetStartPosition().position;
+        //Store server respawn pos so that client also starts in that position
+        respawnPos = NetworkManager.singleton.GetStartPosition().position;
         isAlive = true;
     }
 
@@ -149,5 +151,6 @@ public class PlayerStats : NetworkBehaviour
         CmdRespawn();
         //hide dead text
         deadText.enabled = false;
+        transform.position = respawnPos;
     }
 }

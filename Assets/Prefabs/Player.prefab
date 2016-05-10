@@ -858,7 +858,7 @@ Canvas:
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 689834055
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &22413584
@@ -1022,6 +1022,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Color.b
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SortingLayerID
+      value: 689834055
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

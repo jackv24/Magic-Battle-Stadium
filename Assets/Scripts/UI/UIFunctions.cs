@@ -4,6 +4,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 public class UIFunctions : MonoBehaviour
@@ -22,5 +23,12 @@ public class UIFunctions : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    //Stops the current connection
+    public void StopGame()
+    {
+        //Calling stophost will stop a host, but will also just stop a client
+        NetworkManager.singleton.StopHost();
     }
 }
