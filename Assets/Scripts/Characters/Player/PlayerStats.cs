@@ -153,4 +153,10 @@ public class PlayerStats : NetworkBehaviour
         deadText.enabled = false;
         transform.position = respawnPos;
     }
+
+    void OnDestroy()
+    {
+        //Remove player from local scoreboard (should be called on every client as the player is destroyed on every client)
+        Scoreboard.instance.RemovePlayer(info.username);
+    }
 }

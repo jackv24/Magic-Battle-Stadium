@@ -75,10 +75,28 @@ public class Scoreboard : MonoBehaviour
     //Adds a player to the scoreboard
     public void AddPlayer(string name)
     {
+        //Add name to list
         names.Add(name);
+        //Scores should start at 0
         kills.Add(0);
         deaths.Add(0);
 
+        //Update display
+        UpdateDisplay();
+    }
+
+    //Removes a player from the scoreboard
+    public void RemovePlayer(string name)
+    {
+        //store index of player score info (should be the same in all lists)
+        int index = names.IndexOf(name);
+
+        //Remove info from lists
+        names.RemoveAt(index);
+        kills.RemoveAt(index);
+        deaths.RemoveAt(index);
+
+        //Update the display
         UpdateDisplay();
     }
 
