@@ -74,6 +74,8 @@ public class PlayerInfo : NetworkBehaviour
 
         //set username value passed from syncvar
         username = nameString;
+        //Set gameobject name
+        name = "Player(" + username + ")";
 
         //If there is text in which to display the name, display it
         if (nameText)
