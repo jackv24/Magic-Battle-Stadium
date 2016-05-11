@@ -21,6 +21,8 @@ public class PlayerInfo : NetworkBehaviour
         //If this is the local player
         if (isLocalPlayer)
         {
+            GameManager.instance.localPlayer = gameObject;
+
             //Load name from preferences
             username = PlayerPrefs.GetString("name", System.Environment.UserName);
 

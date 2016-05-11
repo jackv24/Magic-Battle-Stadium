@@ -5,6 +5,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class AttackSlots : MonoBehaviour
 {
@@ -36,13 +37,33 @@ public class AttackSlots : MonoBehaviour
             //if no button was pressed, do nothing
             return;
 
-        //Update slot display
+        //Update slots
         UpdateSlots();
 
     }
 
     void UpdateSlots()
     {
+        PlayerAttack attack = null;
+
+        if (GameManager.instance.localPlayer)
+            attack = GameManager.instance.localPlayer.GetComponent<PlayerAttack>();
+
+        //If the attack script was found
+        if (attack)
+        {
+            //make sure the selected slot is withing the bounds of projectile array
+            if (selectedSlot < attack.projectilePrefabs.Length)
+            {
+                //Set attack slot
+                attack.selectedAttack = selectedSlot;
+                attack.nextAttackTime = 0;
+            }
+            else //if the selected slot is out of bounds
+                //Don't change slot (and keep display)
+                selectedSlot = attack.selectedAttack;
+        }
+
         //Deselect all slots
         foreach (Image slot in slots)
         {

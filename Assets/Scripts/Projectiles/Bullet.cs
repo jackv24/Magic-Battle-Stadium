@@ -8,6 +8,9 @@ using UnityEngine.Networking;
 
 public class Bullet : NetworkBehaviour
 {
+    //How after this bullet  can be fired (in seconds)
+    public float fireTime = 0.25f;
+
     //How fast the bullet will move
     public float moveSpeed = 10f;
     //The amount of seconds after spawning until the bullet will be destroyed
@@ -19,7 +22,8 @@ public class Bullet : NetworkBehaviour
     //Rotation is a SyncVar so that it is synced when the bullet is first spawned, 
     //thus removing the need to sync bullet position since it will not change direction.
     [SyncVar]
-    public Vector3 rotation;
+    [HideInInspector] //Public because it is set externally, but should not show in inspector
+    public Vector3 initialRotation;
 
     //The player who shot this bullet - they should not be damaged
     [SyncVar]
@@ -27,7 +31,7 @@ public class Bullet : NetworkBehaviour
 
     void Start()
     {
-        transform.eulerAngles = rotation;
+        transform.eulerAngles = initialRotation;
         //Set object to be destroyed after its lifetime ends
         Destroy(gameObject, lifeTime);
     }

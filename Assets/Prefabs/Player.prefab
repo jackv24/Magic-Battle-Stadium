@@ -588,7 +588,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackTime: 0.25
-  projectilePrefab: {fileID: 112054, guid: 98b688b01ba13bd47b931d3e7b7b8866, type: 2}
+  projectilePrefabs:
+  - {fileID: 112054, guid: 98b688b01ba13bd47b931d3e7b7b8866, type: 2}
+  - {fileID: 112054, guid: 7a6b72b2ba028c347a6d93acb8e1bbf0, type: 2}
+  selectedAttack: 0
 --- !u!114 &11483830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -976,6 +979,10 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: projectilePrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_Animator
       value: 
       objectReference: {fileID: 0}
@@ -1027,6 +1034,18 @@ Prefab:
       propertyPath: m_SortingLayerID
       value: 689834055
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 112054, guid: 7a6b72b2ba028c347a6d93acb8e1bbf0, type: 2}
+    - target: {fileID: 0}
+      propertyPath: projectilePrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 112054, guid: 98b688b01ba13bd47b931d3e7b7b8866, type: 2}
+    - target: {fileID: 0}
+      propertyPath: projectilePrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 112054, guid: 7a6b72b2ba028c347a6d93acb8e1bbf0, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 114636}

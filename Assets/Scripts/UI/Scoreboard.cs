@@ -104,9 +104,12 @@ public class Scoreboard : MonoBehaviour
     void UpdateDisplay()
     {
         //Reset text values
-        nameText.text = nameTextString;
-        killsText.text = killsTextString;
-        deathsText.text = deathsTextString;
+        if(nameText)
+            nameText.text = nameTextString;
+        if(killsText)
+            killsText.text = killsTextString;
+        if(deathsText)
+            deathsText.text = deathsTextString;
 
         //Iterate through and add values to scoreboard (names, kills, and deaths list should align)
         foreach (string name in names)

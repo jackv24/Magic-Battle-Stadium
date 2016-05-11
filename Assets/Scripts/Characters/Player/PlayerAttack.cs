@@ -10,13 +10,12 @@ using UnityEngine.Networking;
 [NetworkSettings(channel = 1, sendInterval = 0)]
 public class PlayerAttack : NetworkBehaviour
 {
-    //The delay between each consecutive attack
-    public float attackTime = 0.5f;
     //The time after which the next bullet can be fired
-    private float nextAttackTime;
+    public float nextAttackTime;
 
     //The projectile to spawn
-    public GameObject projectilePrefab;
+    public GameObject[] projectilePrefabs;
+    public int selectedAttack = 0;
 
     //attack direction input
     private Vector2 inputVector;
@@ -45,9 +44,9 @@ public class PlayerAttack : NetworkBehaviour
             if (Time.time > nextAttackTime)
             {
                 //Set next attack time
-                nextAttackTime = Time.time + attackTime;
+                nextAttackTime = Time.time + projectilePrefabs[selectedAttack].GetComponent<Bullet>().fireTime;
 
-                CmdFire(inputVector);
+                CmdFire(inputVector, selectedAttack);
             }
         }
     }
@@ -81,13 +80,13 @@ public class PlayerAttack : NetworkBehaviour
 
     //Fire command executed on server (passed direction by client)
     [Command]
-    void CmdFire(Vector2 direction)
+    void CmdFire(Vector2 direction, int attack)
     {
         //Spawn projectile
-        GameObject obj = (GameObject)Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+        GameObject obj = (GameObject)Instantiate(projectilePrefabs[attack], transform.position, Quaternion.identity);
 
         Bullet bullet = obj.GetComponent<Bullet>();
-        bullet.rotation = DirectionToRotation(direction);
+        bullet.initialRotation = DirectionToRotation(direction);
         bullet.owner = gameObject;
 
         //Spawn bullet on the network
