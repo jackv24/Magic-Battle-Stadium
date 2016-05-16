@@ -11,9 +11,11 @@ public class DisplayKillText : MonoBehaviour
     //Opacities of different levels of strings (size of this array also determines to max amount of kill strings)
     public float[] stringOpacity;
 
+    //How long kill text should be displayed before it times out
+    public float timeoutDelay = 5f;
+
     //Current list of kill strings
     private List<string> killStrings = new List<string>();
-
     //Text to update
     private Text killText;
 
@@ -55,6 +57,10 @@ public class DisplayKillText : MonoBehaviour
     //Adds a kill to the display of kill text
     public void AddKill(string playerOneName, string playerTwoName, string weaponName)
     {
+        //Reset text timeout
+        StopCoroutine("TimeoutText");
+        StartCoroutine("TimeoutText");
+
         //construct new string
         string newString = playerOneName + " killed " + playerTwoName + " with " + weaponName;
         //add string to kill strings list
@@ -62,5 +68,20 @@ public class DisplayKillText : MonoBehaviour
 
         //Update display
         UpdateKills();
+    }
+
+    //Removes kill text after a certain time
+    IEnumerator TimeoutText()
+    {
+        yield return new WaitForSeconds(timeoutDelay);
+
+        while (killStrings.Count > 0)
+        {
+            killStrings.RemoveAt(0);
+
+            UpdateKills();
+
+            yield return new WaitForSeconds(1f);
+        }
     }
 }

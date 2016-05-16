@@ -50,8 +50,8 @@ public class Bullet : NetworkBehaviour
         {
             PlayerStats stats = col.gameObject.GetComponent<PlayerStats>();
 
-            //if the object that was collided with has stats
-            if (stats)
+            //if the object that was collided with has stats, and is alive
+            if (stats && stats.isAlive)
             {
                 //Apply damage (name of bullet owner is also sent to identify who killed who)
                 stats.ApplyDamage(damage, owner.GetComponent<PlayerInfo>().username, bulletName);

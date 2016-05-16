@@ -392,12 +392,12 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 28
-    m_FontStyle: 1
+    m_Font: {fileID: 12800000, guid: 686ad995e2295154ca886f7a9a37ad24, type: 3}
+    m_FontSize: 42
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
-    m_MaxSize: 40
+    m_MaxSize: 42
     m_Alignment: 7
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -587,7 +587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcae1a08d78e5a4aa056edf405bec7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackTime: 0.25
+  nextAttackTime: 0
   projectilePrefabs:
   - {fileID: 112054, guid: 98b688b01ba13bd47b931d3e7b7b8866, type: 2}
   - {fileID: 112054, guid: 7a6b72b2ba028c347a6d93acb8e1bbf0, type: 2}
