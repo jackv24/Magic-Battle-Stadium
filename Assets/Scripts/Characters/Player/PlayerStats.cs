@@ -56,7 +56,7 @@ public class PlayerStats : NetworkBehaviour
         StartCoroutine("UpdateSlider");
     }
 
-    public void ApplyDamage(int amount, string attackerName)
+    public void ApplyDamage(int amount, string attackerName, string attackName)
     {
         //Damage can only be applied on the server
         if (!isServer)
@@ -67,7 +67,7 @@ public class PlayerStats : NetworkBehaviour
             currentHealth -= amount;
 
             if (currentHealth <= 0)
-                RpcDie(attackerName);
+                RpcDie(attackerName, attackName);
         }
     }
 
@@ -91,7 +91,7 @@ public class PlayerStats : NetworkBehaviour
 
     //Teh server calls the die command on the client (client shows text)
     [ClientRpc]
-    void RpcDie(string attackerName)
+    void RpcDie(string attackerName, string attackName)
     {
         if (deadText)
         {
@@ -106,12 +106,20 @@ public class PlayerStats : NetworkBehaviour
             StartCoroutine("RespawnTimer", respawnTime);
         }
 
+        //If a scoreboard exists
         if (Scoreboard.instance)
         {
             //Add death to scoreboard
             Scoreboard.instance.AddDeath(info.username);
             //Add kill to scoreboard
             Scoreboard.instance.AddKill(attackerName);
+        }
+
+        //If the kill text display exists
+        if (DisplayKillText.instance)
+        {
+            //Add a kill to the killtext, with player name, attacker name, and the name of the attack that killed it
+            DisplayKillText.instance.AddKill(attackerName, info.username, attackName);
         }
     }
 

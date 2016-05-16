@@ -8,6 +8,8 @@ using UnityEngine.Networking;
 
 public class Bullet : NetworkBehaviour
 {
+    public string bulletName = "Bullet";
+
     //How after this bullet  can be fired (in seconds)
     public float fireTime = 0.25f;
 
@@ -52,7 +54,7 @@ public class Bullet : NetworkBehaviour
             if (stats)
             {
                 //Apply damage (name of bullet owner is also sent to identify who killed who)
-                stats.ApplyDamage(damage, owner.GetComponent<PlayerInfo>().username);
+                stats.ApplyDamage(damage, owner.GetComponent<PlayerInfo>().username, bulletName);
 
                 //destroy bullet
                 Destroy(gameObject);
