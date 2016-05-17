@@ -8,6 +8,22 @@ using UnityEngine.Networking;
 
 public class ConnectionManager : NetworkManager
 {
+    public override void OnStartHost()
+    {
+        base.OnStartHost();
+
+        GameManager.instance.maxPlayers = maxConnections;
+        GameManager.instance.connectedPlayers = numPlayers;
+        GameManager.instance.ReadyGame();
+
+        NotificationManager.instance.ShowNotice("?", "Host connect called");
+    }
+
+    public override void OnClientConnect(NetworkConnection conn)
+    {
+        base.OnClientConnect(conn);
+    }
+
     //When the client is disconnected unexpectedly
     public override void OnClientDisconnect(NetworkConnection conn)
     {
