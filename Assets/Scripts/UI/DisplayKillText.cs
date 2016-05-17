@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*
+**  DisplayKillText.cs: Displays text whenever called externally (a player is killed)
+*/
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;

@@ -35,6 +35,7 @@ MonoBehaviour:
   - 0.6
   - 0.4
   - 0.2
+  timeoutDelay: 5
 --- !u!114 &11462432
 MonoBehaviour:
   m_ObjectHideFlags: 1
