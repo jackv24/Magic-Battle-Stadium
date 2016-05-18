@@ -35,7 +35,7 @@ public class HomingBullet : MonoBehaviour
         {
             float distance = Vector3.Distance(transform.position, t.transform.position);
 
-            if (distance < minDistance && t != bullet.owner)
+            if (distance < minDistance && t != bullet.owner && t.GetComponent<PlayerStats>().isAlive)
             {
                 minDistance = distance;
 
