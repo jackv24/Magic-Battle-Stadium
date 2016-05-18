@@ -5,17 +5,13 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
     public GameObject localPlayer;
-
-    public float gameStartTime = 30f;
-
-    public bool hasGameStarted = false;
-    public int connectedPlayers, maxPlayers;
 
     private Text startText;
     private string startTextString;
@@ -24,39 +20,10 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        startText = GameObject.Find("StartText").GetComponent<Text>();
-        startTextString = startText.text;
-    }
-
-    public void ReadyGame()
-    {
-        if (!hasGameStarted)
+        if (GameObject.Find("StartText"))
         {
-            startText.enabled = true;
-
-            StartCoroutine("StartGameCountdown", gameStartTime);
+            startText = GameObject.Find("StartText").GetComponent<Text>();
+            startTextString = startText.text;
         }
-    }
-
-    IEnumerator StartGameCountdown(float seconds)
-    {
-        float timeLeft = seconds;
-
-        while (timeLeft >= 0)
-        {
-            startText.text = string.Format(startTextString, connectedPlayers, maxPlayers, timeLeft);
-
-            yield return new WaitForSeconds(1f);
-            timeLeft--;
-        }
-
-        StartGame();
-    }
-
-    void StartGame()
-    {
-        startText.enabled = false;
-
-        hasGameStarted = true;
     }
 }
