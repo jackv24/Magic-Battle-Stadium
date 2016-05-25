@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public GameObject localPlayer;
+    //UI attack slots
+    public AttackSlots attackSlots;
 
     private Text startText;
     private string startTextString;
@@ -25,5 +27,11 @@ public class GameManager : MonoBehaviour
             startText = GameObject.Find("StartText").GetComponent<Text>();
             startTextString = startText.text;
         }
+    }
+
+    //Initilises game by calling required initilisers
+    public void Initialise()
+    {
+        attackSlots.InitialiseSlots(localPlayer.GetComponent<PlayerAttack>());
     }
 }

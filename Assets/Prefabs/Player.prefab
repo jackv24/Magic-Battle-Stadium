@@ -545,9 +545,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 100
   maxHealth: 100
+  currentMana: 100
+  maxMana: 100
   isAlive: 1
   respawnTime: 5
   healthSlider: {fileID: 11468166}
+  manaSlider: {fileID: 0}
   sliderUpdateInterval: 0.1
 --- !u!114 &11480818
 MonoBehaviour:
@@ -1046,6 +1049,14 @@ Prefab:
       propertyPath: projectilePrefabs.Array.data[1]
       value: 
       objectReference: {fileID: 112054, guid: 7a6b72b2ba028c347a6d93acb8e1bbf0, type: 2}
+    - target: {fileID: 0}
+      propertyPath: currentMana
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: maxMana
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 114636}

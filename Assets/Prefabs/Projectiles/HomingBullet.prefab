@@ -219,6 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletName: Homing Bullet
+  manaCost: 10
   fireTime: 0.5
   moveSpeed: 10
   lifeTime: 7
@@ -342,6 +343,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: bulletName
       value: Homing Bullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: manaCost
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -16,10 +16,11 @@ public class AttackSlots : MonoBehaviour
     public Color selectedColor = Color.white;
     public Color deselectedColor = Color.gray;
 
+    private PlayerAttack attack;
+
     void Start()
     {
-        //Slots are updated when game starts
-        UpdateSlots();
+        GameManager.instance.attackSlots = this;
     }
 
     void Update()
@@ -42,13 +43,33 @@ public class AttackSlots : MonoBehaviour
 
     }
 
+    //Sets appropriate images and text
+    public void InitialiseSlots(PlayerAttack playerAttack)
+    {
+        attack = playerAttack;
+
+        //Iterate through all display slots
+        for (int i = 0; i < slots.Length; i++)
+        {
+            //Should have a single text object in child
+            Text slotsText = slots[i].GetComponentInChildren<Text>();
+
+            //If the attack slot on the player is filled
+            if (i < attack.projectilePrefabs.Length)
+                //Update slot text
+                slotsText.text = string.Format(slotsText.text, i + 1, attack.projectilePrefabs[i].GetComponent<Bullet>().manaCost);
+            else
+                //Clear slot text
+                slotsText.text = "";
+        }
+
+        //Update the selected slot
+        UpdateSlots();
+    }
+
+    //Updates which slot is selected
     void UpdateSlots()
     {
-        PlayerAttack attack = null;
-
-        if (GameManager.instance.localPlayer)
-            attack = GameManager.instance.localPlayer.GetComponent<PlayerAttack>();
-
         //If the attack script was found
         if (attack)
         {
@@ -57,6 +78,7 @@ public class AttackSlots : MonoBehaviour
             {
                 //Set attack slot
                 attack.selectedAttack = selectedSlot;
+                //Next attack time should be reset when a new attack is selected
                 attack.nextAttackTime = 0;
             }
             else //if the selected slot is out of bounds

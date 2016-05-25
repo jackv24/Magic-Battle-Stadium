@@ -43,10 +43,16 @@ public class PlayerAttack : NetworkBehaviour
             //If the next attack time has passed OR the driection has changed
             if (Time.time > nextAttackTime)
             {
-                //Set next attack time
-                nextAttackTime = Time.time + projectilePrefabs[selectedAttack].GetComponent<Bullet>().fireTime;
+                Bullet bullet = projectilePrefabs[selectedAttack].GetComponent<Bullet>();
 
-                CmdFire(inputVector, selectedAttack);
+                //Use mana to attack. If not enough mana is left, attack cannot be performed
+                if (stats.UseMana(bullet.manaCost))
+                {
+                    //Set next attack time
+                    nextAttackTime = Time.time + bullet.fireTime;
+
+                    CmdFire(inputVector, selectedAttack);
+                }
             }
         }
     }

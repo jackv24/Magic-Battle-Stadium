@@ -13,6 +13,11 @@ public class PlayerStats : NetworkBehaviour
     public int currentHealth = 100;
     public int maxHealth = 100;
 
+    public int currentMana = 100;
+    public int maxMana = 100;
+
+    public float manaRegenInterval = 0.5f;
+
     [SyncVar]
     public bool isAlive = true;
 
@@ -22,12 +27,15 @@ public class PlayerStats : NetworkBehaviour
 
     //UI objects
     public Slider healthSlider;
+    private Text healthSliderText;
+
+    public Slider manaSlider;
+    private Text manaSliderText;
+
     public float sliderUpdateInterval = 0.1f;
 
     private Text deadText;
     private string deadTextString;
-
-    private Text healthSliderText;
 
     private PlayerInfo info;
 
@@ -50,10 +58,14 @@ public class PlayerStats : NetworkBehaviour
             //Find the HUD health slider, and the child text component
             healthSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
             healthSliderText = healthSlider.GetComponentInChildren<Text>();
+
+            manaSlider = GameObject.Find("ManaBar").GetComponent<Slider>();
+            manaSliderText = manaSlider.GetComponentInChildren<Text>();
         }
 
         //Slider is updated using a coroutine (for performance)
         StartCoroutine("UpdateSlider");
+        StartCoroutine("RegenerateMana");
     }
 
     public void ApplyDamage(int amount, string attackerName, string attackName)
@@ -71,21 +83,54 @@ public class PlayerStats : NetworkBehaviour
         }
     }
 
+    //Removes mana, returning true if there was enough mana left
+    public bool UseMana(int amount)
+    {
+        //Only use mana if there is enough
+        if (currentMana >= amount)
+        {
+            currentMana -= amount;
+
+            return true;
+        }
+        else //Else return false as there is not enough mana
+            return false;
+    }
+
+    IEnumerator RegenerateMana()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(manaRegenInterval);
+
+            if(currentMana < maxMana)
+                currentMana += 1;
+        }
+    }
+
     //Slider doesn't need to be updated every frame. Coruotine should save performance.
     IEnumerator UpdateSlider()
     {
-        if (healthSlider)
+        while(true)
         {
-            while (true)
+            if (healthSlider)
             {
                 healthSlider.value = (float)currentHealth / maxHealth;
 
                 if (healthSliderText)
                     healthSliderText.text = currentHealth + "/" + maxHealth;
-
-                //Update at fixed time intervals (not updating every frame saves performance)
-                yield return new WaitForSeconds(sliderUpdateInterval);
             }
+
+            if (manaSlider)
+            {
+                manaSlider.value = (float)currentMana / maxMana;
+
+                if (manaSliderText)
+                    manaSliderText.text = currentMana + "/" + maxMana;
+            }
+
+            //Update at fixed time intervals (not updating every frame saves performance)
+            yield return new WaitForSeconds(sliderUpdateInterval);
         }
     }
 

@@ -10,6 +10,8 @@ public class Bullet : NetworkBehaviour
 {
     public string bulletName = "Bullet";
 
+    public int manaCost = 0;
+
     //How after this bullet  can be fired (in seconds)
     public float fireTime = 0.25f;
 
