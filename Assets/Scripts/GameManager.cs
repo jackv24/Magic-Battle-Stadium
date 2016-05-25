@@ -32,6 +32,9 @@ public class GameManager : MonoBehaviour
     //Initilises game by calling required initilisers
     public void Initialise()
     {
-        attackSlots.InitialiseSlots(localPlayer.GetComponent<PlayerAttack>());
+        if (localPlayer)
+        {
+            attackSlots.InitialiseSlots(localPlayer.GetComponent<PlayerAttack>());
+        }
     }
 }

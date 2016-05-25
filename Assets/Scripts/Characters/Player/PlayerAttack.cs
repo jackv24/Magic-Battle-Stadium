@@ -14,7 +14,7 @@ public class PlayerAttack : NetworkBehaviour
     public float nextAttackTime;
 
     //The projectile to spawn
-    public GameObject[] projectilePrefabs;
+    public Attack[] attackSet;
     public int selectedAttack = 0;
 
     //attack direction input
@@ -43,13 +43,11 @@ public class PlayerAttack : NetworkBehaviour
             //If the next attack time has passed OR the driection has changed
             if (Time.time > nextAttackTime)
             {
-                Bullet bullet = projectilePrefabs[selectedAttack].GetComponent<Bullet>();
-
                 //Use mana to attack. If not enough mana is left, attack cannot be performed
-                if (stats.UseMana(bullet.manaCost))
+                if (stats.UseMana(attackSet[selectedAttack].manaCost))
                 {
                     //Set next attack time
-                    nextAttackTime = Time.time + bullet.fireTime;
+                    nextAttackTime = Time.time + attackSet[selectedAttack].fireTime;
 
                     CmdFire(inputVector, selectedAttack);
                 }
@@ -89,7 +87,7 @@ public class PlayerAttack : NetworkBehaviour
     void CmdFire(Vector2 direction, int attack)
     {
         //Spawn projectile
-        GameObject obj = (GameObject)Instantiate(projectilePrefabs[attack], transform.position, Quaternion.identity);
+        GameObject obj = (GameObject)Instantiate(attackSet[attack].attackPrefab, transform.position, Quaternion.identity);
 
         Bullet bullet = obj.GetComponent<Bullet>();
         bullet.initialRotation = DirectionToRotation(direction);

@@ -52,15 +52,28 @@ public class AttackSlots : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             //Should have a single text object in child
-            Text slotsText = slots[i].GetComponentInChildren<Text>();
+            Text slotText = slots[i].GetComponentInChildren<Text>();
+
+            Image slotImage = null;
+            foreach (Image image in slots[i].GetComponentsInChildren<Image>())
+            {
+                if (image != slots[i])
+                    slotImage = image;
+            }
 
             //If the attack slot on the player is filled
-            if (i < attack.projectilePrefabs.Length)
+            if (i < attack.attackSet.Length)
+            {
                 //Update slot text
-                slotsText.text = string.Format(slotsText.text, i + 1, attack.projectilePrefabs[i].GetComponent<Bullet>().manaCost);
+                slotText.text = string.Format(slotText.text, i + 1, attack.attackSet[i].manaCost);
+                slotImage.sprite = attack.attackSet[i].slotIcon;
+            }
             else
+            {
                 //Clear slot text
-                slotsText.text = "";
+                slotText.text = "";
+                slotImage.color = Color.clear;
+            }
         }
 
         //Update the selected slot
@@ -74,7 +87,7 @@ public class AttackSlots : MonoBehaviour
         if (attack)
         {
             //make sure the selected slot is withing the bounds of projectile array
-            if (selectedSlot < attack.projectilePrefabs.Length)
+            if (selectedSlot < attack.attackSet.Length)
             {
                 //Set attack slot
                 attack.selectedAttack = selectedSlot;
