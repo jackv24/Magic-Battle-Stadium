@@ -12,6 +12,8 @@ public class NetworkConnectUI : MonoBehaviour
 
     //Gameobjects to be enabled when the match has connected
     public GameObject[] enableGameObjects;
+    //Gameobjects to be disabled 
+    public GameObject[] disableGameObjects;
 
     public float connectionAttemptTimeout = 1f;
 
@@ -26,7 +28,7 @@ public class NetworkConnectUI : MonoBehaviour
     void Start()
     {
         //Gameobjects to be enabled should start disabled
-        SetActiveObjects(false);
+        ToggleUIObjects(false);
 
         if (!manager)
             Debug.Log("No NetworkManager assigned to Network Connect UI!");
@@ -79,10 +81,7 @@ public class NetworkConnectUI : MonoBehaviour
                 manager.StartClient();
 
             //Enable all of the gameobjects specified in the inspector
-            SetActiveObjects(true);
-
-            //Disable the connection menu, as it is not needed anymore
-            SetUIActive(false);
+            ToggleUIObjects(true);
 
             //Wait for a certain amount of time to see if the connection was successful
             yield return new WaitForSeconds(connectionAttemptTimeout);
@@ -91,10 +90,7 @@ public class NetworkConnectUI : MonoBehaviour
             if (!manager.IsClientConnected())
             {
                 //Enable all of the gameobjects specified in the inspector
-                SetActiveObjects(false);
-
-                //Disable the connection menu, as it is not needed anymore
-                SetUIActive(true);
+                ToggleUIObjects(false);
 
                 //Display a notice (using custom notice system)
                 NotificationManager.instance.ShowNotice("!", string.Format(
@@ -122,18 +118,17 @@ public class NetworkConnectUI : MonoBehaviour
     }
 
     //Enable all objects in enableObjects (HUD, etc)
-    void SetActiveObjects(bool active)
+    void ToggleUIObjects(bool active)
     {
         foreach (GameObject obj in enableGameObjects)
         {
             obj.SetActive(active);
         }
-    }
 
-    //Sets first child's active state (so code can still run on this gameobject)
-    void SetUIActive(bool active)
-    {
-        gameObject.transform.GetChild(0).gameObject.SetActive(active);
+        foreach (GameObject obj in disableGameObjects)
+        {
+            obj.SetActive(!active);
+        }
     }
 
     ////Will be deleted when everything is implemented
