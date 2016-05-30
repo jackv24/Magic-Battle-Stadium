@@ -26,19 +26,27 @@ public class HomingBullet : MonoBehaviour
 
     void Start()
     {
+        //Get list of potential targets (all players)
         potentialTargets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
+        //Remove the owner of this bullet from the list of targets
         potentialTargets.Remove(bullet.owner);
 
+        //Abitrary start distance (all targets should be closer than this)
         float minDistance = 1000f;
 
+        //Iterate through all targets
         foreach (GameObject t in potentialTargets)
         {
+            //Find distance to this target
             float distance = Vector3.Distance(transform.position, t.transform.position);
 
+            //If this target is closer than the last, and the target is alive
             if (distance < minDistance && t != bullet.owner && t.GetComponent<PlayerStats>().isAlive)
             {
+                //Update min distance
                 minDistance = distance;
 
+                //Set this target as the target
                 target = t;
             }
         }

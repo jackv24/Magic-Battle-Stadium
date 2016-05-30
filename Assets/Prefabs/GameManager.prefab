@@ -42,6 +42,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   localPlayer: {fileID: 0}
+  attackSlots: {fileID: 0}
 --- !u!114 &11439898
 MonoBehaviour:
   m_ObjectHideFlags: 1

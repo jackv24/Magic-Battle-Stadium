@@ -628,12 +628,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4b578ea54ca044db2b065d14320525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderers:
-  - {fileID: 21294346}
-  - {fileID: 21282360}
+  graphics:
+    hat: {fileID: 21282360}
+    clothes: {fileID: 21294346}
+    skin: {fileID: 21287424}
   minSaturation: 0.25
   maxSaturation: 0.75
-  randomColor: {r: 1, g: 1, b: 1, a: 0}
+  hatColor: {r: 0, g: 0, b: 0, a: 0}
+  clothesColor: {r: 0, g: 0, b: 0, a: 0}
+  skinColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &11493342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -799,7 +802,7 @@ SpriteRenderer:
   m_SortingLayerID: 593433907
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300006, guid: e4261f30c5e902d45a824324619d1319, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.992, g: 0.835, b: 0.714, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!212 &21294346
@@ -1069,6 +1072,16 @@ Prefab:
         type: 2}
     - target: {fileID: 0}
       propertyPath: attackSet.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 692f93888841942438f86b50fe924f32,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: attackSet.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 692f93888841942438f86b50fe924f32,
+        type: 2}
+    - target: {fileID: 0}
+      propertyPath: attackSet.Array.data[3]
       value: 
       objectReference: {fileID: 11400000, guid: 692f93888841942438f86b50fe924f32,
         type: 2}
