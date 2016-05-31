@@ -63,4 +63,9 @@ public class Bullet : NetworkBehaviour
             }
         }
     }
+
+    void SetOwner(GameObject obj)
+    {
+        owner = obj;
+    }
 }

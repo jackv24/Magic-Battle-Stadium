@@ -20,11 +20,27 @@ public class AttackEditor : Editor
         EditorGUILayout.Space();
 
         attack.manaCost = EditorGUILayout.IntField("Mana Cost", attack.manaCost);
-        attack.fireTime = EditorGUILayout.FloatField("Fire Interval", attack.fireTime);
+        attack.coolDownTime = EditorGUILayout.FloatField("Cool-down Time", attack.coolDownTime);
         EditorGUILayout.Space();
 
-        attack.attackPrefab = (GameObject)EditorGUILayout.ObjectField("Attack Prefab", attack.attackPrefab, typeof(GameObject), false);
+        attack.type = (Attack.Type)EditorGUILayout.EnumPopup("Type", attack.type);
+        EditorGUILayout.Space();
 
+        //Show different options depending on attack type
+        switch (attack.type)
+        {
+            case Attack.Type.Projectile:
+                attack.attackPrefab = (GameObject)EditorGUILayout.ObjectField("Projectile Prefab", attack.attackPrefab, typeof(GameObject), false);
+                break;
+            case Attack.Type.Trap:
+                attack.attackPrefab = (GameObject)EditorGUILayout.ObjectField("Trap Prefab", attack.attackPrefab, typeof(GameObject), false);
+                break;
+            case Attack.Type.Cast:
+                EditorGUILayout.HelpBox("Cast-type attacks do not spawn a prefab.", MessageType.Info);
+                break;
+        }
+
+        //Make sure to re-draw
         EditorUtility.SetDirty(target);
     }
 }

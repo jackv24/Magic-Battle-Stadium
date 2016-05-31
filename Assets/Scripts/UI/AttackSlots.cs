@@ -86,16 +86,8 @@ public class AttackSlots : MonoBehaviour
         //If the attack script was found
         if (attack)
         {
-            //make sure the selected slot is withing the bounds of projectile array
-            if (selectedSlot < attack.attackSet.Length)
-            {
-                //Set attack slot
-                attack.selectedAttack = selectedSlot;
-                //Next attack time should be reset when a new attack is selected
-                attack.nextAttackTime = 0;
-            }
-            else //if the selected slot is out of bounds
-                //Don't change slot (and keep display)
+            //Attempt to select slot. If unsuccessful, keep currently selected slot
+            if(!attack.SelectSlot(selectedSlot))
                 selectedSlot = attack.selectedAttack;
         }
 

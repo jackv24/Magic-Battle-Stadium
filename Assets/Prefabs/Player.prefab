@@ -595,6 +595,7 @@ MonoBehaviour:
   attackSet:
   - {fileID: 11400000, guid: 4e392130865362d45a0c05e1f10fb29c, type: 2}
   - {fileID: 11400000, guid: 692f93888841942438f86b50fe924f32, type: 2}
+  - {fileID: 11400000, guid: 65e9e6bb0dadb1843b358182c9e2e86b, type: 2}
   selectedAttack: 0
 --- !u!114 &11483830
 MonoBehaviour:
@@ -987,7 +988,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: attackSet.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: projectilePrefabs.Array.size
@@ -1078,7 +1079,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: attackSet.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 692f93888841942438f86b50fe924f32,
+      objectReference: {fileID: 11400000, guid: 65e9e6bb0dadb1843b358182c9e2e86b,
         type: 2}
     - target: {fileID: 0}
       propertyPath: attackSet.Array.data[3]

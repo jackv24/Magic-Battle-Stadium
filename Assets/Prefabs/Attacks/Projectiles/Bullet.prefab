@@ -103,10 +103,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcd467b1486c1e245a7e4df944ef9e48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletName: Bullet
+  manaCost: 0
+  fireTime: 0.25
   moveSpeed: 20
   lifeTime: 5
   damage: 10
-  rotation: {x: 0, y: 0, z: 0}
+  initialRotation: {x: 0, y: 0, z: 0}
   owner: {fileID: 0}
 --- !u!114 &11455958
 MonoBehaviour:

@@ -15,7 +15,16 @@ public class Attack : ScriptableObject
     public int manaCost = 0;
 
     //Interval at which the attack can be performed
-    public float fireTime = 0.25f;
+    public float coolDownTime = 0.25f;
+
+    //The type of attack (used to differentiate between behaviour types)
+    public enum Type
+    {
+        Projectile,
+        Trap,
+        Cast
+    }
+    public Type type;
 
     //Prefab to spawn when this attack is used
     public GameObject attackPrefab;

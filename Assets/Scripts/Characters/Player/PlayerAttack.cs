@@ -47,12 +47,41 @@ public class PlayerAttack : NetworkBehaviour
                 if (stats.UseMana(attackSet[selectedAttack].manaCost))
                 {
                     //Set next attack time
-                    nextAttackTime = Time.time + attackSet[selectedAttack].fireTime;
+                    nextAttackTime = Time.time + attackSet[selectedAttack].coolDownTime;
 
                     CmdFire(inputVector, selectedAttack);
                 }
             }
         }
+    }
+
+    public bool SelectSlot(int slotIndex)
+    {
+        if (slotIndex < attackSet.Length)
+        {
+            //If the attack is a projectile, select it
+            if (attackSet[slotIndex].type == Attack.Type.Projectile)
+                selectedAttack = slotIndex;
+            //If the attack is a trap, it shouldn't be selected, and instead should be used immediately
+            else if (attackSet[slotIndex].type == Attack.Type.Trap)
+            {
+                //Only use attack if there is enough mana
+                if(stats.UseMana(attackSet[slotIndex].manaCost))
+                    CmdFire(Vector2.zero, slotIndex);
+
+                //Attack was not selected (it was used immediately instead)
+                return false;
+            }
+
+            //Reset attack time
+            nextAttackTime = 0;
+
+            //Attack was selected
+            return true;
+        }
+        //If index is out of bounds return false
+        else
+            return false;
     }
 
     //Returns one of four euler angle vectors based in the input vector direction
@@ -89,9 +118,15 @@ public class PlayerAttack : NetworkBehaviour
         //Spawn projectile
         GameObject obj = (GameObject)Instantiate(attackSet[attack].attackPrefab, transform.position, Quaternion.identity);
 
-        Bullet bullet = obj.GetComponent<Bullet>();
-        bullet.initialRotation = DirectionToRotation(direction);
-        bullet.owner = gameObject;
+        //Projectiles have a direction
+        if (direction != Vector2.zero)
+        {
+            Bullet bullet = obj.GetComponent<Bullet>();
+            bullet.initialRotation = DirectionToRotation(direction);
+        }
+
+        //Sets the owner no matter what script (must have method though)
+        obj.SendMessage("SetOwner", gameObject);
 
         //Spawn bullet on the network
         NetworkServer.Spawn(obj);
