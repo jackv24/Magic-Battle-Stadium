@@ -11,7 +11,18 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameObject localPlayer;
+    private GameObject localPlayer;
+    public GameObject LocalPlayer
+    {
+        get { return localPlayer; }
+        set
+        {
+            //Setting the local player calls initialise function to set up player-related things
+            localPlayer = value;
+            Initialise();
+        }
+    }
+
     //UI attack slots
     public AttackSlots attackSlots;
 
@@ -29,12 +40,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Initilises game by calling required initilisers
-    public void Initialise()
+    void Initialise()
     {
-        if (localPlayer)
-        {
-            attackSlots.InitialiseSlots(localPlayer.GetComponent<PlayerAttack>());
-        }
+        //Initialise attack slots
+        attackSlots.InitialiseSlots();
     }
 }

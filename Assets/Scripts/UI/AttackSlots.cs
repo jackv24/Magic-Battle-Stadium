@@ -9,19 +9,22 @@ using UnityEngine.Networking;
 
 public class AttackSlots : MonoBehaviour
 {
-    //UI images for slots
-    public Image[] slots;
+    [System.Serializable]
+    public class Slot
+    {
+        public Image image;
+        public Image icon;
+        public Text text;
+        public Image cooldownImage;
+    }
+    public Slot[] slots;
+
     public int selectedSlot = 0;
 
     public Color selectedColor = Color.white;
     public Color deselectedColor = Color.gray;
 
     private PlayerAttack attack;
-
-    void Start()
-    {
-        GameManager.instance.attackSlots = this;
-    }
 
     void Update()
     {
@@ -44,36 +47,29 @@ public class AttackSlots : MonoBehaviour
     }
 
     //Sets appropriate images and text
-    public void InitialiseSlots(PlayerAttack playerAttack)
+    public void InitialiseSlots()
     {
-        attack = playerAttack;
+        attack = GameManager.instance.LocalPlayer.GetComponent<PlayerAttack>();
 
         //Iterate through all display slots
         for (int i = 0; i < slots.Length; i++)
         {
-            //Should have a single text object in child
-            Text slotText = slots[i].GetComponentInChildren<Text>();
-
-            Image slotImage = null;
-            foreach (Image image in slots[i].GetComponentsInChildren<Image>())
-            {
-                if (image != slots[i])
-                    slotImage = image;
-            }
-
             //If the attack slot on the player is filled
             if (i < attack.attackSet.Length)
             {
                 //Update slot text
-                slotText.text = string.Format(slotText.text, i + 1, attack.attackSet[i].manaCost);
-                slotImage.sprite = attack.attackSet[i].slotIcon;
+                slots[i].text.text = string.Format(slots[i].text.text, i + 1, attack.attackSet[i].attack.manaCost);
+                slots[i].icon.sprite = attack.attackSet[i].attack.slotIcon;
+                slots[i].icon.color = Color.white;
             }
             else
             {
                 //Clear slot text
-                slotText.text = "";
-                slotImage.color = Color.clear;
+                slots[i].text.text = "";
+                slots[i].icon.color = Color.clear;
             }
+
+            slots[i].cooldownImage.fillAmount = 0;
         }
 
         //Update the selected slot
@@ -92,12 +88,44 @@ public class AttackSlots : MonoBehaviour
         }
 
         //Deselect all slots
-        foreach (Image slot in slots)
+        foreach (Slot slot in slots)
         {
-            slot.color = deselectedColor;
+            slot.image.color = deselectedColor;
         }
 
         //Select current slot
-        slots[selectedSlot].color = selectedColor;
+        slots[selectedSlot].image.color = selectedColor;
+    }
+
+    //Public method called externally to start coroutine
+    public void StartCooldown(int slotIndex)
+    {
+        StartCoroutine("DisplayCooldown", slotIndex);
+    }
+
+    //Coruotine to animate the cooldown timer display of a particular slot
+    IEnumerator DisplayCooldown(int slotIndex)
+    {
+        //Store reference to cooldown image
+        Image cooldown = slots[slotIndex].cooldownImage;
+
+        //Start countdown fill at max
+        cooldown.fillAmount = 1f;
+
+        float elapsedTime = 0;
+        float cooldownTime = attack.attackSet[slotIndex].attack.coolDownTime;
+
+        while (elapsedTime <= cooldownTime)
+        {
+            //Lerp fill amount from 1 to 0 based on elapsed time
+            cooldown.fillAmount = Mathf.Lerp(1f, 0, elapsedTime / cooldownTime);
+
+            //Increase elapsed time by deltatime and then return to start of next frame
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        //Make sure fill amunt is zero
+        cooldown.fillAmount = 0;
     }
 }

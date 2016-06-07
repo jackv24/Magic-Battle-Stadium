@@ -10,11 +10,15 @@ using UnityEngine.Networking;
 [NetworkSettings(channel = 1, sendInterval = 0)]
 public class PlayerAttack : NetworkBehaviour
 {
-    //The time after which the next bullet can be fired
-    public float nextAttackTime;
+    [System.Serializable]
+    public struct AttackInfo
+    {
+        public Attack attack;
+        public float nextAttackTime;
+    }
 
-    //The projectile to spawn
-    public Attack[] attackSet;
+    public AttackInfo[] attackSet;
+
     public int selectedAttack = 0;
 
     //attack direction input
@@ -41,13 +45,14 @@ public class PlayerAttack : NetworkBehaviour
         if (inputVector != Vector2.zero)
         {
             //If the next attack time has passed OR the driection has changed
-            if (Time.time > nextAttackTime)
+            if (Time.time > attackSet[selectedAttack].nextAttackTime)
             {
                 //Use mana to attack. If not enough mana is left, attack cannot be performed
-                if (stats.UseMana(attackSet[selectedAttack].manaCost))
+                if (stats.UseMana(attackSet[selectedAttack].attack.manaCost))
                 {
                     //Set next attack time
-                    nextAttackTime = Time.time + attackSet[selectedAttack].coolDownTime;
+                    attackSet[selectedAttack].nextAttackTime = Time.time + attackSet[selectedAttack].attack.coolDownTime;
+                    GameManager.instance.attackSlots.StartCooldown(selectedAttack);
 
                     CmdFire(inputVector, selectedAttack);
                 }
@@ -60,22 +65,24 @@ public class PlayerAttack : NetworkBehaviour
         if (slotIndex < attackSet.Length)
         {
             //If the attack is a projectile, select it
-            if (attackSet[slotIndex].type == Attack.Type.Projectile)
+            if (attackSet[slotIndex].attack.type == Attack.Type.Projectile)
                 selectedAttack = slotIndex;
             //If the attack is a trap, it shouldn't be selected, and instead should be used immediately
-            else if (attackSet[slotIndex].type == Attack.Type.Trap)
+            else if (attackSet[slotIndex].attack.type == Attack.Type.Trap)
             {
-                //Only use attack if there is enough mana
-                if(stats.UseMana(attackSet[slotIndex].manaCost))
+                //Only use attack if there is enough mana and it is not on cooldown
+                if (Time.time > attackSet[slotIndex].nextAttackTime && stats.UseMana(attackSet[slotIndex].attack.manaCost))
+                {
+                    //Set next cooldown time for this attack
+                    attackSet[slotIndex].nextAttackTime = Time.time + attackSet[slotIndex].attack.coolDownTime;
+                    GameManager.instance.attackSlots.StartCooldown(slotIndex);
+
                     CmdFire(Vector2.zero, slotIndex);
+                }
 
                 //Attack was not selected (it was used immediately instead)
                 return false;
             }
-
-            //Reset attack time
-            nextAttackTime = 0;
-
             //Attack was selected
             return true;
         }
@@ -116,7 +123,7 @@ public class PlayerAttack : NetworkBehaviour
     void CmdFire(Vector2 direction, int attack)
     {
         //Spawn projectile
-        GameObject obj = (GameObject)Instantiate(attackSet[attack].attackPrefab, transform.position, Quaternion.identity);
+        GameObject obj = (GameObject)Instantiate(attackSet[attack].attack.attackPrefab, transform.position, Quaternion.identity);
 
         //Projectiles have a direction
         if (direction != Vector2.zero)

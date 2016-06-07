@@ -22,10 +22,7 @@ public class PlayerInfo : NetworkBehaviour
         if (isLocalPlayer)
         {
             //Set a reference to the local player in the gamemanager
-            GameManager.instance.localPlayer = gameObject;
-
-            //After player is spawned initialise game
-            GameManager.instance.Initialise();
+            GameManager.instance.LocalPlayer = gameObject;
 
             //Load name from preferences
             username = PlayerPrefs.GetString("name", System.Environment.UserName);
