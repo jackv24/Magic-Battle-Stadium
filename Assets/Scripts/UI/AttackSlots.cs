@@ -55,11 +55,11 @@ public class AttackSlots : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             //If the attack slot on the player is filled
-            if (i < attack.attackSet.Length)
+            if (attack.attackSet.attacks[i] != null)
             {
                 //Update slot text
-                slots[i].text.text = string.Format(slots[i].text.text, i + 1, attack.attackSet[i].attack.manaCost);
-                slots[i].icon.sprite = attack.attackSet[i].attack.slotIcon;
+                slots[i].text.text = string.Format(slots[i].text.text, i + 1, attack.attackSet.attacks[i].manaCost);
+                slots[i].icon.sprite = attack.attackSet.attacks[i].slotIcon;
                 slots[i].icon.color = Color.white;
             }
             else
@@ -113,7 +113,7 @@ public class AttackSlots : MonoBehaviour
         cooldown.fillAmount = 1f;
 
         float elapsedTime = 0;
-        float cooldownTime = attack.attackSet[slotIndex].attack.coolDownTime;
+        float cooldownTime = attack.attackSet.attacks[slotIndex].coolDownTime;
 
         while (elapsedTime <= cooldownTime)
         {

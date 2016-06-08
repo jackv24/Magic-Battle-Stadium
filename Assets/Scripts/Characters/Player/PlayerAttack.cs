@@ -10,14 +10,10 @@ using UnityEngine.Networking;
 [NetworkSettings(channel = 1, sendInterval = 0)]
 public class PlayerAttack : NetworkBehaviour
 {
-    [System.Serializable]
-    public struct AttackInfo
-    {
-        public Attack attack;
-        public float nextAttackTime;
-    }
+    public float[] nextAttackTime;
 
-    public AttackInfo[] attackSet;
+    public int currentAttackSet = 0;
+    public AttackSet attackSet;
 
     public int selectedAttack = 0;
 
@@ -33,6 +29,19 @@ public class PlayerAttack : NetworkBehaviour
         stats = GetComponent<PlayerStats>();
     }
 
+    void Start()
+    {
+        //Load current attack set if this is the local player
+        //Attack set is blank for remote players since firing happens on the server anyway
+        if (isLocalPlayer)
+        {
+            currentAttackSet = GameManager.instance.currentAttackSet;
+            attackSet = GameManager.instance.attackSets[currentAttackSet];
+
+            nextAttackTime = new float[attackSet.attacks.Length];
+        }
+    }
+
     void Update()
     {
         if (!isLocalPlayer || !stats.isAlive)
@@ -45,16 +54,16 @@ public class PlayerAttack : NetworkBehaviour
         if (inputVector != Vector2.zero)
         {
             //If the next attack time has passed OR the driection has changed
-            if (Time.time > attackSet[selectedAttack].nextAttackTime)
+            if (Time.time > nextAttackTime[selectedAttack])
             {
                 //Use mana to attack. If not enough mana is left, attack cannot be performed
-                if (stats.UseMana(attackSet[selectedAttack].attack.manaCost))
+                if (stats.UseMana(attackSet.attacks[selectedAttack].manaCost))
                 {
                     //Set next attack time
-                    attackSet[selectedAttack].nextAttackTime = Time.time + attackSet[selectedAttack].attack.coolDownTime;
+                    nextAttackTime[selectedAttack] = Time.time + attackSet.attacks[selectedAttack].coolDownTime;
                     GameManager.instance.attackSlots.StartCooldown(selectedAttack);
 
-                    CmdFire(inputVector, selectedAttack);
+                    CmdFire(inputVector, selectedAttack, currentAttackSet);
                 }
             }
         }
@@ -62,22 +71,22 @@ public class PlayerAttack : NetworkBehaviour
 
     public bool SelectSlot(int slotIndex)
     {
-        if (slotIndex < attackSet.Length)
+        if (attackSet.attacks[slotIndex] != null)
         {
             //If the attack is a projectile, select it
-            if (attackSet[slotIndex].attack.type == Attack.Type.Projectile)
+            if (attackSet.attacks[slotIndex].type == Attack.Type.Projectile)
                 selectedAttack = slotIndex;
             //If the attack is a trap, it shouldn't be selected, and instead should be used immediately
-            else if (attackSet[slotIndex].attack.type == Attack.Type.Trap)
+            else if (attackSet.attacks[slotIndex].type == Attack.Type.Trap)
             {
                 //Only use attack if there is enough mana and it is not on cooldown
-                if (Time.time > attackSet[slotIndex].nextAttackTime && stats.UseMana(attackSet[slotIndex].attack.manaCost))
+                if (Time.time > nextAttackTime[slotIndex] && stats.UseMana(attackSet.attacks[slotIndex].manaCost))
                 {
                     //Set next cooldown time for this attack
-                    attackSet[slotIndex].nextAttackTime = Time.time + attackSet[slotIndex].attack.coolDownTime;
+                    nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime;
                     GameManager.instance.attackSlots.StartCooldown(slotIndex);
 
-                    CmdFire(Vector2.zero, slotIndex);
+                    CmdFire(Vector2.zero, slotIndex, currentAttackSet);
                 }
 
                 //Attack was not selected (it was used immediately instead)
@@ -120,10 +129,10 @@ public class PlayerAttack : NetworkBehaviour
 
     //Fire command executed on server (passed direction by client)
     [Command]
-    void CmdFire(Vector2 direction, int attack)
+    void CmdFire(Vector2 direction, int attack, int attackSet)
     {
         //Spawn projectile
-        GameObject obj = (GameObject)Instantiate(attackSet[attack].attack.attackPrefab, transform.position, Quaternion.identity);
+        GameObject obj = (GameObject)Instantiate(GameManager.instance.attackSets[attackSet].attacks[attack].attackPrefab, transform.position, Quaternion.identity);
 
         //Projectiles have a direction
         if (direction != Vector2.zero)

@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 495142}
   - 114: {fileID: 11444356}
   - 114: {fileID: 11439898}
-  - 114: {fileID: 11433606}
+  - 114: {fileID: 11440826}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -30,19 +30,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11433606
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 120174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 688ac19cb71bd0249a38ea8691d25f88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localPlayer: {fileID: 0}
-  attackSlots: {fileID: 0}
 --- !u!114 &11439898
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -56,6 +43,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noticePrefab: {fileID: 124990, guid: 9d31ada9020ee87479a0859e292b0fe6, type: 2}
   displayTime: 5
+--- !u!114 &11440826
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 120174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 688ac19cb71bd0249a38ea8691d25f88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackSlots: {fileID: 0}
+  attackSets:
+  - {fileID: 11400000, guid: 40efaceffce2e1742a5debd189b9ac0d, type: 2}
+  - {fileID: 11400000, guid: 2b8b877a84a172e4db908c3c2a7c3fff, type: 2}
+  currentAttackSet: 0
 --- !u!114 &11444356
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c904a818d49b3c9448e82dda946fc435, type: 3}
+  m_Name: Mage
+  m_EditorClassIdentifier: 
+  setName: Mage
+  attacks:
+  - {fileID: 11400000, guid: 4e392130865362d45a0c05e1f10fb29c, type: 2}
+  - {fileID: 11400000, guid: 692f93888841942438f86b50fe924f32, type: 2}
+  - {fileID: 11400000, guid: 65e9e6bb0dadb1843b358182c9e2e86b, type: 2}
+  - {fileID: 0}

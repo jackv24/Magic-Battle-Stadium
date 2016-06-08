@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
     //UI attack slots
     public AttackSlots attackSlots;
 
+    public AttackSet[] attackSets;
+    public int currentAttackSet = 0;
+
     private Text startText;
     private string startTextString;
 

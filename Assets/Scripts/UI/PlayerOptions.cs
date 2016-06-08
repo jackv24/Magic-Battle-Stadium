@@ -23,6 +23,24 @@ public class PlayerOptions : MonoBehaviour
     }
     public PlayerGraphics playerGraphics;
 
+    [System.Serializable]
+    public class Slot
+    {
+        public Image image;
+        public Text text;
+    }
+    public Slot[] slots;
+    private string slotsTextString;
+
+    //Attack sets
+    public Text attackSetTitle;
+    private string attackSetTitleString;
+
+    public Text attackSetSubtitle;
+
+    private AttackSet[] attackSets;
+    private int currentAttackSet;
+
     void Start()
     {
         //Load existing colours
@@ -35,6 +53,14 @@ public class PlayerOptions : MonoBehaviour
 
         //Update colours
         UpdateColours();
+
+        slotsTextString = slots[0].text.text;
+
+        attackSetTitleString = attackSetTitle.text;
+
+        attackSets = GameManager.instance.attackSets;
+        currentAttackSet = PlayerPrefs.GetInt("AttackSet", 0);
+        DisplayAttackSet();
     }
 
     //Sets listeners on sliders
@@ -106,6 +132,53 @@ public class PlayerOptions : MonoBehaviour
 
         //Save colours
         SaveColours();
+    }
+
+    //Updates the display of attack slots with selected attack set
+    void DisplayAttackSet()
+    {
+        AttackSet set = attackSets[currentAttackSet];
+
+        //Update titles with set info
+        attackSetTitle.text = string.Format(attackSetTitleString, set.setName);
+        attackSetSubtitle.text = string.Format("{0} of {1}", currentAttackSet + 1, attackSets.Length);
+
+        //Update slots with attack info
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (set.attacks[i] != null)
+            {
+                slots[i].image.color = Color.white;
+                slots[i].image.sprite = set.attacks[i].slotIcon;
+                slots[i].text.text = string.Format(slotsTextString, i + 1, set.attacks[i].manaCost);
+            }
+            else
+            {
+                slots[i].image.color = Color.clear;
+                slots[i].text.text = "";
+            }
+        }
+
+        //Save selected attack
+        PlayerPrefs.SetInt("AttackSet", currentAttackSet);
+
+        //Tell gamemanager what set the player will use
+        GameManager.instance.currentAttackSet = currentAttackSet;
+    }
+
+    //Changes which attack set is currently selected (next or previous by how many)
+    public void MoveAttackSet(int distance)
+    {
+        int index = currentAttackSet + distance;
+
+        //If outside of bounds, wrap around
+        if (index >= attackSets.Length)
+            index = 0;
+        else if (index < 0)
+            index = attackSets.Length - 1;
+
+        currentAttackSet = index;
+        DisplayAttackSet();
     }
 }
 
