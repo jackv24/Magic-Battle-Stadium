@@ -218,14 +218,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcd467b1486c1e245a7e4df944ef9e48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletName: Homing Bullet
-  manaCost: 10
+  projectileName: Homing Bullet
+  damage: 10
+  lifeTime: 7
+  owner: {fileID: 0}
   fireTime: 0.5
   moveSpeed: 10
-  lifeTime: 7
-  damage: 10
   initialRotation: {x: 0, y: 0, z: 0}
-  owner: {fileID: 0}
 --- !u!212 &21247370
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -347,6 +346,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: manaCost
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: projectileName
+      value: Homing Bullet
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -38,6 +38,10 @@ public class AttackEditor : Editor
             case Attack.Type.Cast:
                 EditorGUILayout.HelpBox("Cast-type attacks do not spawn a prefab.", MessageType.Info);
                 break;
+            case Attack.Type.Spawn:
+                attack.attackPrefab = (GameObject)EditorGUILayout.ObjectField("Spawn Prefab", attack.attackPrefab, typeof(GameObject), false);
+                attack.amountToSpawn = EditorGUILayout.IntField("Amount to Spawn", attack.amountToSpawn);
+                break;
         }
 
         //Make sure to re-draw

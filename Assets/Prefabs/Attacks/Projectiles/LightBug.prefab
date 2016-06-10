@@ -10,11 +10,13 @@ GameObject:
   - 4: {fileID: 477068}
   - 58: {fileID: 5879870}
   - 50: {fileID: 5003442}
-  - 114: {fileID: 11413118}
   - 114: {fileID: 11455958}
   - 114: {fileID: 11478404}
+  - 96: {fileID: 9608710}
+  - 114: {fileID: 11497512}
+  - 58: {fileID: 5881554}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: LightBug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -91,25 +93,68 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.15
---- !u!114 &11413118
-MonoBehaviour:
+  m_Radius: 0.1
+--- !u!58 &5881554
+CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 112054}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcd467b1486c1e245a7e4df944ef9e48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectileName: Bullet
-  damage: 10
-  lifeTime: 5
-  owner: {fileID: 0}
-  fireTime: 0.25
-  moveSpeed: 20
-  initialRotation: {x: 0, y: 0, z: 0}
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 5
+--- !u!96 &9608710
+TrailRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 112054}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_Materials:
+  - {fileID: 2100000, guid: cf81ebd5d7fece34391a5cdd07766cc5, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Time: 0.1
+  m_StartWidth: 0.15
+  m_EndWidth: 0
+  m_Colors:
+    m_Color[0]:
+      serializedVersion: 2
+      rgba: 4294967295
+    m_Color[1]:
+      serializedVersion: 2
+      rgba: 2147483647
+    m_Color[2]:
+      serializedVersion: 2
+      rgba: 1174405119
+    m_Color[3]:
+      serializedVersion: 2
+      rgba: 436207615
+    m_Color[4]:
+      serializedVersion: 2
+      rgba: 16777215
+  m_MinVertexDistance: 0.05
+  m_Autodestruct: 0
 --- !u!114 &11455958
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -124,22 +169,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 152
-    i1: 182
-    i2: 136
-    i3: 176
-    i4: 27
-    i5: 161
-    i6: 59
-    i7: 212
-    i8: 123
-    i9: 147
-    i10: 29
-    i11: 62
-    i12: 123
-    i13: 123
-    i14: 136
-    i15: 102
+    i0: 203
+    i1: 23
+    i2: 82
+    i3: 31
+    i4: 214
+    i5: 22
+    i6: 74
+    i7: 52
+    i8: 89
+    i9: 211
+    i10: 1
+    i11: 92
+    i12: 248
+    i13: 173
+    i14: 219
+    i15: 146
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &11478404
@@ -162,6 +207,26 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &11497512
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 112054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6317ef8da731742469699576caee21d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileName: Light Bug
+  damage: 5
+  lifeTime: 10
+  owner: {fileID: 0}
+  minSpawnDistance: 1
+  maxSpawnDistance: 2
+  lerpSpeed: 0.25
+  target: {fileID: 0}
+  initialPos: {x: 0, y: 0, z: 0}
 --- !u!212 &21247370
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -188,7 +253,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2b4a8a3a8bfc69b4ebd542267eb486d1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8371bc4f327b17f4fbac92e16f76bdc1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -225,7 +290,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: projectileName
-      value: Bullet
+      value: Light Bug
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: minSpawnDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: maxSpawnDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: lerpSpeed
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

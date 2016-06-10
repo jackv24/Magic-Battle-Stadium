@@ -77,7 +77,7 @@ public class PlayerAttack : NetworkBehaviour
             if (attackSet.attacks[slotIndex].type == Attack.Type.Projectile)
                 selectedAttack = slotIndex;
             //If the attack is a trap, it shouldn't be selected, and instead should be used immediately
-            else if (attackSet.attacks[slotIndex].type == Attack.Type.Trap)
+            else if (attackSet.attacks[slotIndex].type == Attack.Type.Trap || attackSet.attacks[slotIndex].type == Attack.Type.Spawn)
             {
                 //Only use attack if there is enough mana and it is not on cooldown
                 if (Time.time > nextAttackTime[slotIndex] && stats.UseMana(attackSet.attacks[slotIndex].manaCost))
@@ -86,7 +86,9 @@ public class PlayerAttack : NetworkBehaviour
                     nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime;
                     GameManager.instance.attackSlots.StartCooldown(slotIndex);
 
-                    CmdFire(Vector2.zero, slotIndex, currentAttackSet);
+                    //Should only spawn one unless spawn type defines more
+                    for(int i = 0; i < attackSet.attacks[slotIndex].amountToSpawn; i++)
+                        CmdFire(Vector2.zero, slotIndex, currentAttackSet);
                 }
 
                 //Attack was not selected (it was used immediately instead)

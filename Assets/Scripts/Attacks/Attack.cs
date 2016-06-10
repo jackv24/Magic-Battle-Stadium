@@ -22,12 +22,16 @@ public class Attack : ScriptableObject
     {
         Projectile,
         Trap,
-        Cast
+        Cast,
+        Spawn
     }
     public Type type;
 
     //Prefab to spawn when this attack is used
     public GameObject attackPrefab;
+
+    //How many prefabs to spawn (only shown for spawn-type attacks)
+    public int amountToSpawn = 1;
 
     //The icon to display in the slot for this attack
     public Sprite slotIcon;

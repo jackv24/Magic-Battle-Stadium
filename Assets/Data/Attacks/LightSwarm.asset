@@ -9,12 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52de0f2b6650d424e96c9556c2754ec2, type: 3}
-  m_Name: HomingBullet
+  m_Name: LightSwarm
   m_EditorClassIdentifier: 
-  attackName: Homing Bullet
-  manaCost: 10
-  coolDownTime: 0.25
-  type: 0
-  attackPrefab: {fileID: 112054, guid: 7a6b72b2ba028c347a6d93acb8e1bbf0, type: 2}
-  amountToSpawn: 1
-  slotIcon: {fileID: 21300000, guid: dd403f13aa6ef0748b657edc3a5cb399, type: 3}
+  attackName: Light Swarm
+  manaCost: 25
+  coolDownTime: 30
+  type: 3
+  attackPrefab: {fileID: 112054, guid: cb17521fd6164a3459d3015cf8addb92, type: 2}
+  amountToSpawn: 10
+  slotIcon: {fileID: 21300000, guid: aa9c68b463971d2488528bdc84222536, type: 3}
