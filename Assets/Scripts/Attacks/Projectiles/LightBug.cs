@@ -16,6 +16,9 @@ public class LightBug : Projectile
     [Range(0, 1f)]
     public float lerpSpeed = 0.5f;
 
+    public float idleTime = 1.0f;
+    private float startTime = 0;
+
     public GameObject target;
     private Vector3 targetPos;
 
@@ -32,12 +35,14 @@ public class LightBug : Projectile
             initialPos = Vector3.Normalize(new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0));
             initialPos *= Random.Range(minSpawnDistance, maxSpawnDistance);
         }
+
+        startTime = Time.time + idleTime;
     }
 
     void Update()
     {
         //if there is a target, make the target position that of the target
-        if (target)
+        if (target && Time.time > startTime)
             targetPos = target.transform.position;
 
         //If not in target position, lerp towards it

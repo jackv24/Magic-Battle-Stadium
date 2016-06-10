@@ -103,7 +103,7 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 5
+  m_Radius: 4.75
 --- !u!114 &11437878
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drainRate: 5
+  speedMultiplier: 0.5
   lifeTime: 10
   owner: {fileID: 0}
 --- !u!198 &19897512
@@ -525,7 +526,7 @@ ParticleSystem:
     serializedVersion: 2
     enabled: 1
     type: 0
-    radius: 2
+    radius: 5
     angle: 25
     length: 5
     boxX: 1
@@ -546,7 +547,7 @@ ParticleSystem:
     serializedVersion: 2
     m_Type: 0
     rate:
-      scalar: 5
+      scalar: 10
       maxCurve:
         serializedVersion: 2
         m_Curve:

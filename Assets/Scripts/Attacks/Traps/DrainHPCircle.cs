@@ -1,5 +1,5 @@
 ﻿/*
-**  DrainHPCircle.cs: Script for trap. Drain enemies health over time when stood inside it.
+**  DrainHPCircle.cs: Script for trap. Drain enemies health over time when stood inside it, and also slows them down.
 */
 
 using UnityEngine;
@@ -10,6 +10,9 @@ public class DrainHPCircle : MonoBehaviour
 {
     //How much hp is drained per second
     public float drainRate = 2f;
+
+    //Change the speed of a player that enters
+    public float speedMultiplier = 0.5f;
 
     //How long after spawning until it is destroyed
     public float lifeTime = 10f;
@@ -30,13 +33,32 @@ public class DrainHPCircle : MonoBehaviour
     {
         //Add all player that enter, except for the owner
         if (other.tag == "Player" && other.gameObject != owner)
+        {
             playerStats.Add(other.GetComponent<PlayerStats>());
+
+            //Change speed by multiplier (usually damping)
+            other.GetComponent<PlayerMove>().moveSpeed *= speedMultiplier;
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         if (other.tag == "Player" && playerStats.Contains(other.GetComponent<PlayerStats>()))
+        {
             playerStats.Remove(other.GetComponent<PlayerStats>());
+
+            //Return speed to normal
+            other.GetComponent<PlayerMove>().moveSpeed *= 1 / speedMultiplier;
+        }
+    }
+
+    void OnDestroy()
+    {
+        //Return all speeds before destruction
+        foreach (PlayerStats stats in playerStats)
+        {
+            stats.GetComponent<PlayerMove>().moveSpeed *= 1 / speedMultiplier;
+        }
     }
 
     //Drains HP over time

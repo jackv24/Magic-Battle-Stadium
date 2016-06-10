@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackName: Light Swarm
   manaCost: 25
-  coolDownTime: 30
+  coolDownTime: 60
   type: 3
   attackPrefab: {fileID: 112054, guid: cb17521fd6164a3459d3015cf8addb92, type: 2}
   amountToSpawn: 10
