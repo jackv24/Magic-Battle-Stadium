@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0d98f5be51926f46bc797504da5ad22, type: 3}
-  m_Name: New Tileset
+  m_Name: Tileset
   m_EditorClassIdentifier: 
   AtlasTexture: {fileID: 2800000, guid: 2115e5a23a7994149be4db4f1b372441, type: 3}
   TilePxSize: {x: 64, y: 64}
@@ -31,8 +31,6 @@ MonoBehaviour:
     BrushAsset: {fileID: 11400000, guid: 3fea4fb18b6db7b45b438400ce6963d7, type: 2}
   - Id: 4
     BrushAsset: {fileID: 11400000, guid: 5aa4108964ce0d74cb7cde6af2b5c590, type: 2}
-  - Id: 5
-    BrushAsset: {fileID: 11400000, guid: 3910064320b69cc4c8f94f0fbb869008, type: 2}
   - Id: 6
     BrushAsset: {fileID: 11400000, guid: 825273211ed143045b981396ba0f162d, type: 2}
   - Id: 7
