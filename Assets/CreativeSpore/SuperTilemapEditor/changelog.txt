@@ -1,0 +1,66 @@
+--- v1.3.3 ---
+- Added warning message when using Polygon collider or activating isTrigger in the tilemap collider section
+- Added Tile Prefab Setting multi editing to change the prefab setting for a selection of tiles at the same time
+- Added "Show Tile Chunks" to unhide tilemap chunk gameobjects for debugging purposes
+- Added GetTile to Tilemap.cs to return the tileset tile displayed in a tilemap position
+- Added message OnTilePrefabCreation to be sent to the gameobject created for tiles with a prefab attached
+- Added TileobjectBehaviour (when attached to a gameobject used as tile prefab, it will change the sprite renderer to display the tile that has instantiated the prefab)
+- Added collider normal display in tile collider properties, to display the side were the collider is blocking other colliders to pass through.
+- SetParam in ParameterContainer now creates the parameter if it doesn't exist instead of throwing a warning
+- Fixed collider issues when a tile collider vertex was overlapping another vertex by removing duplicated.
+- Fixed: apply atlas texture to a tilemap when it becomes a prefab and it's dragged into the scene for the first time
+- Fixed "Display Brushes List" in tile Palette Window with a scroll bar
+- Fixed: keep tile flags when copying a single tile from a tilemap
+
+--- v1.3.2 ---
+- Added RemoveRedundantVertices and SplitSegments to tilemapChunks (improving performance and fixing lighting issues)
+- Added probability weights to tiles in a random brush
+- Added Randomize Flags mask in random brush to randomize selected flags when painting tiles
+- Added Tileset selector in Tile Palette Window
+- Now, right clicking a tile in the tilemap will first select the brush if any, and second time the tile painted by the brush will be selected.
+- Normal tiles, not painted with a brush, are now considered to be in group Default or group 0 in relation to brush autotiling mode "Group"
+- Fixed some bugs using brush groups
+- Fixed creation/destruction of prefabs asigned to tiles when they are painted using a brush
+- Fixed memory leak issue in TilemapGroupEditor by properly destroying the tilemapEditor object
+
+--- v1.3.1 ---
+- Added Erase method in Tilemap.cs 
+- Added user friendly methods to Tilemap.cs to set tile data using parameters for tileId, brushId and tile flags 
+- Added a dialog asking to keep or not the previous tile data when slicing the atlas tiles in the tileset 
+- Tile Properties and Tile Selection windows has been moved to a new create menu section "SuperTilemapEditor/Window" 
+- All tilemaps are now refreshed if refresh button is pressed when the tilemap group is selected 
+- Improved the tile slicing to be more precise calculating the right uv rect 
+- Hiding painting brush then mouse is not over the SceneView or when dragging a prefab into the SceneView 
+- Fixed precision error while dragging tile collider vertices in the Tile Property window 
+- Fixed collider 2D generation issue 
+- Fixed removing 2D colliders properly when switching to 3D after painting 
+- Fixed creation of tilechunk meshes twice when pressing play 
+- Fixed continuously enabling/disabling of painting brush 
+- Fixed copying the pixelSnap value when duplicating a tilemap 
+- Fixed AddParam and added parameter getters and AddValue helper methods in ParameterContainer.cs 
+- Fixed not painting in the tilemap when closing a popup over the scene view
+
+--- v1.3.0 ---
+
+- Added brush autotiling groups and autotiling modes: self, other and group
+- Added option create a tile view from brush selection to create tile prefabs
+- Added Tilemap Groups to manage several tilemap like if they were layers
+- Improved collider 2D generation to use less colliders
+- Added support for Polygon colliders in addition to Edge for tilemaps with 2D colliders
+- Display all selected tiles in tile collider properties and drawing a tile background to see the shape of tiles with transparency
+- Changed IBrush interface to support tiles with flags
+- Added the option to select a brush to draw a tile of another brush
+- Added the option to change brush tile flags (flip vertically and horizontally and 90º rotation)
+- Right click over a tile in the palette will display the tile property window
+- Added Is Trigger property to tilemap colliders
+- Added Refresh button in tilemap toolbar and shortcut key F5 for the same operation
+- Fixed carpet interior corners autotiling
+- Fixed refresh tilemap properly when changing cell size
+
+--- v1.2.2 ---
+
+- Fixed tile colliders when the tile is flipped and/or rotated
+- Fixed changing of tilemap material
+- Fixed double click issue when painting (double click is a fill action) and in the brush palette ( double click is for selecting the brush asset )
+- Fixed Carpet Brush autotiling
+- Tile collider type is now selected using a selection grid instead of a popup
