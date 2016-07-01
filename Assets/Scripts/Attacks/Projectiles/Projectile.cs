@@ -24,21 +24,16 @@ public class Projectile : NetworkBehaviour
         Destroy(gameObject, lifeTime);
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    public void Collide(PlayerStats stats)
     {
-        if (col.gameObject != owner)
+        //if the object that was collided with has stats, and is alive
+        if (stats && stats.isAlive)
         {
-            PlayerStats stats = col.gameObject.GetComponent<PlayerStats>();
+            //Apply damage (name of bullet owner is also sent to identify who killed who)
+            stats.ApplyDamage(damage, owner.GetComponent<PlayerInfo>().username, projectileName);
 
-            //if the object that was collided with has stats, and is alive
-            if (stats && stats.isAlive)
-            {
-                //Apply damage (name of bullet owner is also sent to identify who killed who)
-                stats.ApplyDamage(damage, owner.GetComponent<PlayerInfo>().username, projectileName);
-
-                //destroy bullet
-                Destroy(gameObject);
-            }
+            //destroy bullet
+            Destroy(gameObject);
         }
     }
 

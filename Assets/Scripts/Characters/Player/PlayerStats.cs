@@ -68,6 +68,20 @@ public class PlayerStats : NetworkBehaviour
         StartCoroutine("RegenerateMana");
     }
 
+    //Bullet collisions are triggered when they enter the trigger
+    //since the player has both a wall collider and a bullet trigger
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Projectile")
+        {
+            Projectile proj = other.GetComponent<Projectile>();
+
+            //Only collide with enemies, not the owner
+            if(proj.owner != gameObject)
+                proj.Collide(this);
+        }
+    }
+
     public void ApplyDamage(int amount, string attackerName, string attackName)
     {
         //Damage can only be applied on the server

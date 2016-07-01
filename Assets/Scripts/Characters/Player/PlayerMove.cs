@@ -16,11 +16,18 @@ public class PlayerMove : MonoBehaviour
 
     private Vector2 moveVector;
 
+    private Rigidbody2D body;
+
+    void Start()
+    {
+        body = GetComponent<Rigidbody2D>();
+    }
+
     public void Move(Vector2 input)
     {
         //Lerp move vector
         moveVector = Vector2.Lerp(moveVector, input * moveSpeed, acceleration);
 
-        transform.Translate(moveVector * Time.deltaTime, Space.World);
+        body.velocity = moveVector;
     }
 }

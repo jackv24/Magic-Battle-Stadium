@@ -15,9 +15,9 @@ GameObject:
   - 96: {fileID: 9608710}
   - 114: {fileID: 11497512}
   - 58: {fileID: 5881554}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LightBug
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +31,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 490580}
   - 212: {fileID: 21247370}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bullet_Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,6 +304,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: lerpSpeed
       value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: Projectile
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

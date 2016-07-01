@@ -13,9 +13,9 @@ GameObject:
   - 114: {fileID: 11413118}
   - 114: {fileID: 11455958}
   - 114: {fileID: 11478404}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +29,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 490580}
   - 212: {fileID: 21247370}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bullet_Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,6 +226,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: projectileName
       value: Bullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: Projectile
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
