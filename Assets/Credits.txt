@@ -1,5 +1,4 @@
-Assets:
-	Tileset: Buch - http://blog-buch.rhcloud.com
+Unless stated below, all assets are created by Jack Vine.
 
 Tools:
 	Super Tilemap Editor - Creative Spore
