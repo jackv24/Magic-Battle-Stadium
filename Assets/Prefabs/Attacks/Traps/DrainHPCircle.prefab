@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 418282}
   - 198: {fileID: 19897512}
   - 199: {fileID: 19963092}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ GameObject:
   - 114: {fileID: 11475252}
   - 114: {fileID: 11437878}
   - 114: {fileID: 11480406}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: DrainHPCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 428310}
   - 212: {fileID: 21239104}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: AOE_Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1744,6 +1744,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: prewarm
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -31,7 +31,7 @@ TextureImporter:
   cubemapConvolutionSteps: 7
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -3
   maxTextureSize: 256
   textureSettings:
     filterMode: 1
@@ -66,14 +66,14 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -12, y: 22}
-        - {x: -21, y: 13}
-        - {x: -21, y: -21}
-        - {x: -16, y: -22}
-        - {x: 18, y: -22}
-        - {x: 21, y: -17}
-        - {x: 21, y: 14}
-        - {x: 8, y: 22}
+      - - {x: -11, y: 19}
+        - {x: -20, y: 11}
+        - {x: -20, y: -17}
+        - {x: -11, y: -20}
+        - {x: 14, y: -20}
+        - {x: 19, y: -14}
+        - {x: 19, y: 10}
+        - {x: 16, y: 19}
     - name: Wizard_Hat
       rect:
         serializedVersion: 2
@@ -85,15 +85,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -48, y: 59}
-        - {x: -93, y: 32}
-        - {x: -93, y: -17}
-        - {x: -76, y: -57}
-        - {x: -71, y: -59}
-        - {x: 81, y: -59}
-        - {x: 93, y: -47}
-        - {x: 93, y: 36}
-        - {x: 62, y: 59}
+      - - {x: -20, y: 59}
+        - {x: -74, y: 43}
+        - {x: -93, y: 33}
+        - {x: -93, y: -20}
+        - {x: -64, y: -59}
+        - {x: 77, y: -59}
+        - {x: 93, y: -44}
+        - {x: 93, y: 7}
+        - {x: 70, y: 59}
     - name: Wizard_RightEye
       rect:
         serializedVersion: 2
@@ -105,14 +105,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -17.5, y: 24.5}
-        - {x: -24.5, y: 22.5}
-        - {x: -24.5, y: -22.5}
-        - {x: -19.5, y: -24.5}
-        - {x: 21.5, y: -24.5}
-        - {x: 24.5, y: -18.5}
-        - {x: 24.5, y: 18.5}
-        - {x: 20.5, y: 24.5}
+      - - {x: -15.5, y: 22.5}
+        - {x: -22.5, y: 13.5}
+        - {x: -22.5, y: -12.5}
+        - {x: -21.5, y: -15.5}
+        - {x: -9.5, y: -23.5}
+        - {x: 12.5, y: -23.5}
+        - {x: 23.5, y: -13.5}
+        - {x: 23.5, y: 17.5}
+        - {x: 11.5, y: 22.5}
     - name: Wizard_Head
       rect:
         serializedVersion: 2
@@ -124,14 +125,15 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -38, y: 57}
-        - {x: -57, y: 41}
-        - {x: -57, y: -25}
-        - {x: -41, y: -57}
-        - {x: 34, y: -57}
-        - {x: 57, y: -44}
-        - {x: 57, y: 49}
-        - {x: 32, y: 57}
+      - - {x: 43, y: 57}
+        - {x: -53, y: 57}
+        - {x: -57, y: 54}
+        - {x: -57, y: -53}
+        - {x: -38, y: -57}
+        - {x: 32, y: -57}
+        - {x: 57, y: -28}
+        - {x: 57, y: 29}
+        - {x: 56, y: 32}
     - name: Wizard_Body
       rect:
         serializedVersion: 2
@@ -143,17 +145,11 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 39, y: 48.5}
-        - {x: 35, y: 55.5}
-        - {x: -34, y: 55.5}
-        - {x: -39, y: 49.5}
-        - {x: -48, y: -27.5}
-        - {x: -48, y: -52.5}
-        - {x: -45, y: -55.5}
-        - {x: 45, y: -55.5}
-        - {x: 48, y: -52.5}
-        - {x: 48, y: -16.5}
-        - {x: 46, y: 0.5}
+      - - {x: -38, y: 55.5}
+        - {x: -48, y: -15.5}
+        - {x: -48, y: -55.5}
+        - {x: 48, y: -55.5}
+        - {x: 48, y: 55.5}
     outline: []
   spritePackingTag: 
   userData: 

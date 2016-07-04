@@ -33,19 +33,27 @@ public class PlayerInput : NetworkBehaviour
 
     void Update()
     {
-        if (!isLocalPlayer || !stats.isAlive)
+        if (!isLocalPlayer)
             return;
 
-        //Get and normalize input
-        inputVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        //Call player move
-        playerMove.Move(inputVector.normalized);
+        if (stats.isAlive)
+        {
+            //Get and normalize input
+            inputVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            //Call player move
+            playerMove.Move(inputVector.normalized);
 
-        //Get attack vector (not normalised in this case)
-        attackVector = new Vector2(Input.GetAxisRaw("Attack Horizontal"), Input.GetAxisRaw("Attack Vertical"));
+            //Get attack vector (not normalised in this case)
+            attackVector = new Vector2(Input.GetAxisRaw("Attack Horizontal"), Input.GetAxisRaw("Attack Vertical"));
 
-        //Call player move to face direction
-        if (attackVector == Vector2.zero)
-            attackVector = inputVector;
+            //Call player move to face direction
+            if (attackVector == Vector2.zero)
+                attackVector = inputVector;
+        }
+        else
+        {
+            //Make sure player stops moving after death
+            playerMove.Move(Vector2.zero);
+        }
     }
 }

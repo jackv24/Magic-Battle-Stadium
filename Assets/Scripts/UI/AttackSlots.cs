@@ -128,4 +128,14 @@ public class AttackSlots : MonoBehaviour
         //Make sure fill amunt is zero
         cooldown.fillAmount = 0;
     }
+
+    public void ResetCooldownDisplay()
+    {
+        StopCoroutine("DisplayCooldown");
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            slots[i].cooldownImage.fillAmount = 0;
+        }
+    }
 }

@@ -38,10 +38,12 @@ public class PlayerStats : NetworkBehaviour
     private string deadTextString;
 
     private PlayerInfo info;
+    private PlayerAttack attack;
 
     void Awake()
     {
         info = GetComponent<PlayerInfo>();
+        attack = GetComponent<PlayerAttack>();
     }
 
     void Start()
@@ -188,6 +190,7 @@ public class PlayerStats : NetworkBehaviour
     {
         //Reset values
         currentHealth = maxHealth;
+        currentMana = maxMana;
         //Store server respawn pos so that client also starts in that position
         respawnPos = NetworkManager.singleton.GetStartPosition().position;
         isAlive = true;
@@ -219,6 +222,8 @@ public class PlayerStats : NetworkBehaviour
         //hide dead text
         deadText.enabled = false;
         transform.position = respawnPos;
+
+        attack.ResetCooldowns();
     }
 
     void OnDestroy()

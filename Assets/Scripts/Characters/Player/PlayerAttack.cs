@@ -71,7 +71,8 @@ public class PlayerAttack : NetworkBehaviour
 
     public bool SelectSlot(int slotIndex)
     {
-        if (attackSet.attacks[slotIndex] != null)
+        //Make sure player can only select attacks that exist, and only while alive
+        if (attackSet.attacks[slotIndex] != null && stats.isAlive)
         {
             //If the attack is a projectile, select it
             if (attackSet.attacks[slotIndex].type == Attack.Type.Projectile)
@@ -100,6 +101,16 @@ public class PlayerAttack : NetworkBehaviour
         //If index is out of bounds return false
         else
             return false;
+    }
+
+    public void ResetCooldowns()
+    {
+        for (int i = 0; i < nextAttackTime.Length; i++)
+        {
+            nextAttackTime[i] = 0;
+        }
+
+        GameManager.instance.attackSlots.ResetCooldownDisplay();
     }
 
     //Returns one of four euler angle vectors based in the input vector direction

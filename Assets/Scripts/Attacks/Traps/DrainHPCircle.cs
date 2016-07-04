@@ -5,8 +5,9 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class DrainHPCircle : MonoBehaviour
+public class DrainHPCircle : NetworkBehaviour
 {
     //How much hp is drained per second
     public float drainRate = 2f;
@@ -18,6 +19,7 @@ public class DrainHPCircle : MonoBehaviour
     public float lifeTime = 10f;
 
     //The owner of this trap
+    [SyncVar]
     public GameObject owner;
 
     //List of player stats to affect
@@ -32,23 +34,23 @@ public class DrainHPCircle : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         //Add all player that enter, except for the owner
-        if (other.tag == "Player" && other.gameObject != owner)
+        if (other.transform.parent.tag == "Player" && other.transform.parent.gameObject != owner)
         {
-            playerStats.Add(other.GetComponent<PlayerStats>());
+            playerStats.Add(other.transform.parent.GetComponent<PlayerStats>());
 
             //Change speed by multiplier (usually damping)
-            other.GetComponent<PlayerMove>().moveSpeed *= speedMultiplier;
+            other.transform.parent.GetComponent<PlayerMove>().moveSpeed *= speedMultiplier;
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "Player" && playerStats.Contains(other.GetComponent<PlayerStats>()))
+        if (other.transform.parent.tag == "Player" && other.transform.parent.gameObject != owner && playerStats.Contains(other.transform.parent.GetComponent<PlayerStats>()))
         {
-            playerStats.Remove(other.GetComponent<PlayerStats>());
+            playerStats.Remove(other.transform.parent.GetComponent<PlayerStats>());
 
             //Return speed to normal
-            other.GetComponent<PlayerMove>().moveSpeed *= 1 / speedMultiplier;
+            other.transform.parent.GetComponent<PlayerMove>().moveSpeed *= 1 / speedMultiplier;
         }
     }
 
