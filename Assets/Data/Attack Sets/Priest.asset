@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c904a818d49b3c9448e82dda946fc435, type: 3}
-  m_Name: Derp
+  m_Name: Priest
   m_EditorClassIdentifier: 
-  setName: Derp
+  setName: Priest
   attacks:
-  - {fileID: 11400000, guid: 4e392130865362d45a0c05e1f10fb29c, type: 2}
-  - {fileID: 11400000, guid: 4e392130865362d45a0c05e1f10fb29c, type: 2}
-  - {fileID: 11400000, guid: 4e392130865362d45a0c05e1f10fb29c, type: 2}
-  - {fileID: 11400000, guid: 4e392130865362d45a0c05e1f10fb29c, type: 2}
+  - {fileID: 11400000, guid: 5692326c33c49df448156145799e3a3c, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

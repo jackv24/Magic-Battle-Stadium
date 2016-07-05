@@ -57,7 +57,7 @@ MonoBehaviour:
   attackSlots: {fileID: 0}
   attackSets:
   - {fileID: 11400000, guid: 40efaceffce2e1742a5debd189b9ac0d, type: 2}
-  - {fileID: 11400000, guid: 2b8b877a84a172e4db908c3c2a7c3fff, type: 2}
+  - {fileID: 11400000, guid: 84e8e89c0111a404d820de27b2d343fb, type: 2}
   currentAttackSet: 0
 --- !u!114 &11444356
 MonoBehaviour:
@@ -89,6 +89,7 @@ MonoBehaviour:
   - {fileID: 112054, guid: 7a6b72b2ba028c347a6d93acb8e1bbf0, type: 2}
   - {fileID: 162846, guid: b98ca18f678c6de43aefb0e69b1513fd, type: 2}
   - {fileID: 112054, guid: cb17521fd6164a3459d3015cf8addb92, type: 2}
+  - {fileID: 112054, guid: b0c5c4b068bc58c448f2c09d802b1e8e, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 6
   m_ConnectionConfig:

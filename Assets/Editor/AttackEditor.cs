@@ -14,6 +14,14 @@ public class AttackEditor : Editor
         //The item that this script is targeting. That is, the item that is selected in the inspector.
         Attack attack = (Attack)target;
 
+        DrawAttackOptions(attack);
+
+        //Make sure to re-draw
+        EditorUtility.SetDirty(target);
+    }
+
+    public static void DrawAttackOptions(Attack attack)
+    {
         attack.attackName = EditorGUILayout.TextField("Name", attack.attackName);
 
         attack.slotIcon = (Sprite)EditorGUILayout.ObjectField("Slot Icon", attack.slotIcon, typeof(Sprite), false);
@@ -44,7 +52,6 @@ public class AttackEditor : Editor
                 break;
         }
 
-        //Make sure to re-draw
-        EditorUtility.SetDirty(target);
+        EditorGUILayout.Space();
     }
 }
