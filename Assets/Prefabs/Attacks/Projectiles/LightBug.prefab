@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6317ef8da731742469699576caee21d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileName: Light Bug
+  projectileName: Light Swarm
   damage: 5
   lifeTime: 10
   owner: {fileID: 0}
@@ -291,7 +291,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: projectileName
-      value: Light Bug
+      value: Light Swarm
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: minSpawnDistance

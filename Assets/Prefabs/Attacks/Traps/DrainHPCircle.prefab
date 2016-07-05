@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drainRate: 5
-  speedMultiplier: 0.5
+  speedMultiplier: 0.25
   lifeTime: 10
   owner: {fileID: 0}
 --- !u!198 &19897512
@@ -1748,6 +1748,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Layer
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: speedMultiplier
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

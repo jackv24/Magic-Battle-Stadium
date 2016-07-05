@@ -55,8 +55,8 @@ MonoBehaviour:
     collData:
       vertices:
       - {x: 0, y: 1}
-      - {x: 1, y: 1}
-      - {x: 0.484375, y: 0.953125}
+      - {x: 0.875, y: 0.15625}
+      - {x: 0.78125, y: 0.875}
       type: 0
     paramContainer:
       m_paramList: []
