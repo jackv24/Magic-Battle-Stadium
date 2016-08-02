@@ -137,7 +137,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 110196}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 12.834235, y: -0.5749525, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -170,7 +170,7 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 2
 --- !u!82 &8284604
 AudioSource:
   m_ObjectHideFlags: 1
@@ -256,8 +256,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e108de0218c0df846990c2ef396bc667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
-  lifeTime: 0.3
+  damage: 25
+  lifeTime: 0.5
+  spawnTime: 0.25
   chainLength: 10
   minDistance: 1
   maxDistance: 3

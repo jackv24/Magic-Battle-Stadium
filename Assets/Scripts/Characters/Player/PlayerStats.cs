@@ -21,6 +21,8 @@ public class PlayerStats : NetworkBehaviour
     [SyncVar]
     public bool isAlive = true;
 
+    public GameObject deathEffect;
+
     //How long it takes to respawn after dying
     public float respawnTime = 5.0f;
     private Vector3 respawnPos;
@@ -191,6 +193,12 @@ public class PlayerStats : NetworkBehaviour
         {
             //Add a kill to the killtext, with player name, attacker name, and the name of the attack that killed it
             DisplayKillText.instance.AddKill(attackerName, info.username, attackName);
+        }
+
+        if (deathEffect)
+        {
+            GameObject obj = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
+            Destroy(obj, 5);
         }
     }
 

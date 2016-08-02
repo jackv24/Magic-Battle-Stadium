@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: HolyCross
   m_EditorClassIdentifier: 
   attackName: Holy Cross
-  manaCost: 0
+  manaCost: 1
   coolDownTime: 0.5
   type: 0
   attackPrefab: {fileID: 112054, guid: b0c5c4b068bc58c448f2c09d802b1e8e, type: 2}

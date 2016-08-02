@@ -3056,7 +3056,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 426038, guid: 139b190df6088a64eba9a9352a0dc1f3, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2039674, guid: 139b190df6088a64eba9a9352a0dc1f3, type: 2}
       propertyPath: m_BackGroundColor.r
