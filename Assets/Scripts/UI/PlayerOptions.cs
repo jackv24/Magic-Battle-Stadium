@@ -63,6 +63,12 @@ public class PlayerOptions : MonoBehaviour
         DisplayAttackSet();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+            PlayerPrefs.DeleteAll();
+    }
+
     //Sets listeners on sliders
     void Initialise(SliderRGB sliders)
     {
@@ -83,20 +89,20 @@ public class PlayerOptions : MonoBehaviour
         SaveColours();
     }
 
-    //Loads colours from playerprefs. If there is nothing in playerprefs, default slider value is used
+    //Loads colours from playerprefs. If there is nothing in playerprefs, random values are used
     void LoadColours()
     {
-        hatSliders.red.value = PlayerPrefs.GetFloat("hatR", hatSliders.red.value);
-        hatSliders.green.value = PlayerPrefs.GetFloat("hatG", hatSliders.green.value);
-        hatSliders.blue.value = PlayerPrefs.GetFloat("hatB", hatSliders.blue.value);
+        hatSliders.red.value = PlayerPrefs.GetFloat("hatR", Random.Range(0, 1f));
+        hatSliders.green.value = PlayerPrefs.GetFloat("hatG", Random.Range(0, 1f));
+        hatSliders.blue.value = PlayerPrefs.GetFloat("hatB", Random.Range(0, 1f));
 
-        clothesSliders.red.value = PlayerPrefs.GetFloat("clothesR", clothesSliders.red.value);
-        clothesSliders.green.value = PlayerPrefs.GetFloat("clothesG", clothesSliders.green.value);
-        clothesSliders.blue.value = PlayerPrefs.GetFloat("clothesB", clothesSliders.blue.value);
+        clothesSliders.red.value = PlayerPrefs.GetFloat("clothesR", Random.Range(0, 1f));
+        clothesSliders.green.value = PlayerPrefs.GetFloat("clothesG", Random.Range(0, 1f));
+        clothesSliders.blue.value = PlayerPrefs.GetFloat("clothesB", Random.Range(0, 1f));
 
-        skinSliders.red.value = PlayerPrefs.GetFloat("skinR", skinSliders.red.value);
-        skinSliders.green.value = PlayerPrefs.GetFloat("skinG", skinSliders.green.value);
-        skinSliders.blue.value = PlayerPrefs.GetFloat("skinB", skinSliders.blue.value);
+        skinSliders.red.value = PlayerPrefs.GetFloat("skinR", Random.Range(0, 1f));
+        skinSliders.green.value = PlayerPrefs.GetFloat("skinG", Random.Range(0, 1f));
+        skinSliders.blue.value = PlayerPrefs.GetFloat("skinB", Random.Range(0, 1f));
     }
 
     //Save slider values to playerprefs

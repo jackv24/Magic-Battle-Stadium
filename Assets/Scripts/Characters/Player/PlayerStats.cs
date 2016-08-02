@@ -13,6 +13,7 @@ public class PlayerStats : NetworkBehaviour
     public int currentHealth = 100;
     public int maxHealth = 100;
 
+    [SyncVar]
     public int currentMana = 100;
     public int maxMana = 100;
 
@@ -97,7 +98,11 @@ public class PlayerStats : NetworkBehaviour
             currentHealth -= amount;
 
             if (currentHealth <= 0)
+            {
+                currentHealth = 0;
+
                 RpcDie(attackerName, attackName);
+            }
         }
     }
 
