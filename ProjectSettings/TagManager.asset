@@ -49,6 +49,9 @@ TagManager:
   - name: Player
     uniqueID: 593433907
     locked: 0
+  - name: Effects
+    uniqueID: 752695627
+    locked: 0
   - name: Foreground
     uniqueID: 611065225
     locked: 0

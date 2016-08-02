@@ -88,8 +88,35 @@ public class PlayerAttack : NetworkBehaviour
                     GameManager.instance.attackSlots.StartCooldown(slotIndex);
 
                     //Should only spawn one unless spawn type defines more
-                    for(int i = 0; i < attackSet.attacks[slotIndex].amountToSpawn; i++)
+                    for (int i = 0; i < attackSet.attacks[slotIndex].amountToSpawn; i++)
                         CmdFire(Vector2.zero, slotIndex, currentAttackSet);
+                }
+
+                //Attack was not selected (it was used immediately instead)
+                return false;
+            }
+            //Cast type attacks need to be handled by the stat they effect
+            else if (attackSet.attacks[slotIndex].type == Attack.Type.Cast)
+            {
+                //Only use attack if there is enough mana and it is not on cooldown
+                if (Time.time > nextAttackTime[slotIndex] && stats.UseMana(attackSet.attacks[slotIndex].manaCost))
+                {
+                    //Set next cooldown time for this attack
+                    nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime;
+                    GameManager.instance.attackSlots.StartCooldown(slotIndex);
+
+                    switch (attackSet.attacks[slotIndex].statType)
+                    {
+                        case Attack.Stat.Health:
+                            stats.CmdHeal(attackSet.attacks[slotIndex].power);
+                            break;
+                    }
+
+                    //Cast effect should follow player
+                    GameObject obj = (GameObject)Instantiate(attackSet.attacks[slotIndex].attackPrefab, transform.position, Quaternion.identity);
+                    obj.transform.parent = transform;
+                    //Destroy after abitrary amount of time (particle effect should be finished)
+                    Destroy(obj, 5f);
                 }
 
                 //Attack was not selected (it was used immediately instead)

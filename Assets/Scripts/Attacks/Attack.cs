@@ -35,4 +35,15 @@ public class Attack : ScriptableObject
 
     //The icon to display in the slot for this attack
     public Sprite slotIcon;
+
+    //Cast-related variables
+    //Type of stat to effect
+    public enum Stat
+    {
+        Health
+    }
+    public Stat statType;
+    
+    //The power at which to effect (in case of health, amount to heal)
+    public int power = 0;
 }

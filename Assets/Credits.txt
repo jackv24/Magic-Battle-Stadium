@@ -2,3 +2,6 @@ Unless stated below, all assets are created by Jack Vine.
 
 Tools:
 	Super Tilemap Editor - Creative Spore
+
+Assets:
+	FX Quest - G.E.TeamDev

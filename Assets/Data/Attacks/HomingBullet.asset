@@ -18,3 +18,5 @@ MonoBehaviour:
   attackPrefab: {fileID: 112054, guid: 7a6b72b2ba028c347a6d93acb8e1bbf0, type: 2}
   amountToSpawn: 1
   slotIcon: {fileID: 21300000, guid: dd403f13aa6ef0748b657edc3a5cb399, type: 3}
+  statType: 0
+  power: 0

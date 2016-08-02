@@ -44,7 +44,12 @@ public class AttackEditor : Editor
                 attack.attackPrefab = (GameObject)EditorGUILayout.ObjectField("Trap Prefab", attack.attackPrefab, typeof(GameObject), false);
                 break;
             case Attack.Type.Cast:
-                EditorGUILayout.HelpBox("Cast-type attacks do not spawn a prefab.", MessageType.Info);
+                //Case type attacks show additional variables related to stats they affect
+                attack.statType = (Attack.Stat)EditorGUILayout.EnumPopup("Stat to Affect", attack.statType);
+                attack.power = EditorGUILayout.IntField("Power", attack.power);
+                EditorGUILayout.Space();
+
+                attack.attackPrefab = (GameObject)EditorGUILayout.ObjectField("Cast Effect Prefab", attack.attackPrefab, typeof(GameObject), false);
                 break;
             case Attack.Type.Spawn:
                 attack.attackPrefab = (GameObject)EditorGUILayout.ObjectField("Spawn Prefab", attack.attackPrefab, typeof(GameObject), false);

@@ -99,6 +99,16 @@ public class PlayerStats : NetworkBehaviour
         }
     }
 
+    //Heal is run on the server
+    [Command]
+    public void CmdHeal(int amount)
+    {
+        currentHealth += amount;
+
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+    }
+
     //Removes mana, returning true if there was enough mana left
     public bool UseMana(int amount)
     {
