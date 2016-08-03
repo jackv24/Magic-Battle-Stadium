@@ -60,14 +60,16 @@ public class Scoreboard : MonoBehaviour
     //Adds a kill to a name and updates the display
     public void AddKill(string name)
     {
-        kills[names.IndexOf(name)] += 1;
+        if(names.Contains(name))
+            kills[names.IndexOf(name)] += 1;
 
         UpdateDisplay();
     }
     //Adds a death to a name and updates the display
     public void AddDeath(string name)
     {
-        deaths[names.IndexOf(name)] += 1;
+        if (names.Contains(name))
+            deaths[names.IndexOf(name)] += 1;
 
         UpdateDisplay();
     }

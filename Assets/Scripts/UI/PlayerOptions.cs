@@ -63,12 +63,6 @@ public class PlayerOptions : MonoBehaviour
         DisplayAttackSet();
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-            PlayerPrefs.DeleteAll();
-    }
-
     //Sets listeners on sliders
     void Initialise(SliderRGB sliders)
     {

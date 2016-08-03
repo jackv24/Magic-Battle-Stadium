@@ -13,6 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackName: Heal Self
   manaCost: 50
+  healthCost: 0
   coolDownTime: 30
   type: 2
   attackPrefab: {fileID: 100002, guid: d199e9cd4846e408aabc52ae86b1dfc6, type: 2}

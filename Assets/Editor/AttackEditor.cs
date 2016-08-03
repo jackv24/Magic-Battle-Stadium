@@ -28,6 +28,9 @@ public class AttackEditor : Editor
         EditorGUILayout.Space();
 
         attack.manaCost = EditorGUILayout.IntField("Mana Cost", attack.manaCost);
+        attack.healthCost = EditorGUILayout.IntField("Health Cost", attack.healthCost);
+        EditorGUILayout.Space();
+
         attack.coolDownTime = EditorGUILayout.FloatField("Cool-down Time", attack.coolDownTime);
         EditorGUILayout.Space();
 

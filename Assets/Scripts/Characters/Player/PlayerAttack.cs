@@ -59,6 +59,9 @@ public class PlayerAttack : NetworkBehaviour
                 //Use mana to attack. If not enough mana is left, attack cannot be performed
                 if (stats.UseMana(attackSet.attacks[selectedAttack].manaCost))
                 {
+                    //Some attacks sacrifice health
+                    stats.ApplyDamage(attackSet.attacks[selectedAttack].healthCost, null, attackSet.attacks[selectedAttack].attackName);
+
                     //Set next attack time
                     nextAttackTime[selectedAttack] = Time.time + attackSet.attacks[selectedAttack].coolDownTime;
                     GameManager.instance.attackSlots.StartCooldown(selectedAttack);
@@ -83,6 +86,9 @@ public class PlayerAttack : NetworkBehaviour
                 //Only use attack if there is enough mana and it is not on cooldown
                 if (Time.time > nextAttackTime[slotIndex] && stats.UseMana(attackSet.attacks[slotIndex].manaCost))
                 {
+                    //Some attacks sacrifice health
+                    stats.ApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
+
                     //Set next cooldown time for this attack
                     nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime;
                     GameManager.instance.attackSlots.StartCooldown(slotIndex);
@@ -101,6 +107,9 @@ public class PlayerAttack : NetworkBehaviour
                 //Only use attack if there is enough mana and it is not on cooldown
                 if (Time.time > nextAttackTime[slotIndex] && stats.UseMana(attackSet.attacks[slotIndex].manaCost))
                 {
+                    //Some attacks sacrifice health
+                    stats.ApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
+
                     //Set next cooldown time for this attack
                     nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime;
                     GameManager.instance.attackSlots.StartCooldown(slotIndex);
@@ -109,6 +118,9 @@ public class PlayerAttack : NetworkBehaviour
                     {
                         case Attack.Stat.Health:
                             stats.CmdHeal(attackSet.attacks[slotIndex].power);
+                            break;
+                        case Attack.Stat.Mana:
+                            stats.CmdRegainMana(attackSet.attacks[slotIndex].power);
                             break;
                     }
 

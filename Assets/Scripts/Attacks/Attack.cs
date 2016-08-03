@@ -13,6 +13,7 @@ public class Attack : ScriptableObject
 
     //How much mana this attack costs to use
     public int manaCost = 0;
+    public int healthCost = 0;
 
     //Interval at which the attack can be performed
     public float coolDownTime = 0.25f;
@@ -40,7 +41,8 @@ public class Attack : ScriptableObject
     //Type of stat to effect
     public enum Stat
     {
-        Health
+        Health,
+        Mana
     }
     public Stat statType;
     

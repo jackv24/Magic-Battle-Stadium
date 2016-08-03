@@ -9,12 +9,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52de0f2b6650d424e96c9556c2754ec2, type: 3}
-  m_Name: Lightning
+  m_Name: Smite
   m_EditorClassIdentifier: 
   attackName: Lightning Strike
   manaCost: 30
+  healthCost: 0
   coolDownTime: 10
   type: 1
   attackPrefab: {fileID: 110196, guid: c98acd6defe4c5f47a5237993e022117, type: 2}
   amountToSpawn: 1
   slotIcon: {fileID: 21300000, guid: 7245212bb6aee474792581d8bd35dac7, type: 3}
+  statType: 0
+  power: 0

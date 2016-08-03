@@ -116,6 +116,15 @@ public class PlayerStats : NetworkBehaviour
             currentHealth = maxHealth;
     }
 
+    [Command]
+    public void CmdRegainMana(int amount)
+    {
+        currentMana += amount;
+
+        if (currentMana > maxMana)
+            currentMana = maxMana;
+    }
+
     //Removes mana, returning true if there was enough mana left
     public bool UseMana(int amount)
     {
@@ -197,7 +206,11 @@ public class PlayerStats : NetworkBehaviour
         if (DisplayKillText.instance)
         {
             //Add a kill to the killtext, with player name, attacker name, and the name of the attack that killed it
-            DisplayKillText.instance.AddKill(attackerName, info.username, attackName);
+            if(attackerName != "")
+                DisplayKillText.instance.AddKill(attackerName, info.username, attackName);
+            //If no attacker name, they must have killed themselves
+            else
+                DisplayKillText.instance.AddKill(info.username, "themselves", attackName);
         }
 
         if (deathEffect)

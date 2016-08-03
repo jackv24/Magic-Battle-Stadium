@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e108de0218c0df846990c2ef396bc667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  damage: 15
   lifeTime: 0.5
   spawnTime: 0.25
   chainLength: 10
