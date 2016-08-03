@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MainCanvas
   - Projectile
+  - AttackSlot
   layers:
   - Default
   - TransparentFX

@@ -28,6 +28,8 @@ public class Attack : ScriptableObject
     }
     public Type type;
 
+    public string description;
+
     //Prefab to spawn when this attack is used
     public GameObject attackPrefab;
 

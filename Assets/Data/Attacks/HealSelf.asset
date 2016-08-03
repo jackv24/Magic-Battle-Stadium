@@ -16,6 +16,9 @@ MonoBehaviour:
   healthCost: 0
   coolDownTime: 30
   type: 2
+  description: 'Heals a certain amount.
+
+    50 mana cost, 30 second cooldown.'
   attackPrefab: {fileID: 100002, guid: d199e9cd4846e408aabc52ae86b1dfc6, type: 2}
   amountToSpawn: 1
   slotIcon: {fileID: 21300000, guid: 5484ead8cde0cd842b531981d77b52fa, type: 3}

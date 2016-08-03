@@ -16,6 +16,9 @@ MonoBehaviour:
   healthCost: 0
   coolDownTime: 0.25
   type: 0
+  description: 'Basic attack. Shoots a bullet in the chosen direction.
+
+    Zero cost and 0.25 second cooldown. '
   attackPrefab: {fileID: 112054, guid: 98b688b01ba13bd47b931d3e7b7b8866, type: 2}
   amountToSpawn: 1
   slotIcon: {fileID: 21300000, guid: 333786b414d370a49a8d9ef86e96a426, type: 3}

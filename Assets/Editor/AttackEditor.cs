@@ -59,7 +59,9 @@ public class AttackEditor : Editor
                 attack.amountToSpawn = EditorGUILayout.IntField("Amount to Spawn", attack.amountToSpawn);
                 break;
         }
-
         EditorGUILayout.Space();
+
+        EditorGUILayout.PrefixLabel("Description");
+        attack.description = EditorGUILayout.TextArea(attack.description, GUILayout.MinHeight(100f));
     }
 }

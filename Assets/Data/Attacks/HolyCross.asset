@@ -13,8 +13,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackName: Holy Cross
   manaCost: 1
+  healthCost: 0
   coolDownTime: 0.5
   type: 0
+  description: 'Throws a cross that moves slightly toward the target.
+
+    Zero cost and 0.5 second cooldown.'
   attackPrefab: {fileID: 112054, guid: b0c5c4b068bc58c448f2c09d802b1e8e, type: 2}
   amountToSpawn: 1
   slotIcon: {fileID: 21300000, guid: 3d13f023390958e48bb4011172aa6588, type: 3}

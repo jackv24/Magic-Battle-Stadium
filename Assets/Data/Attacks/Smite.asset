@@ -16,6 +16,9 @@ MonoBehaviour:
   healthCost: 0
   coolDownTime: 10
   type: 1
+  description: 'Causes bolts of lightning to strike around the player, damaging enemies.
+
+    30 mana cost and 10 second cooldown.'
   attackPrefab: {fileID: 110196, guid: c98acd6defe4c5f47a5237993e022117, type: 2}
   amountToSpawn: 1
   slotIcon: {fileID: 21300000, guid: 7245212bb6aee474792581d8bd35dac7, type: 3}

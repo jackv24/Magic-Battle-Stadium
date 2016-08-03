@@ -13,8 +13,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackName: Light Swarm
   manaCost: 25
+  healthCost: 0
   coolDownTime: 30
   type: 3
+  description: 'Spawns a swarm of lights that attack enemies who come in range.
+
+    25 mana cost and 30 second cooldown. '
   attackPrefab: {fileID: 112054, guid: cb17521fd6164a3459d3015cf8addb92, type: 2}
   amountToSpawn: 10
   slotIcon: {fileID: 21300000, guid: aa9c68b463971d2488528bdc84222536, type: 3}
+  statType: 0
+  power: 0
