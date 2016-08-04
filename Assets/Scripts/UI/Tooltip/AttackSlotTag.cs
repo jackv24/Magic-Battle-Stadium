@@ -13,12 +13,15 @@ public class AttackSlotTag : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        //Pass slot data to load to the tooltip
         Tooltip.instance.LoadData(slotIndex);
+        //Show the toolip
         Tooltip.instance.ShowTooltip(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        //Hide the tooltip
         Tooltip.instance.ShowTooltip(false);
     }
 }

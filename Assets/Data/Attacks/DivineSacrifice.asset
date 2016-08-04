@@ -16,8 +16,9 @@ MonoBehaviour:
   healthCost: 25
   coolDownTime: 5
   type: 2
-  description: "Sacrifice a portion of the player\u2019s HP in exchange for mana.\n25
-    health cost, 5 second cooldown."
+  description: 'Sacrifice 25HP in exchange for 50 mana.
+
+    5 second cooldown.'
   attackPrefab: {fileID: 100000, guid: bbc677731a7164df2bc94fbdbb4ff135, type: 2}
   amountToSpawn: 1
   slotIcon: {fileID: 21300000, guid: 79213031db07b1d4ba2b87746b2da81f, type: 3}

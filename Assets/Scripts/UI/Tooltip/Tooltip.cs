@@ -19,8 +19,14 @@ public class Tooltip : MonoBehaviour
     public Text title;
     public Text description;
 
-    private Camera cam;
+    //Accounts for difference between mouse origin and UI origin
     private Vector3 screenOffset;
+    //The bottom of the screen
+    private float minY;
+
+    private RectTransform rectTrans;
+    //Keep track of changes to screen height
+    private float screenHeight;
 
     private AttackSet attackSet;
 
@@ -28,20 +34,41 @@ public class Tooltip : MonoBehaviour
     {
         instance = this;
 
-        cam = Camera.main;
+        rectTrans = GetComponent<RectTransform>();
     }
 
     void Start()
     {
-        screenOffset = new Vector3(Screen.width / 2 + offset.x, Screen.height / 2 + offset.y, transform.position.z);
-
+        //Start tooltip hidden
         ShowTooltip(false);
     }
 
     void Update()
     {
-        if(isActive)
+        //If the tooltip is active
+        if (isActive)
+        {
+            //Update values if screen height has changed
+            if (screenHeight != Screen.height)
+            {
+                screenHeight = Screen.height;
+
+                screenOffset = new Vector3(Screen.width / 2 + offset.x, Screen.height / 2 + offset.y, transform.position.z);
+                minY = (Screen.height / 2) * -1;
+            }
+
+            //Move tooltip to mouse position
             transform.localPosition = Input.mousePosition - screenOffset;
+
+            //If tooltip is off the bottom of the screen...
+            if (transform.localPosition.y - rectTrans.rect.height < minY)
+            {
+                //...move it up so the whole tooltip is visible
+                Vector3 pos = transform.localPosition;
+                pos.y = minY + rectTrans.rect.height;
+                transform.localPosition = pos;
+            }
+        }
     }
 
     //Shows or hides the tooltip
