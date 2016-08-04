@@ -76,7 +76,11 @@ public class NetworkConnectUI : MonoBehaviour
         {
             //Start the game (either as a host or a client)
             if (isHost)
+            {
                 manager.StartHost();
+
+                GameManager.instance.StartGame();
+            }
             else
                 manager.StartClient();
 

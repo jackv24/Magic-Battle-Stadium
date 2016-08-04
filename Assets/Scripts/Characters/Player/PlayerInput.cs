@@ -36,7 +36,7 @@ public class PlayerInput : NetworkBehaviour
         if (!isLocalPlayer)
             return;
 
-        if (stats.isAlive)
+        if (stats.isAlive && GameManager.instance.hasGameStarted)
         {
             //Get and normalize input
             inputVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));

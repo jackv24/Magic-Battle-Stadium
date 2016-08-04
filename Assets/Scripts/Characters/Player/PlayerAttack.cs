@@ -51,7 +51,7 @@ public class PlayerAttack : NetworkBehaviour
         inputVector = new Vector2(Input.GetAxisRaw("Attack Horizontal"), Input.GetAxisRaw("Attack Vertical"));
 
         //If a direction is being pressed
-        if (inputVector != Vector2.zero)
+        if (inputVector != Vector2.zero && GameManager.instance.hasGameStarted)
         {
             //If the next attack time has passed OR the driection has changed
             if (Time.time > nextAttackTime[selectedAttack])
@@ -75,7 +75,7 @@ public class PlayerAttack : NetworkBehaviour
     public bool SelectSlot(int slotIndex)
     {
         //Make sure player can only select attacks that exist, and only while alive
-        if (attackSet.attacks[slotIndex] != null && stats.isAlive)
+        if (attackSet.attacks[slotIndex] != null && stats.isAlive && GameManager.instance.hasGameStarted)
         {
             //If the attack is a projectile, select it
             if (attackSet.attacks[slotIndex].type == Attack.Type.Projectile)

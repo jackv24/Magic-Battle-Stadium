@@ -17,9 +17,9 @@ public class PlayerOptions : MonoBehaviour
     [System.Serializable]
     public class PlayerGraphics
     {
-        public SpriteRenderer hat;
-        public SpriteRenderer clothes;
-        public SpriteRenderer skin;
+        public Image hat;
+        public Image clothes;
+        public Image skin;
     }
     public PlayerGraphics playerGraphics;
 

@@ -4,8 +4,6 @@
 
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
-using UnityEngine.Networking;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,23 +27,25 @@ public class GameManager : MonoBehaviour
     public AttackSet[] attackSets;
     public int currentAttackSet = 0;
 
-    private Text startText;
-    private string startTextString;
+    public int gameStartTime = 30;
+
+    public bool hasGameStarted = true;
+
+    public GameStart gameStart;
 
     void Awake()
     {
         instance = this;
-
-        if (GameObject.Find("StartText"))
-        {
-            startText = GameObject.Find("StartText").GetComponent<Text>();
-            startTextString = startText.text;
-        }
     }
 
     void Initialise()
     {
         //Initialise attack slots
         attackSlots.InitialiseSlots();
+    }
+
+    public void StartGame()
+    {
+        gameStart.StartGame(gameStartTime);
     }
 }
