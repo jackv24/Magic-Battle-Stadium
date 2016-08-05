@@ -8,9 +8,6 @@ using UnityEngine.Networking;
 
 public class Bullet : Projectile
 {
-    //How after this bullet  can be fired (in seconds)
-    public float fireTime = 0.25f;
-
     //How fast the bullet will move
     public float moveSpeed = 10f;
 

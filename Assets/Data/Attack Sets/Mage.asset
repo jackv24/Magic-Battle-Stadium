@@ -14,7 +14,7 @@ MonoBehaviour:
   setName: Mage
   health: 150
   mana: 100
-  healthRegen: 0
+  healthRegen: 2
   manaRegen: 2
   moveSpeed: 6
   description: 'All-rounder magic class with simple projectiles and some traps.

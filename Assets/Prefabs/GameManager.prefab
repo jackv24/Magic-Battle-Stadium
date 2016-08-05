@@ -58,6 +58,7 @@ MonoBehaviour:
   attackSets:
   - {fileID: 11400000, guid: 40efaceffce2e1742a5debd189b9ac0d, type: 2}
   - {fileID: 11400000, guid: 84e8e89c0111a404d820de27b2d343fb, type: 2}
+  - {fileID: 11400000, guid: 1ceb5b0a322a8ca4881752f7d7e72451, type: 2}
   currentAttackSet: 0
   gameStartTime: 30
   hasGameStarted: 1

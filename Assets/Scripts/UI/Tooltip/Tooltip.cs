@@ -108,6 +108,11 @@ public class Tooltip : MonoBehaviour
                     title.text = selectedAttack.attackName;
                     description.text = selectedAttack.description;
                 }
+                else
+                {
+                    title.text = "";
+                    description.text = "";
+                }
             }
         }
     }

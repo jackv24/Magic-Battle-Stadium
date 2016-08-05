@@ -347,6 +347,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 22483642}
   - 114: {fileID: 11457586}
+  - 114: {fileID: 11470130}
   m_Layer: 5
   m_Name: ManaBar
   m_TagString: Untagged
@@ -482,6 +483,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 22482850}
   - 114: {fileID: 11425308}
+  - 114: {fileID: 11468182}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -1148,6 +1150,30 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 100/100
+--- !u!114 &11468182
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 184826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc8ebee87d182c4cb873052cd847991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotIndex: -1
+--- !u!114 &11470130
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 153890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc8ebee87d182c4cb873052cd847991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotIndex: -1
 --- !u!114 &11470958
 MonoBehaviour:
   m_ObjectHideFlags: 1

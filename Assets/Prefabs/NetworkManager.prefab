@@ -61,6 +61,7 @@ MonoBehaviour:
   - {fileID: 112054, guid: cb17521fd6164a3459d3015cf8addb92, type: 2}
   - {fileID: 112054, guid: b0c5c4b068bc58c448f2c09d802b1e8e, type: 2}
   - {fileID: 110196, guid: c98acd6defe4c5f47a5237993e022117, type: 2}
+  - {fileID: 112054, guid: fd07521f7f409e946b4e07e88b6b3b1a, type: 2}
   m_CustomConfig: 1
   m_MaxConnections: 6
   m_ConnectionConfig:
@@ -101,7 +102,6 @@ MonoBehaviour:
   matchMaker: {fileID: 0}
   matchName: default
   matchSize: 4
-  playerSpawnEffect: {fileID: 100006, guid: b1eae6b56d63b435784c01c7004b15f0, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

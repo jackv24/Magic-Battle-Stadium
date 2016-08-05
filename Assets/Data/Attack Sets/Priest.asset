@@ -14,14 +14,14 @@ MonoBehaviour:
   setName: Priest
   health: 100
   mana: 100
-  healthRegen: 1
-  manaRegen: 2
+  healthRegen: 2
+  manaRegen: 1
   moveSpeed: 5
-  description: 'Holy magic class. Smites enemies and focused on keeping themselves
+  description: 'Holy magic class. Smites enemies and focuses on keeping themselves
     going for as long as possible.
 
 
-    100 HP, 100 mana. Regenerates 1 HP/s and 2 mana.'
+    100 HP, 100 mana. Regenerates 1 HP and 2 mana per second.'
   attacks:
   - {fileID: 11400000, guid: 5692326c33c49df448156145799e3a3c, type: 2}
   - {fileID: 11400000, guid: 6fc419149aa4f0b4c8840b012c169a92, type: 2}

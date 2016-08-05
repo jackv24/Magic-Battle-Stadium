@@ -33,6 +33,10 @@ public class GameStart : NetworkBehaviour
         {
             if (timeLeft > 5 && Input.GetKeyDown(KeyCode.N))
                 StartGame(6);
+
+            //For skipping countdown during testing
+            if (Input.GetKeyDown(KeyCode.O) && Input.GetKeyDown(KeyCode.P))
+                StartGame(0);
         }
     }
 

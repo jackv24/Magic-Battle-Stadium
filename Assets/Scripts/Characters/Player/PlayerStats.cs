@@ -164,6 +164,12 @@ public class PlayerStats : NetworkBehaviour
         {
             currentMana -= amount;
 
+            //Keep within bounds
+            if(currentMana > maxMana)
+                currentMana = maxMana;
+            else if (currentMana < 0)
+                currentMana = 0;
+
             return true;
         }
         else //Else return false as there is not enough mana
