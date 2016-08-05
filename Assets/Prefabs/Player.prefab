@@ -427,6 +427,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   username: no name
   nameText: {fileID: 11434298}
+  playerSpawnEffect: {fileID: 102146, guid: e46e044a337d13a4e81fbf423305adab, type: 2}
 --- !u!114 &11416892
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -627,7 +628,8 @@ MonoBehaviour:
   maxHealth: 100
   currentMana: 100
   maxMana: 100
-  manaRegenInterval: 0.5
+  healthRegen: 1
+  manaRegen: 1
   isAlive: 1
   deathEffect: {fileID: 100002, guid: 463540b05fdbc409c9d262263d4e7a2b, type: 2}
   respawnTime: 5

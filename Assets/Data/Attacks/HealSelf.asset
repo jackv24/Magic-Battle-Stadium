@@ -18,6 +18,7 @@ MonoBehaviour:
   type: 2
   description: 'Heal yourself with 100HP.
 
+
     50 mana cost and 30 second cooldown.'
   attackPrefab: {fileID: 100002, guid: d199e9cd4846e408aabc52ae86b1dfc6, type: 2}
   amountToSpawn: 1

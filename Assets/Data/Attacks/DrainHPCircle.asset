@@ -19,6 +19,7 @@ MonoBehaviour:
   description: 'Spawns a circle trap that slows and damages any enemies that enter
     until it times out.
 
+
     50 mana cost and 20 second cooldown. '
   attackPrefab: {fileID: 162846, guid: b98ca18f678c6de43aefb0e69b1513fd, type: 2}
   amountToSpawn: 1

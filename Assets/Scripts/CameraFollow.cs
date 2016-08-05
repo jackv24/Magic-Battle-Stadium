@@ -16,10 +16,21 @@ public class CameraFollow : MonoBehaviour
     //The target position (for lerping)
     private Vector3 targetPos;
 
+    private bool playerSpawned = false;
+
     void LateUpdate()
     {
+        //When player first spawns...
+        if (!playerSpawned && target)
+        {
+            playerSpawned = true;
+
+            //...make camera start at player position
+            transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
+        }
+
         //Make sure there is a target to follow
-        if (target)
+        if (target && playerSpawned)
         {
             //Only follow on x and y
             targetPos = new Vector3(target.position.x, target.position.y, transform.position.z);

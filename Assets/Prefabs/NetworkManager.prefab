@@ -101,6 +101,7 @@ MonoBehaviour:
   matchMaker: {fileID: 0}
   matchName: default
   matchSize: 4
+  playerSpawnEffect: {fileID: 100006, guid: b1eae6b56d63b435784c01c7004b15f0, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

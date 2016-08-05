@@ -18,6 +18,7 @@ MonoBehaviour:
   type: 2
   description: 'Sacrifice 25HP in exchange for 50 mana.
 
+
     5 second cooldown.'
   attackPrefab: {fileID: 100000, guid: bbc677731a7164df2bc94fbdbb4ff135, type: 2}
   amountToSpawn: 1

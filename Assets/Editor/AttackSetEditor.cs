@@ -14,9 +14,24 @@ public class AttackSetEditor : Editor
     public override void OnInspectorGUI()
     {
         //The item that this script is targeting. That is, the item that is selected in the inspector.
-        AttackSet attack = (AttackSet)target;
+        AttackSet attackSet = (AttackSet)target;
 
-        attack.setName = EditorGUILayout.TextField("Name", attack.setName);
+        attackSet.setName = EditorGUILayout.TextField("Name", attackSet.setName);
+        EditorGUILayout.Space();
+
+        attackSet.health = EditorGUILayout.IntField("Health", attackSet.health);
+        attackSet.mana = EditorGUILayout.IntField("Mana", attackSet.mana);
+        EditorGUILayout.Space();
+
+        attackSet.healthRegen = EditorGUILayout.IntField("Health Regen", attackSet.healthRegen);
+        attackSet.manaRegen = EditorGUILayout.IntField("Mana Regen", attackSet.manaRegen);
+        EditorGUILayout.Space();
+
+        attackSet.moveSpeed = EditorGUILayout.FloatField("Move Speed", attackSet.moveSpeed);
+        EditorGUILayout.Space();
+
+        EditorGUILayout.PrefixLabel("Description");
+        attackSet.description = EditorGUILayout.TextArea(attackSet.description, GUILayout.MinHeight(100f));
         EditorGUILayout.Space();
 
         EditorGUILayout.HelpBox("Attacks can be edited here, and changes will be made to the attack itself (saves time finding attack in project).", MessageType.Info);
@@ -25,19 +40,19 @@ public class AttackSetEditor : Editor
         for (int i = 0; i < 4; i++)
         {
             //Display field to place attack scriptableobject in
-            attack.attacks[i] = (Attack)EditorGUILayout.ObjectField("Attack " + (i + 1), attack.attacks[i], typeof(Attack), false);
+            attackSet.attacks[i] = (Attack)EditorGUILayout.ObjectField("Attack " + (i + 1), attackSet.attacks[i], typeof(Attack), false);
 
             //Display editor for each attack, under a drop-down menu (saves time finding attack in project)
-            if (attack.attacks[i] != null)
+            if (attackSet.attacks[i] != null)
             {
                 EditorGUI.indentLevel++;
 
-                attackFoldout[i] = EditorGUILayout.Foldout(attackFoldout[i], "Attack: " + attack.attacks[i].attackName);
+                attackFoldout[i] = EditorGUILayout.Foldout(attackFoldout[i], "Attack: " + attackSet.attacks[i].attackName);
 
                 if (attackFoldout[i])
                 {
                     EditorGUI.indentLevel++;
-                    AttackEditor.DrawAttackOptions(attack.attacks[i]);
+                    AttackEditor.DrawAttackOptions(attackSet.attacks[i]);
                     EditorGUI.indentLevel--;
                 }
 

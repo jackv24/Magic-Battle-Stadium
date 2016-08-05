@@ -91,14 +91,23 @@ public class Tooltip : MonoBehaviour
 
         if (attackSet)
         {
-            //Get selected attack
-            Attack selectedAttack = attackSet.attacks[index];
-
-            if (selectedAttack)
+            //An index of less than zero means to display the attack set info instead
+            if (index < 0)
             {
-                //Set data
-                title.text = selectedAttack.attackName;
-                description.text = selectedAttack.description;
+                title.text = attackSet.setName;
+                description.text = attackSet.description;
+            }
+            else
+            {
+                //Get selected attack
+                Attack selectedAttack = attackSet.attacks[index];
+
+                if (selectedAttack)
+                {
+                    //Set data
+                    title.text = selectedAttack.attackName;
+                    description.text = selectedAttack.description;
+                }
             }
         }
     }

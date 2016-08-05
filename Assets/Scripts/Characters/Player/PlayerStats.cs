@@ -11,13 +11,18 @@ public class PlayerStats : NetworkBehaviour
 {
     [SyncVar]
     public int currentHealth = 100;
+    [SyncVar]
     public int maxHealth = 100;
 
     [SyncVar]
     public int currentMana = 100;
+    [SyncVar]
     public int maxMana = 100;
 
-    public float manaRegenInterval = 0.5f;
+    [SyncVar]
+    public int healthRegen = 1;
+    [SyncVar]
+    public int manaRegen = 1;
 
     [SyncVar]
     public bool isAlive = true;
@@ -66,11 +71,31 @@ public class PlayerStats : NetworkBehaviour
 
             manaSlider = GameObject.Find("ManaBar").GetComponent<Slider>();
             manaSliderText = manaSlider.GetComponentInChildren<Text>();
+
+            //Load stats on server (changes sent to clients by SyncVar)
+            CmdLoadStats(PlayerPrefs.GetInt("AttackSet", 0));
+
+            StartCoroutine("RegenerateMana");
+            StartCoroutine("RegenerateHealth");
         }
 
         //Slider is updated using a coroutine (for performance)
         StartCoroutine("UpdateSlider");
-        StartCoroutine("RegenerateMana");
+    }
+
+    [Command]
+    void CmdLoadStats(int setIndex)
+    {
+        AttackSet attackSet = GameManager.instance.attackSets[setIndex];
+
+        maxHealth = attackSet.health;
+        currentHealth = maxHealth;
+
+        maxMana = attackSet.mana;
+        currentMana = maxMana;
+
+        healthRegen = attackSet.healthRegen;
+        manaRegen = attackSet.manaRegen;
     }
 
     //Bullet collisions are triggered when they enter the trigger
@@ -112,8 +137,11 @@ public class PlayerStats : NetworkBehaviour
     {
         currentHealth += amount;
 
+        //Keep within bounds
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
+        else if (currentHealth < 0)
+            currentHealth = 0;
     }
 
     [Command]
@@ -121,8 +149,11 @@ public class PlayerStats : NetworkBehaviour
     {
         currentMana += amount;
 
+        //Keep within bounds
         if (currentMana > maxMana)
             currentMana = maxMana;
+        else if (currentMana < 0)
+            currentMana = 0;
     }
 
     //Removes mana, returning true if there was enough mana left
@@ -139,14 +170,25 @@ public class PlayerStats : NetworkBehaviour
             return false;
     }
 
+    IEnumerator RegenerateHealth()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+
+            if (isAlive && GameManager.instance.hasGameStarted)
+                CmdHeal(healthRegen);
+        }
+    }
+
     IEnumerator RegenerateMana()
     {
         while (true)
         {
-            yield return new WaitForSeconds(manaRegenInterval);
+            yield return new WaitForSeconds(1);
 
-            if(currentMana < maxMana)
-                currentMana += 1;
+            if(isAlive && GameManager.instance.hasGameStarted)
+                CmdRegainMana(manaRegen);
         }
     }
 

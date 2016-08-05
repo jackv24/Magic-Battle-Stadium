@@ -18,6 +18,7 @@ MonoBehaviour:
   type: 0
   description: 'Follows the nearest enemy for a period of time.
 
+
     10 mana cost and 0.25 second cooldown. '
   attackPrefab: {fileID: 112054, guid: 7a6b72b2ba028c347a6d93acb8e1bbf0, type: 2}
   amountToSpawn: 1

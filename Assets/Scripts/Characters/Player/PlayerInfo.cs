@@ -16,6 +16,8 @@ public class PlayerInfo : NetworkBehaviour
     //The text component in which to display the player's name
     public Text nameText;
 
+    public GameObject playerSpawnEffect;
+
     void Start()
     {
         //If this is the local player
@@ -52,6 +54,13 @@ public class PlayerInfo : NetworkBehaviour
         //Add player to scoreboard
         if(Scoreboard.instance)
             Scoreboard.instance.AddPlayer(username);
+
+        if (playerSpawnEffect)
+        {
+            GameObject obj = (GameObject)Instantiate(playerSpawnEffect, transform.position - new Vector3(0, 0.6f, 0), Quaternion.identity);
+
+            Destroy(obj, 2f);
+        }
     }
 
     //Updates this player's name on the server

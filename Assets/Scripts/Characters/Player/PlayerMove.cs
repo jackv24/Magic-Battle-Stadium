@@ -4,10 +4,12 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : NetworkBehaviour
 {
     //How fast the player moves
+    [SyncVar]
     public float moveSpeed = 10.0f;
 
     //How fast the player reaches top speed
@@ -21,6 +23,18 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+
+        if (isLocalPlayer)
+            //Set stats on server (sent to clients via SyncVars)
+            CmdSetSpeed(PlayerPrefs.GetInt("AttackSet", 0));
+    }
+
+    [Command]
+    void CmdSetSpeed(int setIndex)
+    {
+        AttackSet attackSet = GameManager.instance.attackSets[setIndex];
+
+        moveSpeed = attackSet.moveSpeed;
     }
 
     public void Move(Vector2 input)
