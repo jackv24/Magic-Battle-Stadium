@@ -47,6 +47,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 490580}
   m_Father: {fileID: 0}
@@ -60,6 +61,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.05, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 477068}
   m_RootOrder: 0
@@ -220,9 +222,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileName: Homing Bullet
   damage: 10
+  hitEffect: {fileID: 149870, guid: 3b65cf58084e96d43804359034f6d86f, type: 2}
   lifeTime: 7
   owner: {fileID: 0}
-  fireTime: 0.5
   moveSpeed: 10
   initialRotation: {x: 0, y: 0, z: 0}
 --- !u!212 &21247370

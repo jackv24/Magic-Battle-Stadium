@@ -240,9 +240,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileName: Homing Bullet
   damage: 10
+  hitEffect: {fileID: 163004, guid: f5137f2de8bc1644495c6c2978f788ce, type: 2}
   lifeTime: 5
   owner: {fileID: 0}
-  fireTime: 0.5
   moveSpeed: 10
   initialRotation: {x: 0, y: 0, z: 0}
 --- !u!212 &21247370
