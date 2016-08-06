@@ -20,7 +20,7 @@ MonoBehaviour:
   description: 'All-rounder magic class with simple projectiles and some traps.
 
 
-    150 HP, 100 mana. Regenerates 2 mana per second.'
+    150 HP, 100 mana. Regenerates 2 mana per second. Speed: 6'
   attacks:
   - {fileID: 11400000, guid: 4e392130865362d45a0c05e1f10fb29c, type: 2}
   - {fileID: 11400000, guid: 692f93888841942438f86b50fe924f32, type: 2}
