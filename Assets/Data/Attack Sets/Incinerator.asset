@@ -16,7 +16,7 @@ MonoBehaviour:
   mana: 200
   healthRegen: 2
   manaRegen: 4
-  moveSpeed: 8
+  moveSpeed: 7
   description: 'Great attack power, but lackluster defense. Not much health, but lots
     of mana and destructive power.
 

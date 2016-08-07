@@ -31,6 +31,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   finalCountdownText: {fileID: 0}
+  initialPos: {x: -20, y: -10}
 --- !u!114 &11484836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -121,7 +122,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -10, y: -10}
+  m_AnchoredPosition: {x: -20, y: -10}
   m_SizeDelta: {x: 250, y: 100}
   m_Pivot: {x: 1, y: 1}
 --- !u!1001 &100100000

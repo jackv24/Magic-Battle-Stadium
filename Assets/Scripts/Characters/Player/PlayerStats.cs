@@ -31,7 +31,6 @@ public class PlayerStats : NetworkBehaviour
 
     //How long it takes to respawn after dying
     public float respawnTime = 5.0f;
-    private Vector3 respawnPos;
 
     //UI objects
     public Slider healthSlider;
@@ -114,7 +113,7 @@ public class PlayerStats : NetworkBehaviour
 
     public void ApplyDamage(int amount, string attackerName, string attackName)
     {
-        //Damage can only be applied on the server
+        //Damage can only be applied on server
         if (!isServer)
             return;
 
@@ -131,7 +130,7 @@ public class PlayerStats : NetworkBehaviour
         }
     }
 
-    //Heal is run on the server
+    //Stats commands are run on the server, and synced to clients
     [Command]
     public void CmdHeal(int amount)
     {
@@ -143,7 +142,7 @@ public class PlayerStats : NetworkBehaviour
         else if (currentHealth < 0)
             currentHealth = 0;
     }
-
+    
     [Command]
     public void CmdRegainMana(int amount)
     {
@@ -157,23 +156,16 @@ public class PlayerStats : NetworkBehaviour
     }
 
     //Removes mana, returning true if there was enough mana left
-    public bool UseMana(int amount)
+    [Command]
+    public void CmdUseMana(int amount)
     {
-        //Only use mana if there is enough
-        if (currentMana >= amount)
-        {
-            currentMana -= amount;
+        currentMana -= amount;
 
-            //Keep within bounds
-            if(currentMana > maxMana)
-                currentMana = maxMana;
-            else if (currentMana < 0)
-                currentMana = 0;
-
-            return true;
-        }
-        else //Else return false as there is not enough mana
-            return false;
+        //Keep within bounds
+        if(currentMana > maxMana)
+            currentMana = maxMana;
+        else if (currentMana < 0)
+            currentMana = 0;
     }
 
     IEnumerator RegenerateHealth()
@@ -275,8 +267,7 @@ public class PlayerStats : NetworkBehaviour
         //Reset values
         currentHealth = maxHealth;
         currentMana = maxMana;
-        //Store server respawn pos so that client also starts in that position
-        respawnPos = NetworkManager.singleton.GetStartPosition().position;
+        
         isAlive = true;
     }
 
@@ -305,7 +296,7 @@ public class PlayerStats : NetworkBehaviour
         CmdRespawn();
         //hide dead text
         deadText.enabled = false;
-        transform.position = respawnPos;
+        transform.position = NetworkManager.singleton.GetStartPosition().position;
 
         attack.ResetCooldowns();
     }

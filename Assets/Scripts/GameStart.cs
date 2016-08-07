@@ -18,12 +18,23 @@ public class GameStart : NetworkBehaviour
     [SyncVar(hook ="UpdateTime")]
     private int timeLeft;
 
+    private Vector2 initialPos;
+
     void Awake()
     {
         startText = GetComponent<Text>();
         startTextString = startText.text;
 
         startText.text = string.Format(startTextString, "", "");
+
+        initialPos = transform.localPosition;
+    }
+
+    void Start()
+    {
+        //Reset UI position (NetworkIdentity moves it for some reason - this fixes that)
+        if(!isServer)
+            transform.position = new Vector3(Screen.width + initialPos.x, Screen.height + initialPos.y, 0);
     }
 
     void Update()

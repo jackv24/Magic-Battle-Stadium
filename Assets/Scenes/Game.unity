@@ -869,7 +869,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22427518, guid: c97d3793e8ac33f4096f57118eafb8c3, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: -10
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 22427518, guid: c97d3793e8ac33f4096f57118eafb8c3, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -1527,7 +1527,7 @@ Transform:
   - {fileID: 1249109641}
   - {fileID: 151276949}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 4
 --- !u!114 &573775057
 MonoBehaviour:
   m_ObjectHideFlags: 0

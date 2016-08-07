@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 [NetworkSettings(channel = 1, sendInterval = 0)]
 public class PlayerAttack : NetworkBehaviour
 {
-    public float[] nextAttackTime;
+    private float[] nextAttackTime;
 
     public int currentAttackSet = 0;
     public AttackSet attackSet;
@@ -57,8 +57,10 @@ public class PlayerAttack : NetworkBehaviour
             if (Time.time > nextAttackTime[selectedAttack])
             {
                 //Use mana to attack. If not enough mana is left, attack cannot be performed
-                if (stats.UseMana(attackSet.attacks[selectedAttack].manaCost))
+                if (stats.currentMana >= attackSet.attacks[selectedAttack].manaCost)
                 {
+                    //Use mana
+                    stats.CmdUseMana(attackSet.attacks[selectedAttack].manaCost);
                     //Some attacks sacrifice health
                     stats.ApplyDamage(attackSet.attacks[selectedAttack].healthCost, null, attackSet.attacks[selectedAttack].attackName);
 
@@ -84,8 +86,10 @@ public class PlayerAttack : NetworkBehaviour
             else if (attackSet.attacks[slotIndex].type == Attack.Type.Trap || attackSet.attacks[slotIndex].type == Attack.Type.Spawn)
             {
                 //Only use attack if there is enough mana and it is not on cooldown
-                if (Time.time > nextAttackTime[slotIndex] && stats.UseMana(attackSet.attacks[slotIndex].manaCost))
+                if (Time.time > nextAttackTime[slotIndex] && stats.currentMana >= attackSet.attacks[slotIndex].manaCost)
                 {
+                    //Use mana
+                    stats.CmdUseMana(attackSet.attacks[slotIndex].manaCost);
                     //Some attacks sacrifice health
                     stats.ApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
 
@@ -105,8 +109,10 @@ public class PlayerAttack : NetworkBehaviour
             else if (attackSet.attacks[slotIndex].type == Attack.Type.Cast)
             {
                 //Only use attack if there is enough mana and it is not on cooldown
-                if (Time.time > nextAttackTime[slotIndex] && stats.UseMana(attackSet.attacks[slotIndex].manaCost))
+                if (Time.time > nextAttackTime[slotIndex] && stats.currentMana >= attackSet.attacks[slotIndex].manaCost)
                 {
+                    //Use mana
+                    stats.CmdUseMana(attackSet.attacks[slotIndex].manaCost);
                     //Some attacks sacrifice health
                     stats.ApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
 
