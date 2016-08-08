@@ -111,12 +111,9 @@ public class PlayerStats : NetworkBehaviour
         }
     }
 
-    public void ApplyDamage(int amount, string attackerName, string attackName)
+    [Command]
+    public void CmdApplyDamage(int amount, string attackerName, string attackName)
     {
-        //Damage can only be applied on server
-        if (!isServer)
-            return;
-
         if (currentHealth > 0)
         {
             currentHealth -= amount;

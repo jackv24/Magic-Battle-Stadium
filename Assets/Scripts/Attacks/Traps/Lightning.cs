@@ -45,7 +45,7 @@ public class Lightning : NetworkBehaviour
         {
             PlayerStats playerStats = other.transform.parent.GetComponent<PlayerStats>();
 
-            playerStats.ApplyDamage(damage, owner.GetComponent<PlayerInfo>().username, "Lightning");
+            playerStats.CmdApplyDamage(damage, owner.GetComponent<PlayerInfo>().username, "Lightning");
         }
     }
 

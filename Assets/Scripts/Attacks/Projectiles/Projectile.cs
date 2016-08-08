@@ -14,6 +14,7 @@ public class Projectile : NetworkBehaviour
 
     public GameObject hitEffect;
 
+    public int health = 0;
     public float lifeTime = 10f;
 
     //The player who shot this bullet - they should not be damaged
@@ -22,6 +23,9 @@ public class Projectile : NetworkBehaviour
 
     public virtual void Start()
     {
+        //Projectile can absorb as much damage as it can deal
+        health = damage;
+
         //Set object to be destroyed after its lifetime ends
         Destroy(gameObject, lifeTime);
     }
@@ -33,7 +37,10 @@ public class Projectile : NetworkBehaviour
         if (stats && stats.isAlive)
         {
             //Apply damage (name of bullet owner is also sent to identify who killed who)
-            stats.ApplyDamage(damage, owner.GetComponent<PlayerInfo>().username, projectileName);
+            stats.CmdApplyDamage(damage, owner.GetComponent<PlayerInfo>().username, projectileName);
+
+            //Projectile expends it's health when colliding with a player
+            health = 0;
         }
 
         if (hitEffect)
@@ -42,8 +49,9 @@ public class Projectile : NetworkBehaviour
             Destroy(obj, 2f);
         }
 
-        //destroy bullet
-        Destroy(gameObject);
+        //Destroy bullet if no health left
+        if(health <= 0)
+            Destroy(gameObject);
     }
 
     //Called via sendmessage from playerattack
@@ -58,6 +66,9 @@ public class Projectile : NetworkBehaviour
         //Can not collide with owner
         if (col.gameObject != owner)
         {
+            //Projectile collision damages health
+            health -= col.gameObject.GetComponent<Projectile>().damage;
+
             Collide(null);
         }
     }

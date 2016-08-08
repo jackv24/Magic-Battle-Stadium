@@ -74,7 +74,7 @@ public class DrainHPCircle : NetworkBehaviour
             //Apply damage to every player in range
             foreach (PlayerStats stats in playerStats)
             {
-                stats.ApplyDamage(1, owner.GetComponent<PlayerInfo>().username, "HP Drain Circle");
+                stats.CmdApplyDamage(1, owner.GetComponent<PlayerInfo>().username, "HP Drain Circle");
             }
         }
 

@@ -62,7 +62,7 @@ public class PlayerAttack : NetworkBehaviour
                     //Use mana
                     stats.CmdUseMana(attackSet.attacks[selectedAttack].manaCost);
                     //Some attacks sacrifice health
-                    stats.ApplyDamage(attackSet.attacks[selectedAttack].healthCost, null, attackSet.attacks[selectedAttack].attackName);
+                    stats.CmdApplyDamage(attackSet.attacks[selectedAttack].healthCost, null, attackSet.attacks[selectedAttack].attackName);
 
                     //Set next attack time
                     nextAttackTime[selectedAttack] = Time.time + attackSet.attacks[selectedAttack].coolDownTime;
@@ -91,7 +91,7 @@ public class PlayerAttack : NetworkBehaviour
                     //Use mana
                     stats.CmdUseMana(attackSet.attacks[slotIndex].manaCost);
                     //Some attacks sacrifice health
-                    stats.ApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
+                    stats.CmdApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
 
                     //Set next cooldown time for this attack
                     nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime;
@@ -114,7 +114,7 @@ public class PlayerAttack : NetworkBehaviour
                     //Use mana
                     stats.CmdUseMana(attackSet.attacks[slotIndex].manaCost);
                     //Some attacks sacrifice health
-                    stats.ApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
+                    stats.CmdApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
 
                     //Set next cooldown time for this attack
                     nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime;
@@ -130,11 +130,7 @@ public class PlayerAttack : NetworkBehaviour
                             break;
                     }
 
-                    //Cast effect should follow player
-                    GameObject obj = (GameObject)Instantiate(attackSet.attacks[slotIndex].attackPrefab, transform.position, Quaternion.identity);
-                    obj.transform.parent = transform;
-                    //Destroy after abitrary amount of time (particle effect should be finished)
-                    Destroy(obj, 5f);
+                    CmdCastEffect(currentAttackSet, slotIndex);
                 }
 
                 //Attack was not selected (it was used immediately instead)
@@ -146,6 +142,22 @@ public class PlayerAttack : NetworkBehaviour
         //If index is out of bounds return false
         else
             return false;
+    }
+
+    [Command]
+    void CmdCastEffect(int set, int attack)
+    {
+        RpcCastEffect(set, attack);
+    }
+
+    [ClientRpc]
+    void RpcCastEffect(int set, int attack)
+    {
+        //Cast effect should follow player
+        GameObject obj = (GameObject)Instantiate(GameManager.instance.attackSets[set].attacks[attack].attackPrefab, transform.position, Quaternion.identity);
+        obj.transform.parent = transform;
+        //Destroy after abitrary amount of time (particle effect should be finished)
+        Destroy(obj, 5f);
     }
 
     public void ResetCooldowns()
