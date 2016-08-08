@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52de0f2b6650d424e96c9556c2754ec2, type: 3}
+  m_Name: Combust
+  m_EditorClassIdentifier: 
+  attackName: Combust
+  manaCost: 30
+  healthCost: 25
+  coolDownTime: 20
+  type: 1
+  description: 'Self-destruct, sacrificing some HP and damaging all surrounding enemies.
+
+
+    10 mana cost, 25HP cost, 20 second cooldown.'
+  attackPrefab: {fileID: 162858, guid: 430c2bebc7e704e459aaf207975c1f22, type: 2}
+  amountToSpawn: 1
+  slotIcon: {fileID: 21300000, guid: ad9a3a1286985c140b1ee419446f6106, type: 3}
+  statType: 0
+  power: 0

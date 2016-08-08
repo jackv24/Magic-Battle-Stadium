@@ -24,6 +24,6 @@ MonoBehaviour:
     100 HP, 200 mana. Regenerates 2 HP and 4 mana per second. Speed: 8'
   attacks:
   - {fileID: 11400000, guid: eed9fc5d93fb7464cb2c699850fb78a3, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 2158278dd24a64044aea206d8ad6c7ba, type: 2}
   - {fileID: 0}
   - {fileID: 0}

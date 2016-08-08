@@ -306,8 +306,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileName: Fireball
-  damage: 25
+  damage: 20
   hitEffect: {fileID: 171250, guid: 7a0da532a9706d840a59e53eca6768fc, type: 2}
+  health: 0
   lifeTime: 5
   owner: {fileID: 0}
   moveSpeed: 10
