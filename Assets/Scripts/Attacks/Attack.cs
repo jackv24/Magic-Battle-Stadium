@@ -44,10 +44,16 @@ public class Attack : ScriptableObject
     public enum Stat
     {
         Health,
-        Mana
+        Mana,
+        AttackRate
     }
     public Stat statType;
     
     //The power at which to effect (in case of health, amount to heal)
     public int power = 0;
+
+    //How much to multiply stat (Can not use power for multiplier since it is a float)
+    public float multiplier = 0;
+    //If this is a timed effect, how long it lasts
+    public float duration = 10f;
 }

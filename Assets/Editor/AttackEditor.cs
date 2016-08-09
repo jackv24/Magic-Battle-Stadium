@@ -49,7 +49,18 @@ public class AttackEditor : Editor
             case Attack.Type.Cast:
                 //Case type attacks show additional variables related to stats they affect
                 attack.statType = (Attack.Stat)EditorGUILayout.EnumPopup("Stat to Affect", attack.statType);
-                attack.power = EditorGUILayout.IntField("Power", attack.power);
+
+                //Display different options based on what type of stat to effect
+                switch(attack.statType)
+                {
+                    case Attack.Stat.AttackRate:
+                        attack.multiplier = EditorGUILayout.FloatField("Rate Multiplier", attack.multiplier);
+                        attack.duration = EditorGUILayout.FloatField("Duration", attack.duration);
+                        break;
+                    default:
+                        attack.power = EditorGUILayout.IntField("Power", attack.power);
+                        break;
+                }
                 EditorGUILayout.Space();
 
                 attack.attackPrefab = (GameObject)EditorGUILayout.ObjectField("Cast Effect Prefab", attack.attackPrefab, typeof(GameObject), false);

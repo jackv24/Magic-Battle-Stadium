@@ -11,6 +11,7 @@ using UnityEngine.Networking;
 public class PlayerAttack : NetworkBehaviour
 {
     private float[] nextAttackTime;
+    private float rateMultiplier = 1f;
 
     public int currentAttackSet = 0;
     public AttackSet attackSet;
@@ -65,7 +66,7 @@ public class PlayerAttack : NetworkBehaviour
                     stats.CmdApplyDamage(attackSet.attacks[selectedAttack].healthCost, null, attackSet.attacks[selectedAttack].attackName);
 
                     //Set next attack time
-                    nextAttackTime[selectedAttack] = Time.time + attackSet.attacks[selectedAttack].coolDownTime;
+                    nextAttackTime[selectedAttack] = Time.time + attackSet.attacks[selectedAttack].coolDownTime * rateMultiplier;
                     GameManager.instance.attackSlots.StartCooldown(selectedAttack);
 
                     CmdFire(inputVector, selectedAttack, currentAttackSet);
@@ -94,7 +95,7 @@ public class PlayerAttack : NetworkBehaviour
                     stats.CmdApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
 
                     //Set next cooldown time for this attack
-                    nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime;
+                    nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime * rateMultiplier;
                     GameManager.instance.attackSlots.StartCooldown(slotIndex);
 
                     //Should only spawn one unless spawn type defines more
@@ -117,7 +118,7 @@ public class PlayerAttack : NetworkBehaviour
                     stats.CmdApplyDamage(attackSet.attacks[slotIndex].healthCost, null, attackSet.attacks[slotIndex].attackName);
 
                     //Set next cooldown time for this attack
-                    nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime;
+                    nextAttackTime[slotIndex] = Time.time + attackSet.attacks[slotIndex].coolDownTime * rateMultiplier;
                     GameManager.instance.attackSlots.StartCooldown(slotIndex);
 
                     switch (attackSet.attacks[slotIndex].statType)
@@ -127,6 +128,10 @@ public class PlayerAttack : NetworkBehaviour
                             break;
                         case Attack.Stat.Mana:
                             stats.CmdRegainMana(attackSet.attacks[slotIndex].power);
+                            break;
+                        case Attack.Stat.AttackRate:
+                            rateMultiplier = 1 / attackSet.attacks[slotIndex].multiplier;
+                            StartCoroutine("ResetMultiplier", attackSet.attacks[slotIndex].duration);
                             break;
                     }
 
@@ -216,5 +221,12 @@ public class PlayerAttack : NetworkBehaviour
 
         //Spawn bullet on the network
         NetworkServer.Spawn(obj);
+    }
+
+    IEnumerator ResetMultiplier(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        rateMultiplier = 1f;
     }
 }

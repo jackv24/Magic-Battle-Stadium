@@ -25,3 +25,5 @@ MonoBehaviour:
   slotIcon: {fileID: 21300000, guid: 79213031db07b1d4ba2b87746b2da81f, type: 3}
   statType: 1
   power: 50
+  multiplier: 0
+  duration: 10

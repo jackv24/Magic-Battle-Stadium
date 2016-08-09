@@ -19,9 +19,11 @@ MonoBehaviour:
   description: 'Self-destruct, sacrificing some HP and damaging all surrounding enemies.
 
 
-    10 mana cost, 25HP cost, 20 second cooldown.'
+    30 mana cost, 25HP cost, 20 second cooldown.'
   attackPrefab: {fileID: 162858, guid: 430c2bebc7e704e459aaf207975c1f22, type: 2}
   amountToSpawn: 1
   slotIcon: {fileID: 21300000, guid: ad9a3a1286985c140b1ee419446f6106, type: 3}
   statType: 0
   power: 0
+  multiplier: 0
+  duration: 10
