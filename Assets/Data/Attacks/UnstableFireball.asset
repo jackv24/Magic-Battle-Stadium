@@ -9,19 +9,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52de0f2b6650d424e96c9556c2754ec2, type: 3}
-  m_Name: FireBomb
+  m_Name: UnstableFireball
   m_EditorClassIdentifier: 
-  attackName: Fire bomb
+  attackName: Unstable Fireball
   manaCost: 20
   healthCost: 0
   coolDownTime: 5
   type: 0
-  description: 'Throws a bomb which explodes on impact, creating a fire which damages
-    all enemies who enter.
-
-
-    20 mana cost, 5 second cooldown.'
-  attackPrefab: {fileID: 0}
+  description: "A stronger fireball which moves erratically in the direction fired.
+    \n\n20 mana cost, 5 second cooldown."
+  attackPrefab: {fileID: 112054, guid: 4c7c1c84a6e12e84da4a7bab2d388b0d, type: 2}
   amountToSpawn: 1
   slotIcon: {fileID: 21300000, guid: 749d07ea05f6dff44b77c281592247c8, type: 3}
   statType: 0

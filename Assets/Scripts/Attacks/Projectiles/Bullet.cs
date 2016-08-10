@@ -24,7 +24,7 @@ public class Bullet : Projectile
         transform.eulerAngles = initialRotation;
     }
 
-    void Update()
+    public virtual void Update()
     {
         //Move the object forward by speed (local forward, as bullet rotation is set when spawned)
         transform.Translate(Vector2.right * moveSpeed * Time.deltaTime);

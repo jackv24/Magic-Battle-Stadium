@@ -2188,7 +2188,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 438066, guid: 37facd5f83a6c63418d3d11110b658a8, type: 2}
       propertyPath: m_RootOrder
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37facd5f83a6c63418d3d11110b658a8, type: 2}
@@ -3218,7 +3218,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 426038, guid: 139b190df6088a64eba9a9352a0dc1f3, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 139b190df6088a64eba9a9352a0dc1f3, type: 2}
@@ -3558,7 +3558,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 495142, guid: 0ab75de4d381f2e47a895b5f4f379c7c, type: 2}
       propertyPath: m_RootOrder
-      value: 9
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 11440826, guid: 0ab75de4d381f2e47a895b5f4f379c7c, type: 2}
       propertyPath: attackSlots

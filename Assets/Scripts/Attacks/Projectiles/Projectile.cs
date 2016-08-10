@@ -17,6 +17,8 @@ public class Projectile : NetworkBehaviour
     public int health = 0;
     public float lifeTime = 10f;
 
+    public bool destroyOnPlayerHit = true;
+
     //The player who shot this bullet - they should not be damaged
     [SyncVar]
     public GameObject owner;
@@ -34,18 +36,19 @@ public class Projectile : NetworkBehaviour
     public void Collide(PlayerStats stats)
     {
         //if the object that was collided with has stats, and is alive
-        if (stats && stats.isAlive)
+        if (isServer && stats && stats.isAlive)
         {
             //Apply damage (name of bullet owner is also sent to identify who killed who)
             stats.CmdApplyDamage(damage, owner.GetComponent<PlayerInfo>().username, projectileName);
 
             //Projectile expends it's health when colliding with a player
-            health = 0;
+            if(destroyOnPlayerHit)
+                health = 0;
         }
 
         if (hitEffect)
         {
-            GameObject obj = (GameObject)Instantiate(hitEffect, transform.position, Quaternion.identity);
+            GameObject obj = (GameObject)Instantiate(hitEffect, destroyOnPlayerHit ? transform.position : stats.transform.position - (Vector3.up / 2), Quaternion.identity);
             Destroy(obj, 2f);
         }
 
