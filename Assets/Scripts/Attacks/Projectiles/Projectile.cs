@@ -18,6 +18,7 @@ public class Projectile : NetworkBehaviour
     public float lifeTime = 10f;
 
     public bool destroyOnPlayerHit = true;
+    public bool damagedByProjectiles = true;
 
     //The player who shot this bullet - they should not be damaged
     [SyncVar]
@@ -48,7 +49,8 @@ public class Projectile : NetworkBehaviour
 
         if (hitEffect)
         {
-            GameObject obj = (GameObject)Instantiate(hitEffect, destroyOnPlayerHit ? transform.position : stats.transform.position - (Vector3.up / 2), Quaternion.identity);
+            //Instantiate hit effect - Spawn effect on player if the projectile is not destroyed, else at projectile pos.
+            GameObject obj = (GameObject)Instantiate(hitEffect, (destroyOnPlayerHit || !stats) ? transform.position : stats.transform.position - (Vector3.up / 2), Quaternion.identity);
             Destroy(obj, 2f);
         }
 
@@ -69,8 +71,9 @@ public class Projectile : NetworkBehaviour
         //Can not collide with owner
         if (col.gameObject != owner)
         {
-            //Projectile collision damages health
-            health -= col.gameObject.GetComponent<Projectile>().damage;
+            if(damagedByProjectiles)
+                //Projectile collision damages health
+                health -= col.gameObject.GetComponent<Projectile>().damage;
 
             Collide(null);
         }
