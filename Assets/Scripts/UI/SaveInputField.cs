@@ -23,7 +23,14 @@ public class SaveInputField : MonoBehaviour
     {
         //If the key already exists, load it into the field
         if (PlayerPrefs.HasKey(key))
+        {
+            //Character limit must be temporarily increased to prevent trancating loaded value
+            field.characterLimit++;
+            //Load value from playerprefs
             field.text = PlayerPrefs.GetString(key);
+            //Return character limit to previous amount
+            field.characterLimit--;
+        }
 
         //Add a listener for when the value of the field changes
         field.onValueChanged.AddListener(delegate { SaveFieldText(); });

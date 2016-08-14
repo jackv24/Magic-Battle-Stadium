@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     public bool hasGameStarted = true;
 
-    public GameStart gameStart;
+    public GameTimer gameStart;
 
     void Awake()
     {

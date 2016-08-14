@@ -31,7 +31,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   finalCountdownText: {fileID: 0}
-  initialPos: {x: -20, y: -10}
+  startText: 'Waiting for players...
+
+    {0}
+
+    <size=24>{1}</size>'
+  timeText: 'Time left: {0}'
 --- !u!114 &11484836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -96,11 +101,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Waiting for players...
-
-    {0}
-
-    {1}'
+  m_Text: Waiting for players...
 --- !u!222 &22202642
 CanvasRenderer:
   m_ObjectHideFlags: 1
