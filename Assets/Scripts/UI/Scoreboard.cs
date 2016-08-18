@@ -22,12 +22,21 @@ public class Scoreboard : MonoBehaviour
     public Text deathsText;
     private string deathsTextString;
 
+    public Text ratioText;
+    private string ratioTextString;
+
     private GameObject childPanel;
 
     //score objects
-    private List<string> names = new List<string>();
-    private List<int> kills = new List<int>();
-    private List<int> deaths = new List<int>();
+    [System.Serializable]
+    public class Score
+    {
+        public string name;
+        public int kills;
+        public int deaths;
+    }
+
+    public List<Score> playerScores = new List<Score>();
 
     void Awake()
     {
@@ -46,6 +55,7 @@ public class Scoreboard : MonoBehaviour
         nameTextString = nameText.text;
         killsTextString = killsText.text;
         deathsTextString = deathsText.text;
+        ratioTextString = ratioText.text;
     }
 
     void Update()
@@ -60,16 +70,20 @@ public class Scoreboard : MonoBehaviour
     //Adds a kill to a name and updates the display
     public void AddKill(string name)
     {
-        if(names.Contains(name))
-            kills[names.IndexOf(name)] += 1;
+        int index = GetScoreIndex(name);
+
+        if (index >= 0)
+            playerScores[index].kills += 1;
 
         UpdateDisplay();
     }
     //Adds a death to a name and updates the display
     public void AddDeath(string name)
     {
-        if (names.Contains(name))
-            deaths[names.IndexOf(name)] += 1;
+        int index = GetScoreIndex(name);
+
+        if (index >= 0)
+            playerScores[index].deaths += 1;
 
         UpdateDisplay();
     }
@@ -77,26 +91,36 @@ public class Scoreboard : MonoBehaviour
     //Adds a player to the scoreboard
     public void AddPlayer(string name)
     {
-        //Add name to list
-        names.Add(name);
-        //Scores should start at 0
-        kills.Add(0);
-        deaths.Add(0);
+        Score playerScore = new Score();
+        playerScore.name = name;
+        playerScore.kills = 0;
+        playerScore.deaths = 0;
+
+        //Add Player to list
+        playerScores.Add(playerScore);
 
         //Update display
         UpdateDisplay();
+    }
+
+    private int GetScoreIndex(string playerName)
+    {
+        for(int i = 0; i < playerScores.Count; i++)
+        {
+            if (playerScores[i].name == playerName)
+                return i;
+        }
+
+        return -1;
     }
 
     //Removes a player from the scoreboard
     public void RemovePlayer(string name)
     {
         //store index of player score info (should be the same in all lists)
-        int index = names.IndexOf(name);
+        int index = GetScoreIndex(name);
 
-        //Remove info from lists
-        names.RemoveAt(index);
-        kills.RemoveAt(index);
-        deaths.RemoveAt(index);
+        playerScores.RemoveAt(index);
 
         //Update the display
         UpdateDisplay();
@@ -105,6 +129,9 @@ public class Scoreboard : MonoBehaviour
     //Updates the UI with scoreboard values
     void UpdateDisplay()
     {
+        //Sort by kills
+        playerScores.Sort((a, b) => b.kills.CompareTo(a.kills));
+
         //Reset text values
         if(nameText)
             nameText.text = nameTextString;
@@ -112,28 +139,32 @@ public class Scoreboard : MonoBehaviour
             killsText.text = killsTextString;
         if(deathsText)
             deathsText.text = deathsTextString;
+        if (ratioText)
+            ratioText.text = ratioTextString;
 
         //Iterate through and add values to scoreboard (names, kills, and deaths list should align)
-        foreach (string name in names)
+        foreach (Score score in playerScores)
         {
-            int index = names.IndexOf(name);
-
-            nameText.text += name + "\n";
-            killsText.text += kills[index] + "\n";
-            deathsText.text += deaths[index] + "\n";
+            nameText.text += score.name + "\n";
+            killsText.text += score.kills + "\n";
+            deathsText.text += score.deaths + "\n";
+            ratioText.text += ((float)score.kills / score.deaths).ToString("0.00") + "\n";
         }
     }
 
     //Checks if a player exists in the scoreboard
     public bool PlayerExists(string name)
     {
-        return names.Contains(name);
+        if (GetScoreIndex(name) >= 0)
+            return true;
+        else
+            return false;
     }
 
     //Changes the name of a player on the scoreboard
     public void ChangeName(string before, string after)
     {
-        names[names.IndexOf(before)] = after;
+        playerScores[GetScoreIndex(before)].name = after;
 
         UpdateDisplay();
     }
