@@ -61,7 +61,7 @@ public class Scoreboard : MonoBehaviour
     void Update()
     {
         //Holding info button shows scoreboard
-        if (Input.GetButtonDown("Info"))
+        if (Input.GetButtonDown("Info") && GameManager.instance.hasGameStarted)
             childPanel.SetActive(true);
         else if (Input.GetButtonUp("Info"))
             childPanel.SetActive(false);
@@ -148,7 +148,10 @@ public class Scoreboard : MonoBehaviour
             nameText.text += score.name + "\n";
             killsText.text += score.kills + "\n";
             deathsText.text += score.deaths + "\n";
-            ratioText.text += ((float)score.kills / score.deaths).ToString("0.00") + "\n";
+
+            //display ratio as decimal, if NaN display '-'
+            string ratio = score.kills > 0 ? ((float)score.kills / score.deaths).ToString("0.00") : "-";
+            ratioText.text += ratio + "\n";
         }
     }
 

@@ -61,7 +61,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1ceb5b0a322a8ca4881752f7d7e72451, type: 2}
   currentAttackSet: 0
   gameStartTime: 30
-  hasGameStarted: 1
+  hasGameStarted: 0
   gameStart: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:

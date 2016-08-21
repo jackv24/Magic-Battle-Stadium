@@ -2660,6 +2660,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 286347155}
     m_Modifications:
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 22437118, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2731,6 +2735,42 @@ Prefab:
     - target: {fileID: 22437118, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.data[0].name
+      value: Jack
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.data[0].kills
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.data[0].deaths
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.data[1].name
+      value: Derp
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.data[1].kills
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.data[1].deaths
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.data[2].name
+      value: Herp
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.data[2].kills
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481258, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
+      propertyPath: playerScores.Array.data[2].deaths
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1b96c717324a6904da00e75d331457ff, type: 2}
