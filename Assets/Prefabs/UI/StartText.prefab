@@ -31,6 +31,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   finalCountdownText: {fileID: 0}
+  resultsScreen: {fileID: 0}
   startText: 'Waiting for players...
 
     {0}

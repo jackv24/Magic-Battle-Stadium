@@ -12,6 +12,8 @@ public class GameTimer : NetworkBehaviour
     //For showing the final seconds more boldy
     public Text finalCountdownText;
 
+    public GameObject resultsScreen;
+
     private Text timerText;
 
     [Multiline]
@@ -25,7 +27,9 @@ public class GameTimer : NetworkBehaviour
     [SyncVar(hook = "UpdateRunTime")]
     private int runTimeLeft;
 
+#if !UNITY_EDITOR
     private Vector2 initialPos;
+#endif
 
     void Awake()
     {
@@ -33,7 +37,9 @@ public class GameTimer : NetworkBehaviour
 
         timerText.text = string.Format(startText, "", "");
 
+#if !UNITY_EDITOR
         initialPos = transform.localPosition;
+#endif
     }
 
     void Start()
@@ -123,8 +129,14 @@ public class GameTimer : NetworkBehaviour
             //Stop game
             GameManager.instance.hasGameStarted = false;
 
-            finalCountdownText.text = "Game Ended";
-            finalCountdownText.gameObject.SetActive(true);
+            if (resultsScreen)
+                //Show results screen
+                resultsScreen.SetActive(true);
+            else
+            {
+                finalCountdownText.text = "Game Ended";
+                finalCountdownText.gameObject.SetActive(true);
+            }
         }
     }
 

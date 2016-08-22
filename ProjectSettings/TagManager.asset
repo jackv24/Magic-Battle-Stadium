@@ -7,6 +7,8 @@ TagManager:
   - MainCanvas
   - Projectile
   - AttackSlot
+  - Scoreboard
+  - Results
   layers:
   - Default
   - TransparentFX
