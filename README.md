@@ -1,1 +1,1 @@
-# Mortal-Wizardy
+# Magic Battle Stadium

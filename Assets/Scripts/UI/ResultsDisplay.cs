@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class ResultsDisplay : MonoBehaviour
 {
-    //UI objects
+    //Scoreboard UI
     public Text nameText;
     public Text killsText;
     public Text deathsText;
@@ -16,8 +16,16 @@ public class ResultsDisplay : MonoBehaviour
 
     private Scoreboard scoreboard;
 
+    //Player results
+    public Text playerNameText;
+
+    public GameObject killsBadge;
+    public GameObject ratioBadge;
+    public GameObject deathsBadge;
+
     void OnEnable()
     {
+        //Get scoreboard instance reference
         scoreboard = Scoreboard.instance;
 
         nameText.text = scoreboard.nameText.text;

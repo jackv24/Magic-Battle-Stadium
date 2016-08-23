@@ -150,8 +150,12 @@ public class Scoreboard : MonoBehaviour
             deathsText.text += score.deaths + "\n";
 
             //display ratio as decimal, if NaN display '-'
-            string ratio = score.kills > 0 ? ((float)score.kills / score.deaths).ToString("0.00") : "-";
-            ratioText.text += ratio + "\n";
+            if (score.kills <= 0)
+                ratioText.text += "0.00\n";
+            else if (score.deaths <= 0)
+                ratioText.text += "<size=20>★</size>" + score.kills + "\n";
+            else
+                ratioText.text += ((float)score.kills / score.deaths).ToString("0.00") + "\n";
         }
     }
 
