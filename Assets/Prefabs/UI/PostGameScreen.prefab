@@ -34,7 +34,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &118082
 GameObject:
   m_ObjectHideFlags: 1
@@ -352,10 +352,20 @@ MonoBehaviour:
   killsText: {fileID: 11403878}
   deathsText: {fileID: 11453564}
   ratioText: {fileID: 11407000}
+  playerGraphics:
+    hat: {fileID: 11422460}
+    clothes: {fileID: 11463324}
+    skin: {fileID: 11484356}
   playerNameText: {fileID: 11454978}
-  killsBadge: {fileID: 119128}
-  ratioBadge: {fileID: 178530}
-  deathsBadge: {fileID: 142580}
+  killsBadge:
+    image: {fileID: 11483146}
+    isOwned: 0
+  ratioBadge:
+    image: {fileID: 11445844}
+    isOwned: 0
+  deathsBadge:
+    image: {fileID: 11458418}
+    isOwned: 0
 --- !u!114 &11402426
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -663,7 +673,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 4
     m_MaxSize: 56
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -1065,7 +1075,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 250, y: 0}
-  m_SizeDelta: {x: 100, y: 0}
+  m_SizeDelta: {x: 90, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22419810
 RectTransform:
@@ -1141,7 +1151,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: 0}
+  m_AnchoredPosition: {x: 20, y: 0}
   m_SizeDelta: {x: 140, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22426038
@@ -1159,8 +1169,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: 0}
-  m_SizeDelta: {x: 100, y: 0}
+  m_AnchoredPosition: {x: 160, y: 0}
+  m_SizeDelta: {x: 90, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22427052
 RectTransform:
@@ -1331,7 +1341,7 @@ RectTransform:
   m_RootOrder: 3
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 350, y: 0}
+  m_AnchoredPosition: {x: 340, y: 0}
   m_SizeDelta: {x: 100, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22495934

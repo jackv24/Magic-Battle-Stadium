@@ -65,6 +65,10 @@ public class Scoreboard : MonoBehaviour
             childPanel.SetActive(true);
         else if (Input.GetButtonUp("Info"))
             childPanel.SetActive(false);
+
+        //For testing
+        if (Input.GetKeyDown(KeyCode.U))
+            UpdateDisplay();
     }
 
     //Adds a kill to a name and updates the display
@@ -174,5 +178,66 @@ public class Scoreboard : MonoBehaviour
         playerScores[GetScoreIndex(before)].name = after;
 
         UpdateDisplay();
+    }
+
+    public enum ScoreType
+    {
+        Kills, Deaths, Ratio
+    }
+
+    //Returns the name of the best player for a particular score type
+    public string GetBestPlayer(ScoreType type)
+    {
+        string name = "";
+        float best;
+
+        switch (type)
+        {
+            case ScoreType.Kills:
+                best = -1;
+                for(int i = 0; i < playerScores.Count; i++)
+                {
+                    if (playerScores[i].kills > best)
+                    {
+                        best = playerScores[i].kills;
+                        name = playerScores[i].name;
+                    }
+                }
+                break;
+            case ScoreType.Deaths:
+                best = int.MaxValue;
+                for (int i = 0; i < playerScores.Count; i++)
+                {
+                    if (playerScores[i].deaths < best)
+                    {
+                        best = playerScores[i].deaths;
+                        name = playerScores[i].name;
+                    }
+                }
+                break;
+            case ScoreType.Ratio:
+                best = -1;
+                for (int i = 0; i < playerScores.Count; i++)
+                {
+                    float ratio;
+
+                    //Prevent ratio being NaN or infinite
+                    if (playerScores[i].kills <= 0)
+                        ratio = 0;
+                    else if (playerScores[i].deaths <= 0)
+                        ratio = playerScores[i].deaths;
+                    else
+                        ratio = (float)playerScores[i].kills / playerScores[i].deaths;
+
+                    if (ratio > best)
+                    {
+                        best = ratio;
+                        name = playerScores[i].name;
+                    }
+                }
+                break;
+        }
+
+        return name;
     }
 }
