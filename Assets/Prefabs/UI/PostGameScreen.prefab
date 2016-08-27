@@ -366,6 +366,8 @@ MonoBehaviour:
   deathsBadge:
     image: {fileID: 11458418}
     isOwned: 0
+  enabledTint: {r: 1, g: 1, b: 1, a: 1}
+  disabledTint: {r: 1, g: 1, b: 1, a: 0.125}
 --- !u!114 &11402426
 MonoBehaviour:
   m_ObjectHideFlags: 1

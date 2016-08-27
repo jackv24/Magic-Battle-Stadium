@@ -87,7 +87,7 @@ public class Tooltip : MonoBehaviour
     public void LoadData(int index)
     {
         //Get current attack set
-        attackSet = GameManager.instance.attackSets[PlayerPrefs.GetInt("AttackSet", 0)];
+        attackSet = GameManager.instance.attackSets[GameManager.instance.currentAttackSet];
 
         if (attackSet)
         {

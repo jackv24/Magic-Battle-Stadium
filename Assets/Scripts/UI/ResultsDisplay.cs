@@ -44,6 +44,10 @@ public class ResultsDisplay : MonoBehaviour
     public Badge ratioBadge;
     public Badge deathsBadge;
 
+    [Header("Display Preferences")]
+    public Color enabledTint = Color.white;
+    public Color disabledTint = new Color(1, 1, 1, 0.125f);
+
     void OnEnable()
     {
         //Get scoreboard instance reference
@@ -71,38 +75,40 @@ public class ResultsDisplay : MonoBehaviour
         {
             playerNameText.text = playerInfo.username;
 
-            //Award badges
+            //Kills badge show/hide
             if (scoreboard.GetBestPlayer(Scoreboard.ScoreType.Kills) == playerInfo.username)
             {
                 killsBadge.isOwned = true;
-                killsBadge.image.enabled = true;
+                killsBadge.image.color = enabledTint;
             }
             else
             {
                 killsBadge.isOwned = false;
-                killsBadge.image.enabled = false;
+                killsBadge.image.color = disabledTint;
             }
 
+            //Deaths badge show/hide
             if (scoreboard.GetBestPlayer(Scoreboard.ScoreType.Deaths) == playerInfo.username)
             {
                 deathsBadge.isOwned = true;
-                deathsBadge.image.enabled = true;
+                deathsBadge.image.color = enabledTint;
             }
             else
             {
                 deathsBadge.isOwned = false;
-                deathsBadge.image.enabled = false;
+                deathsBadge.image.color = disabledTint;
             }
 
+            //Ratio badge show/hide
             if (scoreboard.GetBestPlayer(Scoreboard.ScoreType.Ratio) == playerInfo.username)
             {
                 ratioBadge.isOwned = true;
-                ratioBadge.image.enabled = true;
+                ratioBadge.image.color = enabledTint;
             }
             else
             {
                 ratioBadge.isOwned = false;
-                ratioBadge.image.enabled = false;
+                ratioBadge.image.color = disabledTint;
             }
         }
 

@@ -190,6 +190,7 @@ public class Scoreboard : MonoBehaviour
     {
         string name = "";
         float best;
+        bool isDraw = false;
 
         switch (type)
         {
@@ -202,6 +203,8 @@ public class Scoreboard : MonoBehaviour
                         best = playerScores[i].kills;
                         name = playerScores[i].name;
                     }
+                    else if (playerScores[i].kills == best)
+                        isDraw = true;
                 }
                 break;
             case ScoreType.Deaths:
@@ -213,6 +216,8 @@ public class Scoreboard : MonoBehaviour
                         best = playerScores[i].deaths;
                         name = playerScores[i].name;
                     }
+                    else if (playerScores[i].deaths == best)
+                        isDraw = true;
                 }
                 break;
             case ScoreType.Ratio:
@@ -234,10 +239,16 @@ public class Scoreboard : MonoBehaviour
                         best = ratio;
                         name = playerScores[i].name;
                     }
+                    else if (ratio == best)
+                        isDraw = true;
                 }
                 break;
         }
 
-        return name;
+        //No one wins if it is a draw
+        if (!isDraw)
+            return name;
+        else
+            return "";
     }
 }
