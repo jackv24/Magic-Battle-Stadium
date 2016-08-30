@@ -62,13 +62,15 @@ public class Scoreboard : MonoBehaviour
     {
         //Holding info button shows scoreboard
         if (Input.GetButtonDown("Info") && GameManager.instance.hasGameStarted)
+        {
             childPanel.SetActive(true);
-        else if (Input.GetButtonUp("Info"))
-            childPanel.SetActive(false);
-
-        //For testing
-        if (Input.GetKeyDown(KeyCode.U))
             UpdateDisplay();
+        }
+        else if (Input.GetButtonUp("Info"))
+        {
+            childPanel.SetActive(false);
+            UpdateDisplay();
+        }
     }
 
     //Adds a kill to a name and updates the display

@@ -177,7 +177,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 05146eba86d79f6479f4103f548c2ff6, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []
@@ -469,6 +469,6 @@ PlayerSettings:
   WebGL::template: APPLICATION:Default
   additionalIl2CppArgs::additionalIl2CppArgs: 
   cloudProjectId: 1ab8a057-fa49-487e-be46-2a6447a9048f
-  projectName: MortalWizardry
+  projectName: Magic Battle Stadium
   organizationId: jack-vine-game-development
   cloudEnabled: 0
