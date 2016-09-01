@@ -31,4 +31,14 @@ public class UIFunctions : MonoBehaviour
         //Calling stophost will stop a host, but will also just stop a client
         NetworkManager.singleton.StopHost();
     }
+
+    public void ClearPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+
+        if (NotificationManager.instance)
+            NotificationManager.instance.ShowNotice("!", "All save data and preferences have been cleared!");
+        else
+            Debug.Log("No NotificationManager in scene!");
+    }
 }

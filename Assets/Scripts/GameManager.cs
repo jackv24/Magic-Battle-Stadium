@@ -22,16 +22,24 @@ public class GameManager : MonoBehaviour
     }
 
     //UI attack slots
-    public AttackSlots attackSlots;
-
+    [Header("Attack Slots")]
     public AttackSet[] attackSets;
     public int currentAttackSet = 0;
 
-    public int gameStartTime = 30;
+    [Space()]
+    public AttackSlots attackSlots;
 
+    [Header("Game Timing")]
+    public int gameStartTime = 30;
     public bool hasGameStarted = true;
 
+    [Space()]
     public GameTimer gameStart;
+
+    [Header("Prize Values")]
+    public int prizePerKill = 100;
+    public int prizePerBadge = 500;
+    public int prizePerMatch = 200;
 
     void Awake()
     {

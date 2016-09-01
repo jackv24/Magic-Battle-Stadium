@@ -109,7 +109,7 @@ public class Scoreboard : MonoBehaviour
         UpdateDisplay();
     }
 
-    private int GetScoreIndex(string playerName)
+    public int GetScoreIndex(string playerName)
     {
         for(int i = 0; i < playerScores.Count; i++)
         {

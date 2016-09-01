@@ -23,6 +23,9 @@ public class ResultsDisplay : MonoBehaviour
     public Text deathsText;
     public Text ratioText;
 
+    [Space()]
+    public Text prizeText;
+
     private Scoreboard scoreboard;
 
     //Player results
@@ -71,15 +74,23 @@ public class ResultsDisplay : MonoBehaviour
             playerColour = GameManager.instance.LocalPlayer.GetComponent<PlayerColour>();
         }
 
+
+        int killCount = 0;
+        int badgeCount = 0;
+
         if (playerInfo)
         {
             playerNameText.text = playerInfo.username;
+
+            //Get player kill count
+            killCount = scoreboard.playerScores[scoreboard.GetScoreIndex(playerInfo.username)].kills;
 
             //Kills badge show/hide
             if (scoreboard.GetBestPlayer(Scoreboard.ScoreType.Kills) == playerInfo.username)
             {
                 killsBadge.isOwned = true;
                 killsBadge.image.color = enabledTint;
+                badgeCount++;
             }
             else
             {
@@ -92,6 +103,7 @@ public class ResultsDisplay : MonoBehaviour
             {
                 deathsBadge.isOwned = true;
                 deathsBadge.image.color = enabledTint;
+                badgeCount++;
             }
             else
             {
@@ -104,12 +116,24 @@ public class ResultsDisplay : MonoBehaviour
             {
                 ratioBadge.isOwned = true;
                 ratioBadge.image.color = enabledTint;
+                badgeCount++;
             }
             else
             {
                 ratioBadge.isOwned = false;
                 ratioBadge.image.color = disabledTint;
             }
+
+            //Calculate prize
+            int prize = (killCount * GameManager.instance.prizePerKill) + (badgeCount * GameManager.instance.prizePerBadge) + GameManager.instance.prizePerMatch;
+
+            //Get, update, and set balance
+            int balance = PlayerPrefs.GetInt("cashBalance", 0);
+            balance += prize;
+            PlayerPrefs.SetInt("cashBalance", balance);
+
+            //Display prize and balance
+            prizeText.text = string.Format(prizeText.text, prize, balance);
         }
 
         //Set player colour display

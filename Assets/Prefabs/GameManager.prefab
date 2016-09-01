@@ -54,15 +54,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 688ac19cb71bd0249a38ea8691d25f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackSlots: {fileID: 0}
   attackSets:
   - {fileID: 11400000, guid: 40efaceffce2e1742a5debd189b9ac0d, type: 2}
   - {fileID: 11400000, guid: 84e8e89c0111a404d820de27b2d343fb, type: 2}
   - {fileID: 11400000, guid: 1ceb5b0a322a8ca4881752f7d7e72451, type: 2}
   currentAttackSet: 0
+  attackSlots: {fileID: 0}
   gameStartTime: 30
   hasGameStarted: 0
   gameStart: {fileID: 0}
+  prizePerKill: 50
+  prizePerBadge: 500
+  prizePerMatch: 100
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
