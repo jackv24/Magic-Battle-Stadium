@@ -152,7 +152,7 @@ public class GameTimer : NetworkBehaviour
 
         //After game start countdown has ended, start game run countdown
         //Load time limit from playerprefs
-        int minutes = int.Parse(PlayerPrefs.GetString("timeLimit"));
+        int minutes = int.Parse(PlayerPrefs.GetString("timeLimit", "5"));
 
         //Run game timer (making sure to reset it)
         StopCoroutine("GameRunTimer");
