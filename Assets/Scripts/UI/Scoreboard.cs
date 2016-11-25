@@ -126,7 +126,8 @@ public class Scoreboard : MonoBehaviour
         //store index of player score info (should be the same in all lists)
         int index = GetScoreIndex(name);
 
-        playerScores.RemoveAt(index);
+        if(index >= 0)
+            playerScores.RemoveAt(index);
 
         //Update the display
         UpdateDisplay();
@@ -151,17 +152,23 @@ public class Scoreboard : MonoBehaviour
         //Iterate through and add values to scoreboard (names, kills, and deaths list should align)
         foreach (Score score in playerScores)
         {
-            nameText.text += score.name + "\n";
-            killsText.text += score.kills + "\n";
-            deathsText.text += score.deaths + "\n";
+            if(nameText)
+                nameText.text += score.name + "\n";
+            if(killsText)
+                killsText.text += score.kills + "\n";
+            if(deathsText)
+                deathsText.text += score.deaths + "\n";
 
             //display ratio as decimal, if NaN display '-'
-            if (score.kills <= 0)
-                ratioText.text += "0.00\n";
-            else if (score.deaths <= 0)
-                ratioText.text += "<size=20>★</size>" + score.kills + "\n";
-            else
-                ratioText.text += ((float)score.kills / score.deaths).ToString("0.00") + "\n";
+            if (ratioText)
+            {
+                if (score.kills <= 0)
+                    ratioText.text += "0.00\n";
+                else if (score.deaths <= 0)
+                    ratioText.text += "<size=20>★</size>" + score.kills + "\n";
+                else
+                    ratioText.text += ((float)score.kills / score.deaths).ToString("0.00") + "\n";
+            }
         }
     }
 
