@@ -11,10 +11,35 @@ namespace CreativeSpore.SuperTilemapEditor
 {    
     public static class EditorUtils
     {
-        public static T CreateAssetInSelectedDirectory<T>() where T : ScriptableObject
+        public static T CreateAssetInSelectedDirectory<T>(string name = null) where T : ScriptableObject
         {
+            var asset = ScriptableObject.CreateInstance<T>();
+            ProjectWindowUtil.CreateAsset(asset, "New " + typeof(T).Name + ".asset");
+            return asset;
+            /*
             T asset = ScriptableObject.CreateInstance<T>();
 
+            string path = GetAssetSelectedPath();
+
+            string objName = typeof(T).ToString();
+            string objExt = Path.GetExtension(objName);
+            if (!string.IsNullOrEmpty(objExt))
+            {
+                objName = objExt.Remove(0, 1);
+            }
+            string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + (string.IsNullOrEmpty(name)? "/New " + objName : "/"+name) + ".asset");
+
+            AssetDatabase.CreateAsset(asset, assetPathAndName);
+            Selection.activeObject = asset;
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            EditorUtility.FocusProjectWindow();
+            return asset;*/
+        }
+
+        public static string GetAssetSelectedPath()
+        {
             string path = AssetDatabase.GetAssetPath(Selection.activeObject);
             if (path == "")
             {
@@ -24,22 +49,7 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
             }
-
-            string objName = typeof(T).ToString();
-            string objExt = Path.GetExtension(objName);
-            if (!string.IsNullOrEmpty(objExt))
-            {
-                objName = objExt.Remove(0, 1);
-            }
-            string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/New " + objName + ".asset");
-
-            AssetDatabase.CreateAsset(asset, assetPathAndName);
-            Selection.activeObject = asset;
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            EditorUtility.FocusProjectWindow();
-            return asset;
+            return path;
         }
 
         // Get the sorting layer names

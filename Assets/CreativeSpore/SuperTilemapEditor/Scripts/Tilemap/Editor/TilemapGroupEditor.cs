@@ -21,12 +21,14 @@ namespace CreativeSpore.SuperTilemapEditor
         private TilemapEditor m_tilemapEditor;
         private TilemapGroup m_target;
 
+        private SerializedProperty m_selectedIndexProp;
         private void OnEnable()
         {
             m_target = target as TilemapGroup;
             m_target.Refresh();
+            m_selectedIndexProp = serializedObject.FindProperty("m_selectedIndex");
             m_tilemapReordList = CreateTilemapReorderableList();
-            m_tilemapReordList.index = serializedObject.FindProperty("m_selectedIndex").intValue;
+            m_tilemapReordList.index = m_selectedIndexProp.intValue;
         }
 
         private void OnDisable()
@@ -45,11 +47,15 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             serializedObject.Update();
 
+            if (m_tilemapReordList.HasKeyboardControl())
+                DoKeyboardChecks();
+
             // clamp index to valid value
-            serializedObject.FindProperty("m_selectedIndex").intValue = m_tilemapReordList.index = Mathf.Clamp(m_tilemapReordList.index, -1, targetObj.Tilemaps.Count - 1);
+            m_selectedIndexProp.intValue = m_tilemapReordList.index = Mathf.Clamp(m_selectedIndexProp.intValue, -1, targetObj.Tilemaps.Count - 1);
 
             // Draw Tilemap List
             m_tilemapReordList.DoLayoutList();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("m_unselectedColorMultiplier"), new GUIContent("Highlight Alpha"));
             EditorGUILayout.Space();
 
             // Draw Tilemap Inspector
@@ -74,6 +80,20 @@ namespace CreativeSpore.SuperTilemapEditor
             if (tilemapEditor)
             {
                 (tilemapEditor as TilemapEditor).OnSceneGUI();                
+            }
+
+            DoKeyboardChecks();
+        }
+
+        private void DoKeyboardChecks()
+        {
+            Event e = Event.current;
+            // Cycle over tilemaps
+            if (e.type == EventType.KeyDown)
+            {
+                if (e.keyCode == ShortcutKeys.k_NextLayer) m_tilemapReordList.index++;
+                else if (e.keyCode == ShortcutKeys.k_PrevLayer) m_tilemapReordList.index += m_tilemapReordList.count - 1;
+                m_tilemapReordList.index %= m_tilemapReordList.count;
             }
         }
 
@@ -109,12 +129,14 @@ namespace CreativeSpore.SuperTilemapEditor
                 Texture2D btnTexture = reordList.elementHeight == 0f ? EditorGUIUtility.FindTexture("winbtn_win_max_h") : EditorGUIUtility.FindTexture("winbtn_win_min_h");
                 if (GUI.Button(new Rect(rect.width - rect.height, rect.y, rect.height, rect.height), btnTexture, EditorStyles.label))
                 {
-                    reordList.elementHeight = reordList.elementHeight == 0f ? EditorGUIUtility.singleLineHeight : 0f;
+                    reordList.elementHeight = reordList.elementHeight == 0f ? 21f : 0f;
                     reordList.draggable = reordList.elementHeight > 0f;
                 }
             };
             reordList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
+                if (reordList.elementHeight == 0)
+                    return;
                 var element = reordList.serializedProperty.GetArrayElementAtIndex(index);               
                 rect.y += 2;
                 Tilemap tilemap = element.objectReferenceValue as Tilemap;
@@ -127,7 +149,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 Rect rSortingLayer = new Rect(rect.x + rect.width - 125f, rect.y, 80f, EditorGUIUtility.singleLineHeight);
                 Rect rSortingOrder = new Rect(rect.x + rect.width - 40f, rect.y, 40f, EditorGUIUtility.singleLineHeight);
 
-                tilemap.IsVisible = EditorGUI.Toggle(rToggle, GUIContent.none, tilemap.IsVisible);
+                tilemap.IsVisible = EditorGUI.Toggle(rToggle, GUIContent.none, tilemap.IsVisible, STEditorStyles.Instance.visibleToggleStyle);
                 EditorGUI.PropertyField(rName, tilemapObjSerialized.FindProperty("m_Name"), GUIContent.none);
                 if (TilemapEditor.EditMode == TilemapEditor.eEditMode.Collider)
                 {
@@ -174,7 +196,7 @@ namespace CreativeSpore.SuperTilemapEditor
             };
             reordList.onSelectCallback = (ReorderableList list) =>
             {
-                serializedObject.FindProperty("m_selectedIndex").intValue = reordList.index;
+                m_selectedIndexProp.intValue = reordList.index;
                 serializedObject.ApplyModifiedProperties();
                 GUI.changed = true;
                 TileSelectionWindow.RefreshIfVisible();
@@ -195,7 +217,6 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     UnityEditorInternal.ComponentUtility.CopyComponent(copiedTilemap);
                     UnityEditorInternal.ComponentUtility.PasteComponentValues(newTilemap);
-                    obj.SendMessage("_DoDuplicate");
                     obj.name = GameObjectUtility.GetUniqueNameForSibling(obj.transform.parent, copiedTilemap.name);
                 }
             };
@@ -206,7 +227,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 //NOTE: Fix argument exception
                 if (m_tilemapReordList.index == targetObj.Tilemaps.Count - 1)
                 {
-                    serializedObject.FindProperty("m_selectedIndex").intValue = m_tilemapReordList.index = m_tilemapReordList.index - 1;
+                    m_selectedIndexProp.intValue = m_tilemapReordList.index = m_tilemapReordList.index - 1;
                 }
             };
 

@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 
 namespace CreativeSpore.SuperTilemapEditor
 {
 
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(RandomBrush))]
     public class RandomBrushEditor : TilesetBrushEditor
     {
@@ -17,6 +19,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         RandomBrush m_brush;
         ReorderableList m_randTileList;
+        bool m_randTileListHasFocus = false;
         Tileset m_prevTileset;
 
         public override void OnEnable()
@@ -83,6 +86,14 @@ namespace CreativeSpore.SuperTilemapEditor
                     list.serializedProperty.InsertArrayElementAtIndex(list.index);
                 else
                     list.serializedProperty.InsertArrayElementAtIndex(0);
+                list.index = Mathf.Max(0, list.index + 1);
+                list.serializedProperty.serializedObject.ApplyModifiedProperties();
+                m_brush.RandomTileList[list.index].probabilityFactor = 1f;
+                if(m_brush.Tileset.SelectedTile != null)
+                {
+                    m_randTileList.GrabKeyboardFocus();
+                    OnTileSelected(m_brush.Tileset, -1, m_brush.Tileset.SelectedTileId);
+                }
             };
         }
 
@@ -96,7 +107,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void OnTileSelected(Tileset source, int prevTileId, int newTileId)
         {
-            if (m_randTileList.index >= 0 && m_randTileList.index < m_brush.RandomTileList.Count)
+            if (m_randTileListHasFocus && m_randTileList.index >= 0 && m_randTileList.index < m_brush.RandomTileList.Count)
             {
                 if (m_brush.RandomTileList[m_randTileList.index].tileData == Tileset.k_TileData_Empty)
                 {
@@ -160,6 +171,19 @@ namespace CreativeSpore.SuperTilemapEditor
             // Draw List
             m_randTileList.elementHeight = visualTileSize.y + 35f;
             m_randTileList.DoLayoutList();
+            if (Event.current.type == EventType.Repaint)
+            {
+                m_randTileListHasFocus = m_randTileList.HasKeyboardControl();
+            }
+
+            TileSelection tileSelection = ((TilesetBrush)target).Tileset.TileSelection;
+            if (tileSelection != null)
+            {
+                if (GUILayout.Button("Add tiles from tile selection"))
+                {
+                    m_brush.RandomTileList.AddRange(tileSelection.selectionData.Select(x => new RandomBrush.RandomTileData() { tileData = x, probabilityFactor = 1f }));
+                }
+            }
 
             EditorGUILayout.HelpBox("Select a tile from list and then select a tile from tile selection window.", MessageType.Info);
             EditorGUILayout.HelpBox("Add and Remove tiles with '+' and '-' buttons.", MessageType.Info);
@@ -168,6 +192,7 @@ namespace CreativeSpore.SuperTilemapEditor
             serializedObject.ApplyModifiedProperties();
             if (GUI.changed)
             {
+                m_brush.InvalidateSortedList();
                 EditorUtility.SetDirty(target);
             }
         }

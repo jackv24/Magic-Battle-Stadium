@@ -7,6 +7,7 @@ using System.Linq;
 namespace CreativeSpore.SuperTilemapEditor
 {
 
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(AnimBrush))]
     public class AnimBrushEditor : TilesetBrushEditor
     {

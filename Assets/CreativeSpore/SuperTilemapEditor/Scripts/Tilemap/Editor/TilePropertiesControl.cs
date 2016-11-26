@@ -239,8 +239,11 @@ namespace CreativeSpore.SuperTilemapEditor
             if (e.type == EventType.MouseDown)
             {
                 m_isDragging = true;
-                m_savedVertexData = new Vector2[selectedTile.collData.vertices.Length];
-                selectedTile.collData.vertices.CopyTo(m_savedVertexData, 0);
+                if (selectedTile.collData.vertices != null)
+                {
+                    m_savedVertexData = new Vector2[selectedTile.collData.vertices.Length];
+                    selectedTile.collData.vertices.CopyTo(m_savedVertexData, 0);
+                }
             }
             else if (e.type == EventType.MouseUp)
             {
@@ -277,7 +280,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 foreach (uint tileData in Tileset.TileSelection.selectionData)
                 {
                     int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                    Tile tile = (tileId != Tileset.k_TileId_Empty) ? Tileset.Tiles[tileId] : null;
+                    Tile tile = Tileset.GetTile(tileId);
                     if (tile != null)
                     {
                         GUI.color = new Color(1f, 1f, 1f, 1f / Tileset.TileSelection.selectionData.Count);
@@ -441,11 +444,13 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     saveChanges = true;
                     //remove duplicated vertex
-                    selectedTile.collData.vertices = selectedTile.collData.vertices.Distinct().ToArray();
+                    selectedTile.collData.vertices = selectedTile.collData.vertices.Distinct().ToArray();                    
                     if(selectedTile.collData.vertices.Length <= 2)
                     {
                         selectedTile.collData.vertices = m_savedVertexData;
                     }
+                    //snap vertex positions
+                    selectedTile.collData.SnapVertices(Tileset);
                 }
             }
 
@@ -459,7 +464,6 @@ namespace CreativeSpore.SuperTilemapEditor
             EditorGUILayout.Space();
 
             string helpInfo =
-                //"Using Polygon collider:" + "\n" +
                 "  - Click and drag over a vertex to move it" + "\n" +
                 "  - Hold Shift + Click for adding a new vertex" + "\n" +
                 "  - Hold "+((Application.platform == RuntimePlatform.OSXEditor)? "Command" : "Ctrl")+" + Click for removing a vertex. (should be more than 3)" + "\n" +
@@ -519,6 +523,10 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                 }
                 EditorUtility.SetDirty(Tileset);
+                //Refresh selected tilemap
+                Tilemap selectedTilemap = Selection.activeGameObject? Selection.activeGameObject.GetComponent<Tilemap>() : null;
+                if(selectedTilemap)
+                    selectedTilemap.Refresh(false, true);
             }
         }
 
@@ -527,19 +535,19 @@ namespace CreativeSpore.SuperTilemapEditor
         //     mouse position. And returns the segment index ( the vertex index of the segment with the closest point )
         /// </summary>
         /// <param name="vertices"></param>
-        /// <param name="closedSegmentIdx"></param>
+        /// <param name="closestSegmentIdx"></param>
         /// <returns></returns>
-        Vector3 ClosestPointToPolyLine(Vector3[] vertices, out int closedSegmentIdx)
+        Vector3 ClosestPointToPolyLine(Vector3[] vertices, out int closestSegmentIdx)
         {
             float minDist = float.MaxValue;
-            closedSegmentIdx = 0;
+            closestSegmentIdx = 0;
             for (int i = 0; i < vertices.Length - 1; ++i)
             {
                 float dist = HandleUtility.DistanceToLine(vertices[i], vertices[i + 1]);
                 if (dist < minDist)
                 {
                     minDist = dist;
-                    closedSegmentIdx = i;
+                    closestSegmentIdx = i;
                 }
             }
             return HandleUtility.ClosestPointToPolyLine(vertices);
@@ -564,9 +572,13 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     paramContainer.AddNewParam(new Parameter("new float", 0f));
                 };
+                GenericMenu.MenuFunction addStringParamFunc = () =>
+                {
+                    paramContainer.AddNewParam(new Parameter("new string", ""));
+                };
                 GenericMenu.MenuFunction addObjectParamFunc = () =>
                 {
-                    paramContainer.AddNewParam(new Parameter("new object", null));
+                    paramContainer.AddNewParam(new Parameter("new object", (UnityEngine.Object)null));
                 };
                 GenericMenu.MenuFunction removeAllFunc = () =>
                 {
@@ -578,11 +590,13 @@ namespace CreativeSpore.SuperTilemapEditor
                 menu.AddItem(new GUIContent("Add Bool"), false, addBoolParamFunc);
                 menu.AddItem(new GUIContent("Add Int"), false, addIntParamFunc);
                 menu.AddItem(new GUIContent("Add Float"), false, addFloatParamFunc);
+                menu.AddItem(new GUIContent("Add String"), false, addStringParamFunc);
                 menu.AddItem(new GUIContent("Add Object"), false, addObjectParamFunc);
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("Remove All"), false, removeAllFunc);
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("Sort By Name"), false, paramContainer.SortByName);
+                menu.AddItem(new GUIContent("Sort By Type"), false, paramContainer.SortByType);
                 menu.ShowAsContext();
             };
             reordList.onRemoveCallback = (ReorderableList list) =>
@@ -641,6 +655,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 else if (param.GetParamType() == eParameterType.Float)
                 {
                     param.SetValue(EditorGUI.FloatField(rParamValue, param.GetAsFloat()));
+                }
+                else if (param.GetParamType() == eParameterType.String)
+                {
+                    param.SetValue(EditorGUI.TextField(rParamValue, param.GetAsString()));
                 }
                 else if (param.GetParamType() == eParameterType.Object)
                 {

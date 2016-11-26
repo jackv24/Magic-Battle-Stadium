@@ -225,7 +225,7 @@ namespace CreativeSpore.SuperTilemapEditor
             for (int i = 0; i < gridWidth * gridHeight; ++i)
             {
                 int gx = i % gridWidth;
-                int gy = i / gridHeight;
+                int gy = i / gridWidth;
                 int tileIdx = tileIdxMap[i];
                 Rect rVisualTile = new Rect(gx * visualTileSize.x, gy * visualTileSize.y, visualTileSize.x, visualTileSize.y);
 
@@ -295,10 +295,26 @@ namespace CreativeSpore.SuperTilemapEditor
                 m_tileIdOff = 0;
                 EditorUtility.SetDirty(m_target);
             }
+            if (Tileset.TileSelection != null && Tileset.TileSelection.selectionData.Count == gridWidth * gridHeight && Tileset.TileSelection.rowLength == gridWidth)
+            {
+                if (GUILayout.Button("Autocomplete from selection"))
+                {
+                    Undo.RecordObject(m_target, "MultipleTileChanged");
+                    for (int i = 0; i < tileIdxMap.Length; ++i)
+                    {
+                        int tileIdx = tileIdxMap[i];
+                        int selectionIdx = (i % gridWidth) + ( gridHeight - 1 - i / gridWidth) * gridWidth;
+                        int brushTileId = (int)(Tileset.TileSelection.selectionData[selectionIdx] & Tileset.k_TileDataMask_TileId);
+                        m_aBrushTileData[tileIdx] = (uint)(brushTileId & Tileset.k_TileDataMask_TileId);
+                    }
+                    m_tileIdOff = 0;
+                    EditorUtility.SetDirty(m_target);
+                }
+            }
 
             if (ShowHelpBox)
             {
-                EditorGUILayout.HelpBox("Select  a tile from the grid, then select a tile from Tile Selection Window to change the tile.", MessageType.Info);
+                EditorGUILayout.HelpBox("Select  a tile from the grid, then select a tile from Tile Selection Window to change the tile.\nOr select a group of tiles and press Autocomplete from selection.", MessageType.Info);
             }
         }
 
@@ -336,11 +352,18 @@ namespace CreativeSpore.SuperTilemapEditor
                 brush = (TilesetBrush)EditorGUILayout.ObjectField("Brush", brush, typeof(TilesetBrush), false);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    brushId = brush != null ? tileset.FindBrushId(brush.name) : Tileset.k_BrushId_Default;
-                    int tileId = brush != null ? (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId) : Tileset.GetTileIdFromTileData(tileData);
-                    tileData &= Tileset.k_TileDataMask_Flags;
-                    tileData |= (uint)(brushId << 16) & Tileset.k_TileDataMask_BrushId;
-                    tileData |= (uint)(tileId & Tileset.k_TileDataMask_TileId);
+                    if ( brush && brush.Tileset != tileset)
+                    {
+                        Debug.LogWarning("The brush " + brush.name + " belongs to a different tileset and cannot be selected! ");
+                    }
+                    else
+                    {
+                        brushId = brush != null ? tileset.FindBrushId(brush.name) : Tileset.k_BrushId_Default;
+                        int tileId = brush != null ? (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId) : Tileset.GetTileIdFromTileData(tileData);
+                        tileData &= Tileset.k_TileDataMask_Flags;
+                        tileData |= (uint)(brushId << 16) & Tileset.k_TileDataMask_BrushId;
+                        tileData |= (uint)(tileId & Tileset.k_TileDataMask_TileId);
+                    }
                 }
             }
 

@@ -80,7 +80,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (s_atlasSettingsFoldout)
                 {
                     EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                    tileset.TilePxSize = _GetPositiveIntVect2(EditorGUILayout.Vector2Field("Tile Size (pixels)", tileset.TilePxSize));
+                    tileset.TilePxSize = _GetPositiveIntVect2(EditorGUILayout.Vector2Field("Tile Size (pixels)", tileset.TilePxSize), Vector2.one);
                     tileset.SliceOffset = _GetPositiveIntVect2(EditorGUILayout.Vector2Field(new GUIContent("Offset", "The offset position in pixels to start slicing tiles from the atlas texture"), tileset.SliceOffset));
                     tileset.SlicePadding = _GetPositiveIntVect2(EditorGUILayout.Vector2Field(new GUIContent("Padding", "The separation in pixels between tiles"), tileset.SlicePadding));
 
@@ -89,6 +89,11 @@ namespace CreativeSpore.SuperTilemapEditor
                         tileset.Slice();
                     }
                     EditorGUILayout.EndVertical();
+                }
+                EditorGUILayout.Separator();
+                if (GUILayout.Button("Import TMX into the Scene"))
+                {
+                    CreativeSpore.TiledImporter.TmxImporter.ImportTmxIntoTheScene(tileset);
                 }
                 EditorGUILayout.Separator();
                 string[] modeNames = System.Enum.GetNames(typeof(eMode));
@@ -106,7 +111,7 @@ namespace CreativeSpore.SuperTilemapEditor
                         {
                             m_groupsList.DoLayoutList();
                         }
-                        GroupMatrixGUI.DoGUI("Group Autotiling Mask", tileset.BrushGroupNames, ref s_brushAutotilingMaskFoldout, ref s_brushGroupMatrixScrollPos, GetValue, SetValue);
+                        GroupMatrixGUI.DoGUI("Group Autotiling Mask", tileset.BrushGroupNames, ref s_brushAutotilingMaskFoldout, ref s_brushGroupMatrixScrollPos, GetAutotiling, SetAutotiling);
                         EditorGUILayout.HelpBox("Check the group that should autotile between them when Autotiling Mode Group is enabled in a brush", MessageType.Info);
                         break;
                 }
@@ -119,20 +124,20 @@ namespace CreativeSpore.SuperTilemapEditor
             }
         }
 
-        private bool GetValue(int groupA, int groupB)
+        private bool GetAutotiling(int groupA, int groupB)
         {
             Tileset tileset = (Tileset)target;
             return tileset.GetGroupAutotiling(groupA, groupB);
         }
-        private void SetValue(int groupA, int groupB, bool val)
+        private void SetAutotiling(int groupA, int groupB, bool val)
         {
             Tileset tileset = (Tileset)target;
             tileset.SetGroupAutotiling(groupA, groupB, val);
         }
 
-        private Vector2 _GetPositiveIntVect2(Vector2 v)
+        private Vector2 _GetPositiveIntVect2(Vector2 v, Vector2 minValue = default(Vector2))
         {
-            return new Vector2(Mathf.Max(0, (int)v.x), Mathf.Max(0, (int)v.y));
+            return new Vector2(Mathf.Max(minValue.x, (int)v.x), Mathf.Max(minValue.y, (int)v.y));
         }
 
         public static Tileset GetSelectedTileset()
@@ -182,6 +187,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     tileset.AddBrush(brushesFound[i]);
                 }
             }
+            tileset.UpdateBrushTypeArray();
             EditorUtility.SetDirty(tileset);
         }
 
@@ -291,7 +297,12 @@ namespace CreativeSpore.SuperTilemapEditor
             brushRList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
                 Tileset.BrushContainer brushContainer = tileset.Brushes[index];
-                Rect rTile = rect; rTile.width = rTile.height = tileset.VisualTileSize.y;
+                Rect rToggle = new Rect(rect.x, rect.y, 16f, EditorGUIUtility.singleLineHeight);
+                Rect rTile = new Rect(rect.x + 16f, rect.y, tileset.VisualTileSize.x, tileset.VisualTileSize.y);
+                Rect rTileId = rTile;
+                rTileId.x += rTile.width + 20; rTileId.width = rect.width - rTileId.x;
+                rTileId.height = rect.height / 2;
+
                 Rect tileUV = brushContainer.BrushAsset.GetAnimUV();
                 if (tileUV != default(Rect))
                 {
@@ -299,10 +310,8 @@ namespace CreativeSpore.SuperTilemapEditor
                     GUI.DrawTextureWithTexCoords(rTile, tileset.AtlasTexture, tileUV, true);
                 }
 
-                Rect rTileId = rect;
-                rTileId.x += rTile.width + 20; rTileId.width -= rTile.width + 20;
-                rTileId.height = rect.height / 2;
-                GUI.Label(rTileId, "Id(" + brushContainer.Id + ")");
+                brushContainer.BrushAsset.ShowInPalette = EditorGUI.Toggle(rToggle, GUIContent.none, brushContainer.BrushAsset.ShowInPalette, STEditorStyles.Instance.visibleToggleStyle);
+                GUI.Label(rTileId, "Id(" + brushContainer.Id + ") " + brushContainer.BrushAsset.name);
             };
 
             return brushRList;
@@ -311,12 +320,13 @@ namespace CreativeSpore.SuperTilemapEditor
         public static void DoGUIDrawTileFromTileData(Rect dstRect, uint tileData, Tileset tileset, Rect customUV = default(Rect))
         {
             int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+            Tile tile = tileset.GetTile(tileId);
             if (tileId != Tileset.k_TileId_Empty)
             {
-                if ((tileData & Tileset.k_TileFlag_FlipH) != 0) GUIUtility.ScaleAroundPivot(new Vector2(1f, -1f), dstRect.center);
-                if ((tileData & Tileset.k_TileFlag_FlipV) != 0) GUIUtility.ScaleAroundPivot(new Vector2(-1f, 1f), dstRect.center);
+                if ((tileData & Tileset.k_TileFlag_FlipV) != 0) GUIUtility.ScaleAroundPivot(new Vector2(1f, -1f), dstRect.center);
+                if ((tileData & Tileset.k_TileFlag_FlipH) != 0) GUIUtility.ScaleAroundPivot(new Vector2(-1f, 1f), dstRect.center);
                 if ((tileData & Tileset.k_TileFlag_Rot90) != 0) GUIUtility.RotateAroundPivot(90f, dstRect.center);
-                GUI.DrawTextureWithTexCoords(dstRect, tileset.AtlasTexture, customUV == default(Rect) ? tileset.Tiles[tileId].uv : customUV, true);
+                GUI.DrawTextureWithTexCoords(dstRect, tileset.AtlasTexture, customUV == default(Rect) && tile != null ? tile.uv : customUV, true);
                 GUI.matrix = Matrix4x4.identity;
             }
         }
@@ -326,7 +336,7 @@ namespace CreativeSpore.SuperTilemapEditor
     {
         public delegate bool GetValueFunc(int layerA, int layerB);
         public delegate void SetValueFunc(int layerA, int layerB, bool val);
-        public static void DoGUI(string title, string[] groupNames, ref bool show, ref Vector2 scrollPos, GetValueFunc getValue, SetValueFunc setValue)
+        public static void DoGUI(string title, string[] groupNames, ref bool show, ref Vector2 scrollPos, GetValueFunc getValue, SetValueFunc setValue, bool allowBothCombinations = true)
         {
             int num = 0;
             for (int i = 0; i < groupNames.Length; i++)
@@ -390,7 +400,7 @@ namespace CreativeSpore.SuperTilemapEditor
                         {
                             if (groupNames[l] != string.Empty)
                             {
-                                if (num4 < num - num2)
+                                //if (num4 < num - num2)
                                 {
                                     GUIContent content = new GUIContent(string.Empty, groupNames[k] + "/" + groupNames[l]);
                                     bool flag = getValue(k, l);

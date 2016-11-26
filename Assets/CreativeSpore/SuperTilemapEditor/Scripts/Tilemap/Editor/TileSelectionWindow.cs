@@ -104,7 +104,11 @@ namespace CreativeSpore.SuperTilemapEditor
                 Repaint();
                 return;
             }
-            m_tilesetControl.Tileset = (Tileset)EditorGUILayout.ObjectField("Tileset", m_tilesetControl.Tileset, typeof(Tileset), false);
+            Tilemap selectedTilemap = Selection.activeGameObject? Selection.activeGameObject.GetComponent<Tilemap>() : null;
+            if (selectedTilemap && selectedTilemap.Tileset != m_tilesetControl.Tileset)
+            {
+                Refresh();
+            }
 
             s_scrollPos = EditorGUILayout.BeginScrollView(s_scrollPos);
             m_tilesetControl.Display();

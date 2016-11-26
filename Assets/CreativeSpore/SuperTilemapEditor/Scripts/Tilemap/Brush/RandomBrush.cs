@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace CreativeSpore.SuperTilemapEditor
 {
-    public class RandomBrush : TilesetBrush, ISerializationCallbackReceiver
+    public class RandomBrush : TilesetBrush
     {
         [System.Obsolete("Use RandomTileList instead")]
         public List<uint> RandomTiles = new List<uint>();
@@ -33,20 +33,20 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 #pragma warning restore 618
 
-            m_sortedList = new List<RandomTileData>(RandomTileList.OrderBy(x => x.probabilityFactor));           
+            InvalidateSortedList();
         }
 
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        public void InvalidateSortedList()
         {
             m_sortedList = new List<RandomTileData>(RandomTileList.OrderBy(x => x.probabilityFactor));           
         }
-        void ISerializationCallbackReceiver.OnBeforeSerialize(){}
 
         private List<RandomTileData> m_sortedList;
         public uint GetRandomTile()
         {
             float randPercent = Random.value;
             float sumProbabilityFactor = Mathf.Max(GetSumProbabilityFactor(), float.Epsilon);
+            if (m_sortedList == null || m_sortedList.Count == 0) InvalidateSortedList();
             foreach (RandomTileData randomTileData in m_sortedList)
             {
                 float probability = randomTileData.probabilityFactor / sumProbabilityFactor;

@@ -57,13 +57,28 @@ namespace CreativeSpore.SuperTilemapEditor
                 m_meshFilter.sharedMesh.name = ParentTilemap.name + "_mesh";
                 m_needsRebuildMesh = true;
             }
-
-            if (m_meshRenderer.sharedMaterial == null)
+#if UNITY_EDITOR
+            // fix prefab preview, not compatible with MaterialPropertyBlock. I need to create a new material and change the main texture and color directly.
+            if (UnityEditor.PrefabUtility.GetPrefabType(gameObject) == UnityEditor.PrefabType.Prefab)
+            {
+                gameObject.hideFlags |= HideFlags.HideInHierarchy;
+                if (m_meshRenderer.sharedMaterial == null || m_meshRenderer.sharedMaterial == ParentTilemap.Material)
+                {
+                    m_meshRenderer.sharedMaterial = new Material(ParentTilemap.Material);
+                    m_meshRenderer.sharedMaterial.name += "_copy";
+                    m_meshRenderer.sharedMaterial.hideFlags = HideFlags.DontSave;
+                    m_meshRenderer.sharedMaterial.color = ParentTilemap.TintColor;
+                    m_meshRenderer.sharedMaterial.mainTexture = ParentTilemap.Tileset ? ParentTilemap.Tileset.AtlasTexture : null;
+                }
+            }
+            else
+#endif
+            //NOTE: else above
             {
                 m_meshRenderer.sharedMaterial = ParentTilemap.Material;
-                m_meshRenderer.sharedMaterial.mainTexture = Tileset.AtlasTexture;
             }
-            m_meshRenderer.enabled = ParentTilemap.IsVisible;
+
+            m_meshRenderer.enabled = ParentTilemap.IsVisible;                       
 
             if (m_needsRebuildMesh)
             {
@@ -71,10 +86,11 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (FillMeshData())
                 {
                     m_invalidateBrushes = false;
+                    m_uvArray = m_uv.ToArray();
                     Mesh mesh = m_meshFilter.sharedMesh;
                     mesh.Clear();
                     mesh.vertices = m_vertices.ToArray();
-                    mesh.uv = m_uv.ToArray();
+                    mesh.uv = m_uvArray;
                     mesh.triangles = m_triangles.ToArray();
                     mesh.RecalculateNormals(); //NOTE: allow directional lights to work properly
                 }
@@ -97,6 +113,16 @@ namespace CreativeSpore.SuperTilemapEditor
             }
         }
 
+        static TilemapChunk s_currUpdatedTilechunk;
+        static int s_currUVVertex;
+        public static void RegisterAnimatedBrush(IBrush brush, int subTileIdx = -1)
+        {
+            if (subTileIdx >= 0)
+                s_currUpdatedTilechunk.m_animatedTiles.Add(new AnimTileData() { VertexIdx = s_currUVVertex + (subTileIdx << 2), Brush = brush, SubTileIdx = subTileIdx });
+            else
+                s_currUpdatedTilechunk.m_animatedTiles.Add(new AnimTileData() { VertexIdx = s_currUVVertex, Brush = brush, SubTileIdx = subTileIdx });
+        }
+
         /// <summary>
         /// Fill the mesh data and return false if all tiles are empty
         /// </summary>
@@ -108,9 +134,6 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 return false;
             }
-
-            m_meshRenderer.sharedMaterial = ParentTilemap.Material;
-            m_meshRenderer.sharedMaterial.mainTexture = Tileset.AtlasTexture;
 
             int totalTiles = m_width * m_height;
             if (m_vertices == null)
@@ -160,7 +183,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     {
                         int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
                         int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                        Tile tile = (tileId != Tileset.k_TileId_Empty) ? Tileset.Tiles[tileId] : null;
+                        Tile tile = Tileset.GetTile(tileId);
                         TilesetBrush tileBrush = null;
                         if (brushId > 0)
                         {
@@ -176,7 +199,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 tileData |= Tileset.k_TileFlag_Updated;// set updated flag
                                 m_tileDataList[tileIdx] = tileData; // update tileData                                
                                 tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                                tile = (tileId != Tileset.k_TileId_Empty) ? Tileset.Tiles[tileId] : null;
+                                tile = Tileset.GetTile(tileId);
                                 // update created objects
                                 if (tile != null && tile.prefabData.prefab != null)
                                     CreateTileObject(tileIdx, tile.prefabData);
@@ -189,10 +212,11 @@ namespace CreativeSpore.SuperTilemapEditor
 
                         if (tileBrush != null && tileBrush.IsAnimated())
                         {
-                            m_animatedTiles.Add(new AnimTileData() { VertexIdx = m_vertices.Count, Brush = tileBrush });
+                            m_animatedTiles.Add(new AnimTileData() { VertexIdx = m_vertices.Count, Brush = tileBrush, SubTileIdx = -1 });
                         }
 
-
+                        s_currUpdatedTilechunk = this;
+                        s_currUVVertex = m_vertices.Count;
                         Rect tileUV;
                         uint[] subtileData = tileBrush != null ? tileBrush.GetSubtiles(ParentTilemap, GridPosX + tx, GridPosY + ty, tileData) : null;
                         if (subtileData == null)
@@ -238,8 +262,9 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             float px0 = tx * CellSize.x + subtileOffset.x;
             float py0 = ty * CellSize.y + subtileOffset.y;
-            float px1 = px0 + subtileCellSize.x;
-            float py1 = py0 + subtileCellSize.y;
+            //NOTE: px0 and py0 values are not used to avoid float errors and line artifacts. Don't forget Pixel Snap has to be disabled as well.
+            float px1 = tx * CellSize.x + subtileOffset.x + subtileCellSize.x;
+            float py1 = ty * CellSize.y + subtileOffset.y + subtileCellSize.y;           
 
             int vertexIdx = m_vertices.Count;
 
@@ -265,13 +290,13 @@ namespace CreativeSpore.SuperTilemapEditor
             float u1 = tileUV.xMax - Tileset.AtlasTexture.texelSize.x * InnerPadding;
             float v1 = tileUV.yMax - Tileset.AtlasTexture.texelSize.y * InnerPadding;
 
-            if (flipH)
+            if (flipV)
             {
                 float v = v0;
                 v0 = v1;
                 v1 = v;
             }
-            if (flipV)
+            if (flipH)
             {
                 float u = u0;
                 u0 = u1;

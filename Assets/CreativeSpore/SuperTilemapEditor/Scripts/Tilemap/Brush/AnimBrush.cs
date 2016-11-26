@@ -67,6 +67,11 @@ namespace CreativeSpore.SuperTilemapEditor
             return default(Rect);
         }
 
+        public override int GetAnimFrameIdx()
+        {
+            return (int)(Time.realtimeSinceStartup * AnimFPS) % AnimFrames.Count;
+        }
+
         public override uint GetAnimTileData()
         {
             if (AnimFrames.Count > 0)

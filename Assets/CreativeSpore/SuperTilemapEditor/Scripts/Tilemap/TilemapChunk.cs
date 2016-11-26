@@ -65,92 +65,120 @@ namespace CreativeSpore.SuperTilemapEditor
         #region Private Fields
 
         [SerializeField, HideInInspector]
-        private int m_width = 8;
+        private int m_width = -1;
         [SerializeField, HideInInspector]
-        private int m_height = 4;
+        private int m_height = -1;
         [SerializeField, HideInInspector]
         private List<uint> m_tileDataList = new List<uint>();        
 
         private List<Vector3> m_vertices;
         private List<Vector2> m_uv;
         private List<int> m_triangles;
+        private Vector2[] m_uvArray;
         // private List<Color32> m_colors; TODO: add color vertex support
 
         struct AnimTileData
         {
             public int VertexIdx;
-            public TilesetBrush Brush;
+            public int SubTileIdx;
+            public IBrush Brush;
         }
         private List<AnimTileData> m_animatedTiles = new List<AnimTileData>();
         #endregion
 
         #region Monobehaviour Methods
 
+        [SerializeField]
+        private MaterialPropertyBlock m_matPropBlock;
+        void UpdateMaterialPropertyBlock()
+        {
+            if(m_matPropBlock == null)
+                m_matPropBlock = new MaterialPropertyBlock();
+            m_meshRenderer.GetPropertyBlock(m_matPropBlock);
+#if UNITY_EDITOR
+            // Apply UnselectedColorMultiplier
+            TilemapGroup selectedTilemapGroup;
+            if (
+                !Application.isPlaying &&
+                // Check if there is a parent tilemap group and this tilemap is not the selected tilemap in the tilemap group
+                ParentTilemap.ParentTilemapGroup && 
+                ParentTilemap.ParentTilemapGroup.SelectedTilemap != ParentTilemap &&
+                // Check if the tilemap group or any of its children is selected
+                Selection.activeGameObject &&
+                (Selection.activeGameObject == ParentTilemap.ParentTilemapGroup.gameObject ||
+                ((selectedTilemapGroup = Selection.activeGameObject.GetComponentInParent<TilemapGroup>()) && selectedTilemapGroup == ParentTilemap.ParentTilemapGroup) &&
+                // Exception: the selected object is parent of the tilemap but it's not a tilemap group (ex: grouping tilemaps under a dummy gameobject)
+                !(ParentTilemap.transform.IsChildOf(Selection.activeGameObject.transform) && !Selection.activeGameObject.GetComponent<TilemapGroup>())
+                )
+            )
+            {
+                m_matPropBlock.SetColor("_Color", ParentTilemap.TintColor * ParentTilemap.ParentTilemapGroup.UnselectedColorMultiplier);
+            }
+            else
+#endif
+            {
+                m_matPropBlock.SetColor("_Color", ParentTilemap.TintColor);
+            }
+            if (Tileset && Tileset.AtlasTexture != null)
+                m_matPropBlock.SetTexture("_MainTex", Tileset.AtlasTexture);
+            else
+                m_matPropBlock.SetTexture("_MainTex", default(Texture));
+            m_meshRenderer.SetPropertyBlock(m_matPropBlock);
+        }
+
+
+        static Dictionary<Material, Material> s_dicMaterialCopyWithPixelSnap = new Dictionary<Material, Material>();
         void OnWillRenderObject()
         {
+            if (!ParentTilemap.Tileset)
+                return;
+
+            if (ParentTilemap.PixelSnap && ParentTilemap.Material.HasProperty("PixelSnap"))
+            {
+                Material matCopyWithPixelSnap;
+                if(!s_dicMaterialCopyWithPixelSnap.TryGetValue(ParentTilemap.Material, out matCopyWithPixelSnap))
+                {
+                    matCopyWithPixelSnap = new Material(ParentTilemap.Material);
+                    matCopyWithPixelSnap.name += "_pixelSnapCopy";
+                    matCopyWithPixelSnap.hideFlags = HideFlags.DontSave;
+                    matCopyWithPixelSnap.EnableKeyword("PIXELSNAP_ON");
+                    matCopyWithPixelSnap.SetFloat("PixelSnap", 1f);
+                    s_dicMaterialCopyWithPixelSnap[ParentTilemap.Material] = matCopyWithPixelSnap;
+                }
+                m_meshRenderer.sharedMaterial = matCopyWithPixelSnap;
+            }
+            else
+            {
+                m_meshRenderer.sharedMaterial = ParentTilemap.Material;
+            }
+
+            UpdateMaterialPropertyBlock();
+
             if (m_animatedTiles.Count > 0) //TODO: add fps attribute to update animated tiles when necessary
             {
-
-                Dictionary<TilesetBrush, Vector2[]> animTileCache = new Dictionary<TilesetBrush, Vector2[]>();
                 for (int i = 0; i < m_animatedTiles.Count; ++i)
                 {
                     AnimTileData animTileData = m_animatedTiles[i];
-                    Vector2[] uvs;
-                    if (!animTileCache.TryGetValue(animTileData.Brush, out uvs))
+                    Vector2[] uvs = animTileData.Brush.GetAnimUVWithFlags(InnerPadding);
+                    if (animTileData.SubTileIdx >= 0)
                     {
-                        //NOTE: GetAnimTileData will be called only once per brush, because after this call, the brush will be in the cache dictionary
-                        uint tileData = animTileData.Brush.GetAnimTileData();
-                        Rect tileUV = animTileData.Brush.GetAnimUV();
-
-                        bool flipH = (tileData & Tileset.k_TileFlag_FlipH) != 0;
-                        bool flipV = (tileData & Tileset.k_TileFlag_FlipV) != 0;
-                        bool rot90 = (tileData & Tileset.k_TileFlag_Rot90) != 0;
-
-                        //NOTE: xMinMax and yMinMax is opposite if width or height is negative
-                        float u0 = tileUV.xMin + Tileset.AtlasTexture.texelSize.x * InnerPadding;
-                        float v0 = tileUV.yMin + Tileset.AtlasTexture.texelSize.y * InnerPadding;
-                        float u1 = tileUV.xMax - Tileset.AtlasTexture.texelSize.x * InnerPadding;
-                        float v1 = tileUV.yMax - Tileset.AtlasTexture.texelSize.y * InnerPadding;
-
-                        if (flipH)
+                        for (int j = 0; j < 4; ++j)
                         {
-                            float v = v0;
-                            v0 = v1;
-                            v1 = v;
+                            if (j == animTileData.SubTileIdx)
+                                m_uvArray[animTileData.VertexIdx + j] = uvs[j];
+                            else
+                                m_uvArray[animTileData.VertexIdx + j] = (uvs[j] + uvs[animTileData.SubTileIdx]) / 2f;
                         }
-                        if (flipV)
-                        {
-                            float u = u0;
-                            u0 = u1;
-                            u1 = u;
-                        }
-
-                        uvs = new Vector2[4];
-                        if (rot90)
-                        {
-                            uvs[0] = new Vector2(u1, v0);
-                            uvs[1] = new Vector2(u1, v1);
-                            uvs[2] = new Vector2(u0, v0);
-                            uvs[3] = new Vector2(u0, v1);
-                        }
-                        else
-                        {
-                            uvs[0] = new Vector2(u0, v0);
-                            uvs[1] = new Vector2(u1, v0);
-                            uvs[2] = new Vector2(u0, v1);
-                            uvs[3] = new Vector2(u1, v1);
-                        }
-
-                        animTileCache[animTileData.Brush] = uvs;
                     }
-
-                    m_uv[animTileData.VertexIdx + 0] = uvs[0];
-                    m_uv[animTileData.VertexIdx + 1] = uvs[1];
-                    m_uv[animTileData.VertexIdx + 2] = uvs[2];
-                    m_uv[animTileData.VertexIdx + 3] = uvs[3];
+                    else
+                    {
+                        m_uvArray[animTileData.VertexIdx + 0] = uvs[0];
+                        m_uvArray[animTileData.VertexIdx + 1] = uvs[1];
+                        m_uvArray[animTileData.VertexIdx + 2] = uvs[2];
+                        m_uvArray[animTileData.VertexIdx + 3] = uvs[3];
+                    }
                 }
-                m_meshFilter.sharedMesh.uv = m_uv.ToArray();
-
+                m_meshFilter.sharedMesh.uv = m_uvArray;
             }
         }
 
@@ -171,13 +199,20 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 _DoDuplicate();
             }
-            // Refresh only if Mesh is null (this happens if hideFlags == DontSave)
-            m_needsRebuildMesh = m_meshFilter.sharedMesh == null;
-            m_needsRebuildColliders = ParentTilemap.ColliderType == eColliderType._3D && (m_meshCollider == null || m_meshCollider.sharedMesh == null);
-            s_isOnValidate = true;
-            UpdateMesh();
-            UpdateColliders();
-            s_isOnValidate = false;
+#if UNITY_EDITOR
+            // fix prefab preview
+            if (UnityEditor.PrefabUtility.GetPrefabType(gameObject) == UnityEditor.PrefabType.Prefab)
+            {
+                m_needsRebuildMesh = true;
+                UpdateMesh();
+            }
+            else
+#endif
+            {
+                m_needsRebuildMesh = true;
+                m_needsRebuildColliders = true;
+                ParentTilemap.UpdateMesh();
+            }
         }
 
         private void _DoDuplicate()
@@ -201,6 +236,11 @@ namespace CreativeSpore.SuperTilemapEditor
 
         void OnEnable()
         {
+            if (ParentTilemap == null)
+            {
+                ParentTilemap = GetComponentInParent<Tilemap>();
+            }
+
 #if UNITY_EDITOR
             if (m_meshRenderer != null)
             {
@@ -217,7 +257,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 
             // if not playing, this will be done later by OnValidate
-            if (Application.isPlaying)
+            if (Application.isPlaying && IsInitialized()) //NOTE: && IsInitialized was added to avoid calling UpdateMesh when adding this component and GridPos was set
             {
                 // Refresh only if Mesh is null (this happens if hideFlags == DontSave)
                 m_needsRebuildMesh = m_meshFilter.sharedMesh == null;
@@ -225,6 +265,11 @@ namespace CreativeSpore.SuperTilemapEditor
                 UpdateMesh();
                 UpdateColliders();
             }
+        }
+
+        public bool IsInitialized()
+        {
+            return m_width > 0 && m_height > 0;
         }
 
         public void Reset()
@@ -248,20 +293,30 @@ namespace CreativeSpore.SuperTilemapEditor
 
         #region Public Methods
 
+        /// <summary>
+        /// This fix should be called on next update after updating the MeshCollider (sharedMesh, convex or isTrigger property). 
+        /// For some reason, if this is not called, the OnCollision event will return a collision 
+        /// data with empty contacts points array until this is called for all colliders not touching the tilechunk collider when it was modified
+        /// </summary>
+        public void ApplyContactsEmptyFix()
+        {
+            if (m_meshCollider) m_meshCollider.convex = m_meshCollider.convex;
+        }
+
         public void DrawColliders()
         {
             if (ParentTilemap.ColliderType == eColliderType._3D)
             {
                 if (m_meshCollider != null && m_meshCollider.sharedMesh != null && m_meshCollider.sharedMesh.normals.Length > 0f)
                 {
-                    Gizmos.color = new Color(0f, 1f, 0f, 0.8f);
+                    Gizmos.color = EditorGlobalSettings.TilemapColliderColor;
                     Gizmos.DrawWireMesh(m_meshCollider.sharedMesh, transform.position, transform.rotation, transform.lossyScale);
                     Gizmos.color = Color.white;
                 }
             }
             else if(ParentTilemap.ColliderType == eColliderType._2D)
             {
-                Gizmos.color = new Color(0f, 1f, 0f, 0.8f);
+                Gizmos.color = EditorGlobalSettings.TilemapColliderColor;
                 Gizmos.matrix = gameObject.transform.localToWorldMatrix;
                 Collider2D[] edgeColliders = GetComponents<Collider2D>();
                 for(int i = 0; i < edgeColliders.Length; ++i)
@@ -273,12 +328,40 @@ namespace CreativeSpore.SuperTilemapEditor
                         for (int j = 0; j < (points.Length - 1); ++j)
                         {
                             Gizmos.DrawLine(points[j], points[j + 1]);
+                            //Draw normals
+                            if(ParentTilemap.ShowColliderNormals)
+                            {
+                                Vector2 s0 = points[j];
+                                Vector2 s1 = points[j + 1];
+                                Vector3 normPos = (s0 + s1) / 2f;
+                                Gizmos.DrawLine(normPos, normPos + Vector3.Cross(s1 - s0, -Vector3.forward).normalized * ParentTilemap.CellSize.y * 0.05f);
+                            }
                         }
                     }
                 }
                 Gizmos.matrix = Matrix4x4.identity;
                 Gizmos.color = Color.white;
             }
+        }
+
+        public Bounds GetBounds()
+        {
+            Bounds bounds = MeshFilter.sharedMesh? MeshFilter.sharedMesh.bounds : default(Bounds);
+            if (bounds == default(Bounds))
+            {
+                Vector3 vMinMax = Vector2.Scale(new Vector2(GridPosX < 0? GridWidth : 0f, GridPosY < 0? GridHeight : 0f), CellSize);
+                bounds.SetMinMax( vMinMax, vMinMax);
+            }
+            for (int i = 0; i < m_tileObjList.Count; ++i )
+            {
+                int locGx = m_tileObjList[i].tilePos % GridWidth;
+                if (GridPosX >= 0) locGx++;
+                int locGy = m_tileObjList[i].tilePos / GridWidth;
+                if (GridPosY >= 0) locGy++;
+                Vector2 gridPos = Vector2.Scale( new Vector2(locGx, locGy), CellSize);
+                bounds.Encapsulate(gridPos);
+            }
+            return bounds;
         }
 
         public void SetDimensions(int width, int height)
@@ -308,10 +391,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 int tileIdx = locGridY * m_width + locGridX;
 
                 int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                Tile tile = tileId != Tileset.k_TileId_Empty? Tileset.Tiles[tileId] : null;
+                Tile tile = Tileset.GetTile(tileId);
 
                 int prevTileId = (int)(m_tileDataList[tileIdx] & Tileset.k_TileDataMask_TileId);
-                Tile prevTile = prevTileId != Tileset.k_TileId_Empty? Tileset.Tiles[prevTileId] : null;                             
+                Tile prevTile = Tileset.GetTile(prevTileId);                             
 
                 int brushId = Tileset.GetBrushIdFromTileData(tileData);
                 int prevBrushId = Tileset.GetBrushIdFromTileData(m_tileDataList[tileIdx]);
@@ -407,11 +490,14 @@ namespace CreativeSpore.SuperTilemapEditor
                 // Update tile data
                 m_tileDataList[tileIdx] = tileData;
 
-                // Create tile Objects
-                if (tile != null && tile.prefabData.prefab != null)
-                    CreateTileObject(tileIdx, tile.prefabData);
-                else
-                    DestroyTileObject(tileIdx);    
+                if (!Tilemap.DisableTilePrefabCreation)
+                {
+                    // Create tile Objects
+                    if (tile != null && tile.prefabData.prefab != null)
+                        CreateTileObject(tileIdx, tile.prefabData);
+                    else
+                        DestroyTileObject(tileIdx);
+                }
             }
         }
 

@@ -26,30 +26,30 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             s_needsSubTiles = false;
             s_brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_N = (int)((uint)(tilemap.GetTileData(gridX, gridY + 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_E = (int)((uint)(tilemap.GetTileData(gridX + 1, gridY) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_S = (int)((uint)(tilemap.GetTileData(gridX, gridY - 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_W = (int)((uint)(tilemap.GetTileData(gridX - 1, gridY) & Tileset.k_TileDataMask_BrushId) >> 16);
+            bool autotiling_N = AutotileWith(tilemap, s_brushId, gridX, gridY + 1);
+            bool autotiling_E = AutotileWith(tilemap, s_brushId, gridX + 1, gridY);
+            bool autotiling_S = AutotileWith(tilemap, s_brushId, gridX, gridY - 1);
+            bool autotiling_W = AutotileWith(tilemap, s_brushId, gridX - 1, gridY);
             s_neighIdx = 0;
-            if (AutotileWith(s_brushId, brushId_N)) s_neighIdx |= 1;
-            if (AutotileWith(s_brushId, brushId_E)) s_neighIdx |= 2;
-            if (AutotileWith(s_brushId, brushId_S)) s_neighIdx |= 4;
-            if (AutotileWith(s_brushId, brushId_W)) s_neighIdx |= 8;
+            if (autotiling_N) s_neighIdx |= 1;
+            if (autotiling_E) s_neighIdx |= 2;
+            if (autotiling_S) s_neighIdx |= 4;
+            if (autotiling_W) s_neighIdx |= 8;
 
             s_needsSubTiles = (s_neighIdx == 0 || s_neighIdx == 1 || s_neighIdx == 2 || s_neighIdx == 4
             || s_neighIdx == 5 || s_neighIdx == 8 || s_neighIdx == 10) ;
             
             // diagonals
             {
-                int brushId_NE = (int)((uint)(tilemap.GetTileData(gridX + 1, gridY + 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-                int brushId_SE = (int)((uint)(tilemap.GetTileData(gridX + 1, gridY - 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-                int brushId_SW = (int)((uint)(tilemap.GetTileData(gridX - 1, gridY - 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-                int brushId_NW = (int)((uint)(tilemap.GetTileData(gridX - 1, gridY + 1) & Tileset.k_TileDataMask_BrushId) >> 16);
+                bool autotiling_NE = AutotileWith(tilemap, s_brushId, gridX + 1, gridY + 1);
+                bool autotiling_SE = AutotileWith(tilemap, s_brushId, gridX + 1, gridY - 1);
+                bool autotiling_SW = AutotileWith(tilemap, s_brushId, gridX - 1, gridY - 1);
+                bool autotiling_NW = AutotileWith(tilemap, s_brushId, gridX - 1, gridY + 1);
 
-                s_showDiagonal[0] = !AutotileWith(s_brushId, brushId_SW) && AutotileWith(s_brushId, brushId_S) && AutotileWith(s_brushId, brushId_W);
-                s_showDiagonal[1] = !AutotileWith(s_brushId, brushId_SE) && AutotileWith(s_brushId, brushId_S) && AutotileWith(s_brushId, brushId_E);
-                s_showDiagonal[2] = !AutotileWith(s_brushId, brushId_NW) && AutotileWith(s_brushId, brushId_N) && AutotileWith(s_brushId, brushId_W);
-                s_showDiagonal[3] = !AutotileWith(s_brushId, brushId_NE) && AutotileWith(s_brushId, brushId_N) && AutotileWith(s_brushId, brushId_E);
+                s_showDiagonal[0] = !autotiling_SW && autotiling_S && autotiling_W;
+                s_showDiagonal[1] = !autotiling_SE && autotiling_S && autotiling_E;
+                s_showDiagonal[2] = !autotiling_NW && autotiling_N && autotiling_W;
+                s_showDiagonal[3] = !autotiling_NE && autotiling_N && autotiling_E;
 
                 s_tileData = TileIds[s_neighIdx];
                 bool foundTrueDiagonal = false;
@@ -92,7 +92,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             CalculateNeighbourData(tilemap, gridX, gridY, tileData);
             // tiles that need subtile division
-            if ( s_needsSubTiles )
+            if (s_needsSubTiles)
             {
                 uint[] aSubTileData = null;
 
@@ -136,15 +136,32 @@ namespace CreativeSpore.SuperTilemapEditor
                     aSubTileData = new uint[] { TileIds[s_neighIdx], TileIds[s_neighIdx], TileIds[s_neighIdx], TileIds[s_neighIdx] };
                 }
 
-                for(int i = 0; i < s_showDiagonal.Length; ++i)
+                for (int i = 0; i < s_showDiagonal.Length; ++i)
                 {
-                    if(s_showDiagonal[i])
+                    if (s_showDiagonal[i])
                     {
-                        aSubTileData[i] = InteriorCornerTileIds[3-i];
+                        aSubTileData[i] = InteriorCornerTileIds[3 - i];
+                    }
+                    // Add animated tiles
+                    {
+                        TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(aSubTileData[i]));
+                        if (brush && brush.IsAnimated())
+                        {
+                            TilemapChunk.RegisterAnimatedBrush(brush, i);
+                        }
                     }
                 }
 
                 return aSubTileData;
+            }
+
+            // Add animated tiles
+            {
+                TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(s_tileData));
+                if (brush && brush.IsAnimated())
+                {
+                    TilemapChunk.RegisterAnimatedBrush(brush);
+                }
             }
             return null;
         }

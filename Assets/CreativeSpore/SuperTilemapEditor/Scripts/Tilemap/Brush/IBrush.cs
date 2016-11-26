@@ -49,7 +49,17 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <returns></returns>
         Rect GetAnimUV();
         /// <summary>
-        /// Return the current frame tile data
+        /// Returns the tile UV for the current frame with flaps applied
+        /// </summary>
+        /// <returns></returns>
+        Vector2[] GetAnimUVWithFlags(float innerPadding = 0f);
+        /// <summary>
+        /// Gets the current animation index
+        /// </summary>
+        /// <returns></returns>
+        int GetAnimFrameIdx();
+        /// <summary>
+        /// Returns the current frame tile data
         /// </summary>
         /// <returns></returns>
         uint GetAnimTileData();

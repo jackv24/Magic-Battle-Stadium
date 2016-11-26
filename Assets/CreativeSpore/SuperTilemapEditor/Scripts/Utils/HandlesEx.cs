@@ -76,6 +76,15 @@ namespace CreativeSpore.SuperTilemapEditor
             Handles.DrawDottedLine(rectVerts[2], rectVerts[3], screenSpaceSize);
             Handles.DrawDottedLine(rectVerts[3], rectVerts[0], screenSpaceSize);
         }
+
+        public static void DrawDottedPolyLine(Vector3[] points, float screenSpaceSize, Color color)
+        {
+            Color savedColor = Handles.color;
+            Handles.color = color;
+            for (int i = 0; i < points.Length; ++i )
+                Handles.DrawDottedLine(points[i], points[(i + 1) % points.Length], screenSpaceSize);
+            Handles.color = savedColor;
+        }
     }
 }
 #endif

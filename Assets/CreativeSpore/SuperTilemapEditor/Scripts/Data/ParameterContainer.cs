@@ -56,6 +56,11 @@ namespace CreativeSpore.SuperTilemapEditor
             m_paramList.Sort((Parameter a, Parameter b) => a.name.CompareTo(b.name));
         }
 
+        public void SortByType()
+        {
+            m_paramList.Sort((Parameter a, Parameter b) => a.GetParamType().CompareTo(b.GetParamType()));
+        }
+
         public Parameter FindParam(string name)
         {
             return m_paramList.Find(x => x.name == name);
@@ -75,6 +80,11 @@ namespace CreativeSpore.SuperTilemapEditor
         public void AddParam(string name, float value)
         {
             AddParam<float>(name, value);
+        }
+
+        public void AddParam(string name, string value)
+        {
+            AddParam<string>(name, value);
         }
 
         public void AddParam(string name, UnityEngine.Object value)
@@ -162,6 +172,12 @@ namespace CreativeSpore.SuperTilemapEditor
             return param != null ? param.GetAsFloat() : defaultValue;
         }
 
+        public string GetStringParam(string name, string defaultValue = "")
+        {
+            Parameter param = FindParam(name);
+            return param != null ? param.GetAsString() : defaultValue;
+        }
+
         public bool GetBoolParam(string name, bool defaultValue = false)
         {
             Parameter param = FindParam(name);
@@ -210,6 +226,7 @@ namespace CreativeSpore.SuperTilemapEditor
         Int,
         Float,
         Object,
+        String,
     }
 
     [Serializable]
@@ -228,12 +245,15 @@ namespace CreativeSpore.SuperTilemapEditor
         [SerializeField]
         private float _floatValue = 0f;
         [SerializeField]
+        private string _stringValue = string.Empty;
+        [SerializeField]
         private UnityEngine.Object _objectValue = null;
 
         private Parameter(string name) { this.name = name; }
         public Parameter(string name, bool value) : this(name) { this._boolValue = value; _paramType = eParameterType.Bool; }
         public Parameter(string name, int value) : this(name) { this._intValue = value; _paramType = eParameterType.Int; }
         public Parameter(string name, float value) : this(name) { this._floatValue = value; _paramType = eParameterType.Float; }
+        public Parameter(string name, string value) : this(name) { this._stringValue = value; _paramType = eParameterType.String; }
         public Parameter(string name, UnityEngine.Object value) : this(name) { this._objectValue = value; _paramType = eParameterType.Object; }
 
         public override string ToString()
@@ -243,6 +263,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 case eParameterType.Bool: return _boolValue.ToString();
                 case eParameterType.Int: return _intValue.ToString();
                 case eParameterType.Float: return _floatValue.ToString();
+                case eParameterType.String: return _stringValue.ToString();
                 case eParameterType.Object: return _objectValue.ToString();
                 default: return "<Not defined>";
             }
@@ -271,6 +292,12 @@ namespace CreativeSpore.SuperTilemapEditor
             return _floatValue;
         }
 
+        public string GetAsString()
+        {
+            Debug.Assert(_paramType == eParameterType.String, string.Format(k_warning_msg_wrongType, name, _paramType, eParameterType.String));
+            return _stringValue;
+        }
+
         public UnityEngine.Object GetAsObject()
         {
             Debug.Assert(_paramType == eParameterType.Object, string.Format(k_warning_msg_wrongType, name, _paramType, eParameterType.Object));
@@ -293,6 +320,12 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             Debug.Assert(_paramType == eParameterType.Float, string.Format(k_warning_msg_wrongType, name, _paramType, eParameterType.Float));
             _floatValue = value;
+        }
+
+        public void SetValue(string value)
+        {
+            Debug.Assert(_paramType == eParameterType.String, string.Format(k_warning_msg_wrongType, name, _paramType, eParameterType.String));
+            _stringValue = value;
         }
 
         public void SetValue(UnityEngine.Object value)

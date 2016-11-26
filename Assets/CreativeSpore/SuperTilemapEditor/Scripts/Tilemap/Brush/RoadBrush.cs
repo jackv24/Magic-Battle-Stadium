@@ -24,16 +24,16 @@ namespace CreativeSpore.SuperTilemapEditor
         public override uint Refresh(Tilemap tilemap, int gridX, int gridY, uint tileData)
         {
             int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushIdTop = (int)((uint)(tilemap.GetTileData(gridX, gridY + 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushIdRight = (int)((uint)(tilemap.GetTileData(gridX + 1, gridY) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushIdBottom = (int)((uint)(tilemap.GetTileData(gridX, gridY - 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushIdLeft = (int)((uint)(tilemap.GetTileData(gridX - 1, gridY) & Tileset.k_TileDataMask_BrushId) >> 16);
+            bool autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
+            bool autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
+            bool autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
+            bool autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
 
             int idx = 0;
-            if (AutotileWith(brushId, brushIdTop)) idx = 1;
-            if (AutotileWith(brushId, brushIdRight)) idx |= 2;
-            if (AutotileWith(brushId, brushIdBottom)) idx |= 4;
-            if (AutotileWith(brushId, brushIdLeft)) idx |= 8;
+            if (autotiling_N) idx = 1;
+            if (autotiling_E) idx |= 2;
+            if (autotiling_S) idx |= 4;
+            if (autotiling_W) idx |= 8;
 
             uint brushTileData = RefreshLinkedBrush(tilemap, gridX, gridY, TileIds[idx]);
             // overwrite flags
@@ -43,7 +43,32 @@ namespace CreativeSpore.SuperTilemapEditor
             brushTileData &= ~Tileset.k_TileDataMask_BrushId;
             brushTileData |= tileData & Tileset.k_TileDataMask_BrushId;
             return brushTileData;
-        }       
+        }
+
+        public override uint[] GetSubtiles(Tilemap tilemap, int gridX, int gridY, uint tileData)
+        {
+            // Add animated tiles
+            {
+                int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
+                bool autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
+                bool autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
+                bool autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
+                bool autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
+
+                int idx = 0;
+                if (autotiling_N) idx = 1;
+                if (autotiling_E) idx |= 2;
+                if (autotiling_S) idx |= 4;
+                if (autotiling_W) idx |= 8;
+
+                TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(TileIds[idx]));
+                if (brush && brush.IsAnimated())
+                {
+                    TilemapChunk.RegisterAnimatedBrush(brush);
+                }
+            }
+            return null;
+        }
 
         #endregion
     }

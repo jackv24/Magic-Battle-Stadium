@@ -5,6 +5,7 @@ using UnityEditor;
 namespace CreativeSpore.SuperTilemapEditor
 {
 
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(CarpetBrush))]
     public class CarpetBrushEditor : TilesetBrushEditor
     {

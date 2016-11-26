@@ -40,22 +40,22 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 
             int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_N = (int)((uint)(tilemap.GetTileData(gridX, gridY + 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_E = (int)((uint)(tilemap.GetTileData(gridX + 1, gridY) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_S = (int)((uint)(tilemap.GetTileData(gridX, gridY - 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_W = (int)((uint)(tilemap.GetTileData(gridX - 1, gridY) & Tileset.k_TileDataMask_BrushId) >> 16);
+            bool autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
+            bool autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
+            bool autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
+            bool autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
 
             // diagonals
-            int brushId_NE = (int)((uint)(tilemap.GetTileData(gridX + 1, gridY + 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_SE = (int)((uint)(tilemap.GetTileData(gridX + 1, gridY - 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_SW = (int)((uint)(tilemap.GetTileData(gridX - 1, gridY - 1) & Tileset.k_TileDataMask_BrushId) >> 16);
-            int brushId_NW = (int)((uint)(tilemap.GetTileData(gridX - 1, gridY + 1) & Tileset.k_TileDataMask_BrushId) >> 16);
+            bool autotiling_NE = AutotileWith(tilemap, brushId, gridX + 1, gridY + 1);
+            bool autotiling_SE = AutotileWith(tilemap, brushId, gridX + 1, gridY - 1);
+            bool autotiling_SW = AutotileWith(tilemap, brushId, gridX - 1, gridY - 1);
+            bool autotiling_NW = AutotileWith(tilemap, brushId, gridX - 1, gridY + 1);
 
             uint[] subTileData = new uint[4];
-            subTileData[0] = (AutotileWith(brushId, brushId_SW) && AutotileWith(brushId, brushId_S) && AutotileWith(brushId, brushId_W)) ? TileIds[3] : TileIds[0];
-            subTileData[1] = (AutotileWith(brushId, brushId_SE) && AutotileWith(brushId, brushId_S) && AutotileWith(brushId, brushId_E)) ? TileIds[2] : TileIds[1];
-            subTileData[2] = (AutotileWith(brushId, brushId_NW) && AutotileWith(brushId, brushId_N) && AutotileWith(brushId, brushId_W)) ? TileIds[1] : TileIds[2];
-            subTileData[3] = (AutotileWith(brushId, brushId_NE) && AutotileWith(brushId, brushId_N) && AutotileWith(brushId, brushId_E)) ? TileIds[0] : TileIds[3];
+            subTileData[0] = (autotiling_SW && autotiling_S && autotiling_W) ? TileIds[3] : TileIds[0];
+            subTileData[1] = (autotiling_SE && autotiling_S && autotiling_E) ? TileIds[2] : TileIds[1];
+            subTileData[2] = (autotiling_NW && autotiling_N && autotiling_W) ? TileIds[1] : TileIds[2];
+            subTileData[3] = (autotiling_NE && autotiling_N && autotiling_E) ? TileIds[0] : TileIds[3];
 
             return subTileData;
         }

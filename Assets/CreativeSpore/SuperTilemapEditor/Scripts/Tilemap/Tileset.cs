@@ -21,13 +21,46 @@ namespace CreativeSpore.SuperTilemapEditor
         public eTileCollider type;
         public TileColliderData Clone()
         {
+            if(this.vertices == null) this.vertices = new Vector2[0];
             Vector2[] clonedVertices = new Vector2[this.vertices.Length];
             vertices.CopyTo(clonedVertices, 0);
 
             return new TileColliderData { vertices = clonedVertices, type = type };
         }
 
-        public void FlipV()
+        public static Vector2 SnapVertex(Vector2 vertex, Tileset tileset)
+        {
+            vertex.x = Mathf.Clamp01(Mathf.RoundToInt(vertex.x * tileset.TilePxSize.x) / tileset.TilePxSize.x);
+            vertex.y = Mathf.Clamp01(Mathf.RoundToInt(vertex.y * tileset.TilePxSize.y) / tileset.TilePxSize.y);
+            return vertex;
+        }
+
+        /// <summary>
+        /// Snap vertices positions according to the tileset tile size in pixels. This way, the tile colliders will be seamless avoiding precision erros.
+        /// </summary>
+        /// <param name="tileset"></param>
+        public void SnapVertices(Tileset tileset)
+        {
+            if (vertices != null)
+                for (int i = 0; i < vertices.Length; ++i)
+                    vertices[i] = SnapVertex(vertices[i], tileset);
+        }
+
+        public void ApplyFlippingFlags(uint tileData)
+        {
+            if ((tileData & Tileset.k_TileFlag_FlipH) != 0) FlipH();
+            if ((tileData & Tileset.k_TileFlag_FlipV) != 0) FlipV();
+            if ((tileData & Tileset.k_TileFlag_Rot90) != 0) Rot90();
+        }
+
+        public void RemoveFlippingFlags(uint tileData)
+        {
+            if ((tileData & Tileset.k_TileFlag_Rot90) != 0) Rot90Back();
+            if ((tileData & Tileset.k_TileFlag_FlipV) != 0) FlipV();
+            if ((tileData & Tileset.k_TileFlag_FlipH) != 0) FlipH();
+        }
+
+        public void FlipH()
         {
             for(int i = 0; i < vertices.Length; ++i)
             {
@@ -36,7 +69,7 @@ namespace CreativeSpore.SuperTilemapEditor
             Array.Reverse(vertices);
         }
 
-        public void FlipH()
+        public void FlipV()
         {
             for (int i = 0; i < vertices.Length; ++i)
             {
@@ -53,6 +86,17 @@ namespace CreativeSpore.SuperTilemapEditor
                 vertices[i].x = vertices[i].y;
                 vertices[i].y = tempX;
                 vertices[i].y = 1f - vertices[i].y;
+            }
+        }
+        
+        public void Rot90Back()
+        {
+            for (int i = 0; i < vertices.Length; ++i)
+            {
+                vertices[i].y = 1f - vertices[i].y;
+                float tempX = vertices[i].x;
+                vertices[i].x = vertices[i].y;
+                vertices[i].y = tempX;
             }
         }
     }
@@ -166,8 +210,8 @@ namespace CreativeSpore.SuperTilemapEditor
         public const uint k_TileDataMask_BrushId = 0x0FFF0000; // up to 4096 - 1 ( id 0 is used for undefined brush )
         public const uint k_TileDataMask_Flags = 0xF0000000; // Flags: (1bit)FlipX, (1bit)FlipY, (1bits)Rot90, (1 bit reserved)
         // Tile Data Flags
-        public const uint k_TileFlag_FlipH = 0x80000000;
-        public const uint k_TileFlag_FlipV = 0x40000000;
+        public const uint k_TileFlag_FlipV = 0x80000000;
+        public const uint k_TileFlag_FlipH = 0x40000000;
         public const uint k_TileFlag_Rot90 = 0x20000000;
         public const uint k_TileFlag_Updated = 0x10000000; // used by brushes to check when a tile should be updated or not
 
@@ -210,8 +254,8 @@ namespace CreativeSpore.SuperTilemapEditor
         public int VisualTilePadding = 1;
         public int TileRowLength = 8;        
 
-        public int Width { get { return m_tilesetWidth; } }
-        public int Height { get { return m_tilesetHeight; } }
+        public int Width { get { return m_tilesetWidth > 0? m_tilesetWidth : Mathf.RoundToInt(AtlasTexture.width / TilePxSize.x); } }
+        public int Height { get { return m_tilesetHeight > 0 ? m_tilesetHeight : Mathf.RoundToInt(AtlasTexture.height / TilePxSize.y); } }
 
         public bool GetGroupAutotiling(int groupA, int groupB) 
         { 
@@ -220,15 +264,9 @@ namespace CreativeSpore.SuperTilemapEditor
         public void SetGroupAutotiling(int groupA, int groupB, bool value)
         {
             if (value)
-            {
                 m_brushGroupAutotilingMatrix[groupA] |= (1u << groupB);
-                m_brushGroupAutotilingMatrix[groupB] |= (1u << groupA);
-            }
             else
-            {
                 m_brushGroupAutotilingMatrix[groupA] &= ~(1u << groupB);
-                m_brushGroupAutotilingMatrix[groupB] &= ~(1u << groupA);
-            }
         }
         public string[] BrushGroupNames { get { return m_brushGroupNames; } }
 
@@ -241,15 +279,13 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public Tile SelectedTile { get { return SelectedTileId != k_TileId_Empty ? m_tiles[SelectedTileId] : null; } }
         public List<BrushContainer> Brushes { get { return m_brushes; } }
-        public IList<Tile> Tiles { get { return m_tiles.AsReadOnly(); } }
+        //public IList<Tile> Tiles { get { return m_tiles.AsReadOnly(); } } //NOTE: removed AsReadOnly for performance and for removing memory allocation
+        public List<Tile> Tiles { get { return m_tiles; } }
         public float PixelsPerUnit { get { return m_pixelsPerUnit; } set { m_pixelsPerUnit = value; } }
-
-        public Vector2 CalculateTileTexelSize()
-        {
-            return AtlasTexture != null ? Vector2.Scale(AtlasTexture.texelSize, TilePxSize) : Vector2.zero;
-        }
-
+        public void SetTiles(List<Tile> tiles) { m_tiles = tiles; }
+        public Vector2 CalculateTileTexelSize(){ return AtlasTexture != null ? Vector2.Scale(AtlasTexture.texelSize, TilePxSize) : Vector2.zero;}
         public List<TileView> TileViews { get { return m_tileViews; } }
+        public int BrushTypeMask { get { return m_brushTypeMask; } set { m_brushTypeMask = value; } }
 
         public int SelectedTileId
         {
@@ -342,6 +378,10 @@ namespace CreativeSpore.SuperTilemapEditor
         private string[] m_brushGroupNames = Enumerable.Range(0, 32).Select( x => x == 0? "Default" : "").ToArray();
         [SerializeField]
         private uint[] m_brushGroupAutotilingMatrix = Enumerable.Range(0, 31).Select(x => 1u << x).ToArray();
+        [SerializeField]
+        private string[] m_brushTypeMaskOptions;
+        [SerializeField]
+        private int m_brushTypeMask = -1;
 
         private int m_selectedTileId = k_TileId_Empty;
         private int m_selectedBrushId = -1;
@@ -403,9 +443,9 @@ namespace CreativeSpore.SuperTilemapEditor
             return m_tileViews.Find(x => x.name == name);
         }
 
-        public void RemoveNullBrushes()
+        public void RemoveInvalidBrushes()
         {
-            m_brushes.RemoveAll(x => x.BrushAsset == null);
+            m_brushes.RemoveAll(x => x.BrushAsset == null || x.BrushAsset.Tileset != this);
             m_brushCache.Clear();
         }
 
@@ -502,6 +542,43 @@ namespace CreativeSpore.SuperTilemapEditor
                     Debug.LogWarning(" Error while slicing. There is something wrong with slicing parameters. uInc = " + uInc + "; vInc = " + vInc);
                 }
             }
+        }
+
+        public string[] UpdateBrushTypeArray()
+        {
+            List<string> outList = new List<string>();
+            for(int i = 0; i < Brushes.Count; ++i)
+            {
+                TilesetBrush brush = Brushes[i].BrushAsset;
+                if(brush)
+                {
+                    string type = brush.GetType().Name;
+                    if (!outList.Contains(type)) outList.Add(type);
+                }
+            }
+            m_brushTypeMaskOptions = outList.ToArray();
+            return m_brushTypeMaskOptions;
+        }
+
+        public string[] GetBrushTypeArray()
+        {
+            if (m_brushTypeMaskOptions == null || m_brushTypeMaskOptions.Length == 0)
+                UpdateBrushTypeArray();
+            return m_brushTypeMaskOptions;
+        }
+
+        public bool IsBrushVisibleByTypeMask(TilesetBrush brush)
+        {
+            if(brush)
+            {
+                string[] brushTypes = GetBrushTypeArray();
+                if(brushTypes != null && brushTypes.Length > 0)
+                {
+                    int idx = System.Array.IndexOf(brushTypes, brush.GetType().Name);
+                    return ((1 << idx) & m_brushTypeMask) != 0;
+                }
+            }
+            return false;
         }
 
 #if UNITY_EDITOR

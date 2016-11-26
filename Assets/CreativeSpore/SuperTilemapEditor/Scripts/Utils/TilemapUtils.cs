@@ -75,5 +75,58 @@ namespace CreativeSpore.SuperTilemapEditor
             return tilemap.transform.TransformPoint(new Vector2((gridX + .5f) * tilemap.CellSize.x, (gridY + .5f) * tilemap.CellSize.y));
         }
 
+        static public Vector3 GetGridWorldPos(int gridX, int gridY, Vector2 cellSize)
+        {
+            return new Vector2((gridX + .5f) * cellSize.x, (gridY + .5f) * cellSize.y);
+        }
+
+        /// <summary>
+        /// Gets the grid X position for a given tilemap and local position. To convert from world to local position use tilemap.transform.InverseTransformPoint(worldPosition).
+        /// Avoid using positions multiple of cellSize like 0.32f if cellSize = 0.16f because due float imprecisions the return value could be wrong.
+        /// </summary>
+        /// <param name="tilemap"></param>
+        /// <param name="locPosition"></param>
+        /// <returns></returns>
+        static public int GetGridX( Tilemap tilemap, Vector2 locPosition)
+        {
+            return BrushUtil.GetGridX(locPosition, tilemap.CellSize);
+        }
+
+        /// <summary>
+        /// Gets the grid Y position for a given tilemap and local position. To convert from world to local position use tilemap.transform.InverseTransformPoint(worldPosition).
+        /// Avoid using positions multiple of cellSize like 0.32f if cellSize = 0.16f because due float imprecisions the return value could be wrong.
+        /// </summary>
+        /// <param name="tilemap"></param>
+        /// <param name="locPosition"></param>
+        /// <returns></returns>
+        static public int GetGridY(Tilemap tilemap, Vector2 locPosition)
+        {
+            return BrushUtil.GetGridY(locPosition, tilemap.CellSize);
+        }
+
+        /// <summary>
+        /// Gets the grid X position for a given tilemap and camera where the mouse is over.
+        /// </summary>
+        /// <param name="tilemap"></param>
+        /// <param name="camera"></param>
+        /// <returns></returns>
+        static public int GetMouseGridX(Tilemap tilemap, Camera camera)
+        {
+            Vector2 locPos = camera.ScreenToWorldPoint(Input.mousePosition);
+            return GetGridX(tilemap, tilemap.transform.InverseTransformPoint(locPos));
+        }
+
+        /// <summary>
+        /// /// Gets the grid X position for a given tilemap and camera where the mouse is over.
+        /// </summary>
+        /// <param name="tilemap"></param>
+        /// <param name="camera"></param>
+        /// <returns></returns>
+        static public int GetMouseGridY(Tilemap tilemap, Camera camera)
+        {
+            Vector2 locPos = camera.ScreenToWorldPoint(Input.mousePosition);
+            return GetGridY(tilemap, tilemap.transform.InverseTransformPoint(locPos));
+        }
+
     }
 }

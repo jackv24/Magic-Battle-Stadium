@@ -89,6 +89,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     m_meshCollider.isTrigger = false;
                     m_meshCollider.convex = false;
                 }
+                m_meshCollider.sharedMaterial = ParentTilemap.PhysicMaterial;
 
                 //NOTE: m_meshCollider.sharedMesh is equal to m_meshFilter.sharedMesh when the script is attached or reset
                 if (m_meshCollider != null && (m_meshCollider.sharedMesh == null || m_meshCollider.sharedMesh == m_meshFilter.sharedMesh))
@@ -180,9 +181,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 if ((tileData & (Tileset.k_TileFlag_FlipH | Tileset.k_TileFlag_FlipV | Tileset.k_TileFlag_Rot90)) != 0)
                                 {
                                     tileCollData = tileCollData.Clone();
-                                    if ((tileData & Tileset.k_TileFlag_FlipH) != 0) tileCollData.FlipH();
-                                    if ((tileData & Tileset.k_TileFlag_FlipV) != 0) tileCollData.FlipV();
-                                    if ((tileData & Tileset.k_TileFlag_Rot90) != 0) tileCollData.Rot90();
+                                    tileCollData.ApplyFlippingFlags(tileData);                                    
                                 }
                                 isEmpty = false;
                                 int neighborCollFlags = 0; // don't remove, even using neighborTileCollData, neighborTileCollData is not filled if tile is empty
@@ -192,28 +191,31 @@ namespace CreativeSpore.SuperTilemapEditor
                                 for (int i = 0; i < 4; ++i)
                                 {
                                     uint neighborTileData;
+                                    bool isTriggerOrPolygon = ParentTilemap.IsTrigger || 
+                                        ParentTilemap.ColliderType == eColliderType._2D && 
+                                        ParentTilemap.Collider2DType == e2DColliderType.PolygonCollider2D;
                                     switch (i)
                                     {
                                         case 0:  // Up Tile
                                             neighborTileData = (tileIdx + m_width) < m_tileDataList.Count ? 
                                             m_tileDataList[tileIdx + m_width]
                                             :
-                                            ParentTilemap.GetTileData( GridPosX + tx, GridPosY + ty + 1); break;
+                                            isTriggerOrPolygon? Tileset.k_TileData_Empty : ParentTilemap.GetTileData( GridPosX + tx, GridPosY + ty + 1); break;
                                         case 1: // Right Tile
                                             neighborTileData = (tileIdx + 1) % m_width != 0 ? //(tileIdx + 1) < m_tileDataList.Count ? 
                                             m_tileDataList[tileIdx + 1]
                                             :
-                                            ParentTilemap.GetTileData(GridPosX + tx + 1, GridPosY + ty); break;
+                                            isTriggerOrPolygon? Tileset.k_TileData_Empty : ParentTilemap.GetTileData(GridPosX + tx + 1, GridPosY + ty); break;
                                         case 2: // Down Tile
                                             neighborTileData = tileIdx >= m_width ? 
                                             m_tileDataList[tileIdx - m_width]
                                             :
-                                            ParentTilemap.GetTileData(GridPosX + tx, GridPosY + ty - 1); break;  
+                                            isTriggerOrPolygon? Tileset.k_TileData_Empty : ParentTilemap.GetTileData(GridPosX + tx, GridPosY + ty - 1); break;  
                                         case 3: // Left Tile
                                             neighborTileData = tileIdx % m_width != 0 ? //neighborTileId = tileIdx >= 1 ? 
                                             m_tileDataList[tileIdx - 1]
                                             :
-                                            ParentTilemap.GetTileData(GridPosX + tx - 1, GridPosY + ty); break;
+                                            isTriggerOrPolygon? Tileset.k_TileData_Empty : ParentTilemap.GetTileData(GridPosX + tx - 1, GridPosY + ty); break;
                                         default: neighborTileData = Tileset.k_TileData_Empty; break;
                                     }
 
@@ -427,11 +429,13 @@ namespace CreativeSpore.SuperTilemapEditor
                                                 {
                                                     if (segmentIdxToMerge >= 0)
                                                     {
-                                                        if (s0 == openEdges[segmentIdxToMerge].First.Value)
-                                                            openEdges[segmentIdxToMerge].RemoveFirst();
+                                                        LinkedList<Vector2> segmentToMerge = openEdges[segmentIdxToMerge];
+                                                        if (s0 == segmentToMerge.First.Value)
+                                                            for (LinkedListNode<Vector2> node = segmentToMerge.First.Next; node != null; node = node.Next)
+                                                                edgeSegments.AddLast(node.Value);
                                                         else
-                                                            openEdges[segmentIdxToMerge].RemoveLast();
-                                                        openEdges[edgeIdx] = new LinkedList<Vector2>(edgeSegments.Concat(openEdges[segmentIdxToMerge]));
+                                                            for (LinkedListNode<Vector2> node = segmentToMerge.Last.Previous; node != null; node = node.Previous)
+                                                                edgeSegments.AddLast(node.Value);
                                                         openEdges.RemoveAt(segmentIdxToMerge);
                                                     }
                                                     else
@@ -445,11 +449,13 @@ namespace CreativeSpore.SuperTilemapEditor
                                                 {
                                                     if (segmentIdxToMerge >= 0)
                                                     {
-                                                        if (s1 == openEdges[segmentIdxToMerge].First.Value)
-                                                            openEdges[segmentIdxToMerge].RemoveFirst();
+                                                        LinkedList<Vector2> segmentToMerge = openEdges[segmentIdxToMerge];
+                                                        if (s1 == segmentToMerge.First.Value)
+                                                            for (LinkedListNode<Vector2> node = segmentToMerge.First.Next; node != null; node = node.Next)
+                                                                edgeSegments.AddLast(node.Value);
                                                         else
-                                                            openEdges[segmentIdxToMerge].RemoveLast();
-                                                        openEdges[edgeIdx] = new LinkedList<Vector2>(edgeSegments.Concat(openEdges[segmentIdxToMerge]));
+                                                            for (LinkedListNode<Vector2> node = segmentToMerge.Last.Previous; node != null; node = node.Previous)
+                                                                edgeSegments.AddLast(node.Value);
                                                         openEdges.RemoveAt(segmentIdxToMerge);
                                                     }
                                                     else
@@ -463,11 +469,13 @@ namespace CreativeSpore.SuperTilemapEditor
                                                 {
                                                     if (segmentIdxToMerge >= 0)
                                                     {
-                                                        if (s0 == openEdges[segmentIdxToMerge].First.Value)
-                                                            openEdges[segmentIdxToMerge].RemoveFirst();
+                                                        LinkedList<Vector2> segmentToMerge = openEdges[segmentIdxToMerge];
+                                                        if (s0 == segmentToMerge.Last.Value)
+                                                            for (LinkedListNode<Vector2> node = edgeSegments.First.Next; node != null; node = node.Next)
+                                                                segmentToMerge.AddLast(node.Value);
                                                         else
-                                                            openEdges[segmentIdxToMerge].RemoveLast();
-                                                        openEdges[segmentIdxToMerge] = new LinkedList<Vector2>(openEdges[segmentIdxToMerge].Concat(edgeSegments));
+                                                            for (LinkedListNode<Vector2> node = edgeSegments.Last.Previous; node != null; node = node.Previous)
+                                                                segmentToMerge.AddLast(node.Value);
                                                         openEdges.RemoveAt(edgeIdx);
                                                     }
                                                     else
@@ -481,11 +489,13 @@ namespace CreativeSpore.SuperTilemapEditor
                                                 {
                                                     if (segmentIdxToMerge >= 0)
                                                     {
-                                                        if (s1 == openEdges[segmentIdxToMerge].First.Value)
-                                                            openEdges[segmentIdxToMerge].RemoveFirst();
+                                                        LinkedList<Vector2> segmentToMerge = openEdges[segmentIdxToMerge];
+                                                        if (s1 == segmentToMerge.Last.Value)
+                                                            for (LinkedListNode<Vector2> node = edgeSegments.First.Next; node != null; node = node.Next)
+                                                                segmentToMerge.AddLast(node.Value);
                                                         else
-                                                            openEdges[segmentIdxToMerge].RemoveLast();
-                                                        openEdges[segmentIdxToMerge] = new LinkedList<Vector2>(openEdges[segmentIdxToMerge].Concat(edgeSegments));
+                                                            for (LinkedListNode<Vector2> node = edgeSegments.Last.Previous; node != null; node = node.Previous)
+                                                                segmentToMerge.AddLast(node.Value);
                                                         openEdges.RemoveAt(edgeIdx);
                                                     }
                                                     else
@@ -540,6 +550,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     Collider2D collider2D = reuseCollider ? (Collider2D)aColliders2D[i] : (Collider2D)gameObject.AddComponent(collider2DType);
                     collider2D.enabled = true;
                     collider2D.isTrigger = ParentTilemap.IsTrigger;
+                    collider2D.sharedMaterial = ParentTilemap.PhysicMaterial2D;
                     if (ParentTilemap.Collider2DType == e2DColliderType.EdgeCollider2D)
                     {
                         ((EdgeCollider2D)collider2D).points = edgeSegments.ToArray();

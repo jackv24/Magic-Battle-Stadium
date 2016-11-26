@@ -18,7 +18,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 float pixelsPerUnit = data.ParentTilemap.Tileset.TilePxSize.x / data.ParentTilemap.CellSize.x;
                 Vector2 atlasSize = new Vector2(data.ParentTilemap.Tileset.AtlasTexture.width, data.ParentTilemap.Tileset.AtlasTexture.height);
                 Rect spriteUV = new Rect( Vector2.Scale(tile.uv.position, atlasSize), Vector2.Scale(tile.uv.size, atlasSize));
-                GetComponent<SpriteRenderer>().sprite = Sprite.Create(data.ParentTilemap.Tileset.AtlasTexture, spriteUV, new Vector2(.5f, .5f), pixelsPerUnit);
+                SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Sprite.Create(data.ParentTilemap.Tileset.AtlasTexture, spriteUV, new Vector2(.5f, .5f), pixelsPerUnit);
+                spriteRenderer.sortingLayerID = data.ParentTilemap.SortingLayerID;
+                spriteRenderer.sortingOrder = data.ParentTilemap.OrderInLayer;
             }
         }
     }
