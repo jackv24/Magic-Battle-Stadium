@@ -19,6 +19,10 @@ public class DisplayIP : MonoBehaviour
 
     void Start()
     {
+        text.text = "NA";
+
+#if !UNITY_WEBGL
         text.text = "IP: " + Network.player.ipAddress;
+#endif
     }
 }
